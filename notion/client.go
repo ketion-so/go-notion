@@ -25,7 +25,7 @@ const (
 	rateLimitRemainingHeader = "X-RateLimit-Remaining"
 	rateLimitLimitHeader     = "X-RateLimit-Limit"
 
-	baseURL          = "https://api.miro.com"
+	baseURL          = "https://api.notion.com"
 	defaultUserAgent = "go-notion"
 )
 
@@ -45,6 +45,8 @@ type Client struct {
 	UserAgent   string
 	AccessToken string
 	BaseURL     *url.URL
+
+	Users *UsersService
 }
 
 // RateLimit represents the rate limit info for the API
@@ -69,6 +71,8 @@ func NewClient(accessKey string) *Client {
 	c.common.client = c
 	c.client = http.DefaultClient
 	c.RateLimit = defaultRateLimit
+
+	c.Users = (*UsersService)(&c.common)
 	return c
 }
 

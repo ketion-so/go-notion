@@ -1,0 +1,120 @@
+package notion
+
+import (
+	"context"
+	"encoding/json"
+	"fmt"
+	"net/http"
+)
+
+const (
+	usersPath = "users"
+)
+
+// UsersService handles communication to Notion Users API.
+//
+// API doc: https://developers.notion.com/reference/user
+type UsersService service
+
+// Users object represents Notion User.
+//
+// API doc: https://developers.notion.com/reference/user
+//go:generate gomodifytags -file $GOFILE -struct User -clear-tags -w
+//go:generate gomodifytags --file $GOFILE --struct User -add-tags json -w -transform snakecase
+type User struct {
+	ID        string  `json:"id"`
+	Type      string  `json:"type"`
+	Name      string  `json:"name"`
+	AvatarURL string  `json:"avatar_url"`
+	Person    *People `json:"person"`
+	Bot       *Bot    `json:"bot"`
+}
+
+// People object represents Notion human account.
+//
+//go:generate gomodifytags -file $GOFILE -struct People -clear-tags -w
+//go:generate gomodifytags --file $GOFILE --struct People -add-tags json -w -transform snakecase
+type People struct {
+	Email string `json:"email"`
+}
+
+// Bot object represents Notion bot account.
+//
+//go:generate gomodifytags -file $GOFILE -struct Bot -clear-tags -w
+//go:generate gomodifytags --file $GOFILE --struct Bot -add-tags json -w -transform snakecase
+type Bot struct{}
+
+type GetUserResponse User
+
+// Get gets user by user ID.
+//
+// API doc: https://developers.notion.com/reference/get-user
+func (s *UsersService) Get(ctx context.Context, userID string) (*GetUserResponse, error) {
+	req, err := s.client.NewGetRequest(fmt.Sprintf("%s/%s", usersPath, userID))
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := s.client.Do(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		respErr := &RespError{}
+		if err := json.NewDecoder(resp.Body).Decode(respErr); err != nil {
+			return nil, err
+		}
+		return nil, fmt.Errorf("status code not expected, got:%d, message:%s", resp.StatusCode, respErr.Message)
+	}
+
+	board := &GetUserResponse{}
+	if err := json.NewDecoder(resp.Body).Decode(board); err != nil {
+		return nil, err
+	}
+
+	return board, nil
+}
+
+// ListUserResponse represents the response from the list User API
+//
+//go:generate gomodifytags -file $GOFILE -struct ListUserResponse -clear-tags -w
+//go:generate gomodifytags --file $GOFILE --struct ListUserResponse -add-tags json -w -transform snakecase
+type ListUserResponse struct {
+	Object     string `json:"object"`
+	Results    []User `json:"results"`
+	NextCursor string `json:"next_cursor"`
+	HasMore    bool   `json:"has_more"`
+}
+
+// List gets the list of users.
+//
+// API doc: https://developers.notion.com/reference/get-users
+func (s *UsersService) List(ctx context.Context) (*ListUserResponse, error) {
+	req, err := s.client.NewGetRequest(usersPath)
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := s.client.Do(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		respErr := &RespError{}
+		if err := json.NewDecoder(resp.Body).Decode(respErr); err != nil {
+			return nil, err
+		}
+		return nil, fmt.Errorf("status code not expected, got:%d, message:%s", resp.StatusCode, respErr.Message)
+	}
+
+	luResp := &ListUserResponse{}
+	if err := json.NewDecoder(resp.Body).Decode(luResp); err != nil {
+		return nil, err
+	}
+
+	return luResp, nil
+}
