@@ -20,20 +20,20 @@ type SearchService service
 //go:generate gomodifytags -file $GOFILE -struct SearchRequest -clear-tags -w
 //go:generate gomodifytags --file $GOFILE --struct SearchRequest -add-tags json -w -transform snakecase
 type SearchRequest struct {
-	Query       string
-	Sort        *Sort
-	StartCursor string
-	PageSize    int32
+	Query       string `json:"query"`
+	Sort        *Sort  `json:"sort"`
+	StartCursor string `json:"start_cursor"`
+	PageSize    int32  `json:"page_size"`
 }
 
 // SearchResult object represents Notion Search params
 //go:generate gomodifytags -file $GOFILE -struct SearchResult -clear-tags -w
 //go:generate gomodifytags --file $GOFILE --struct SearchResult -add-tags json -w -transform snakecase
 type SearchResult struct {
-	HasMore    bool
-	NextCursor string
-	Object     string
-	Results    []interface{}
+	HasMore    bool          `json:"has_more"`
+	NextCursor string        `json:"next_cursor"`
+	Object     string        `json:"object"`
+	Results    []interface{} `json:"results"`
 }
 
 // Direction represents the sort direction.
@@ -60,10 +60,10 @@ const (
 	Object FilterValue = "object"
 )
 
-type PropertyValue string
+type FilterPropertyValue string
 
 const (
-	Property PropertyValue = "object"
+	ObjectFilterProperty FilterPropertyValue = "object"
 )
 
 // Filter object represents Notion User.
@@ -71,7 +71,7 @@ const (
 //go:generate gomodifytags --file $GOFILE --struct Filter -add-tags json -w -transform snakecase
 type Filter struct {
 	Value    FilterValue
-	Property PropertyValue
+	Property FilterPropertyValue
 }
 
 // Get gets user by user ID.
