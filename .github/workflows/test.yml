@@ -8,7 +8,7 @@ on:
 jobs:
   fmt: 
     name: Format
-    runs-on: ${{ matrix.platform }}
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/setup-go@v1
         with:
