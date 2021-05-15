@@ -1,7 +1,9 @@
-name: Tests
-on: [push, pull_request]
-env:
-  GO111MODULE: on
+name: Test
+on: 
+  push:
+    branches:
+      - master
+  pull_request:
 
 jobs:
   test:
