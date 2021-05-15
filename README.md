@@ -4,6 +4,8 @@
 
 # go-notion
 
+[![Go Reference](https://pkg.go.dev/badge/github.com/ketion-so/go-notion.svg)](https://pkg.go.dev/github.com/ketion-so/go-notion)
+
 Go written [Notion](https://www.notion.so) SDK.
 
 *Note: The [Notion API](https://developers.notion.com/) is in beta phase*
