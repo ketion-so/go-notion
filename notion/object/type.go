@@ -3,10 +3,12 @@ package object
 type Type string
 
 const (
-	Bot    Type = "bot"
-	Person Type = "person"
-	User   Type = "user"
-	List   Type = "list"
+	Bot      Type = "bot"
+	Database Type = "database"
+	Page     Type = "page"
+	Person   Type = "person"
+	User     Type = "user"
+	List     Type = "list"
 )
 
 type BlockType string
