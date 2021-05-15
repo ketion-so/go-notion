@@ -44,12 +44,10 @@ type People struct {
 //go:generate gomodifytags --file $GOFILE --struct Bot -add-tags json -w -transform snakecase
 type Bot struct{}
 
-type GetUserResponse User
-
 // Get gets user by user ID.
 //
 // API doc: https://developers.notion.com/reference/get-user
-func (s *UsersService) Get(ctx context.Context, userID string) (*GetUserResponse, error) {
+func (s *UsersService) Get(ctx context.Context, userID string) (*User, error) {
 	req, err := s.client.NewGetRequest(fmt.Sprintf("%s/%s", usersPath, userID))
 	if err != nil {
 		return nil, err
@@ -69,7 +67,7 @@ func (s *UsersService) Get(ctx context.Context, userID string) (*GetUserResponse
 		return nil, fmt.Errorf("status code not expected, got:%d, message:%s", resp.StatusCode, respErr.Message)
 	}
 
-	user := &GetUserResponse{}
+	user := &User{}
 	if err := json.NewDecoder(resp.Body).Decode(user); err != nil {
 		return nil, err
 	}
