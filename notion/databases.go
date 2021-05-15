@@ -84,3 +84,59 @@ func (s *DatabasesService) Get(ctx context.Context, databaseID string) (*Databas
 
 	return db, nil
 }
+
+// Database object represents Notion Database.
+//
+// API doc: https://developers.notion.com/reference/database
+//go:generate gomodifytags -file $GOFILE -struct Database -clear-tags -w
+//go:generate gomodifytags --file $GOFILE --struct Database -add-tags json -w -transform snakecase
+type ListDatabase struct {
+	Object         string                 `json:"object"`
+	ID             string                 `json:"id"`
+	CreatedTime    string                 `json:"created_time"`
+	LastEditedTime string                 `json:"last_edited_time"`
+	Title          string                 `json:"title"`
+	Properties     map[string]interface{} `json:"properties"`
+}
+
+// ListDatabaseResponse represents the response from the list User API
+//
+//go:generate gomodifytags -file $GOFILE -struct ListDatabaseResponse -clear-tags -w
+//go:generate gomodifytags --file $GOFILE --struct ListDatabaseResponse -add-tags json -w -transform snakecase
+type ListDatabaseResponse struct {
+	Object     string         `json:"object"`
+	Results    []ListDatabase `json:"results"`
+	NextCursor string         `json:"next_cursor"`
+	HasMore    bool           `json:"has_more"`
+}
+
+// List lists database.
+//
+// API doc: https://developers.notion.com/reference/get-databases
+func (s *DatabasesService) List(ctx context.Context) (*ListDatabaseResponse, error) {
+	req, err := s.client.NewGetRequest(databasesPath)
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := s.client.Do(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		respErr := &RespError{}
+		if err := json.NewDecoder(resp.Body).Decode(respErr); err != nil {
+			return nil, err
+		}
+		return nil, fmt.Errorf("status code not expected, got:%d, message:%s", resp.StatusCode, respErr.Message)
+	}
+
+	results := &ListDatabaseResponse{}
+	if err := json.NewDecoder(resp.Body).Decode(results); err != nil {
+		return nil, err
+	}
+
+	return results, nil
+}
