@@ -33,6 +33,22 @@ Initialize the client as below:
 client := notion.NewClient("access token")
 ```
 
+Here are some examples:
+
+## List Dashboard
+
+```golang
+resp, _ := client.Databases.List(ctx)
+fmt.Println(resp.Databases)
+```
+
+## Get user
+
+```golang
+user, _ := client.Users.Get(ctx, "user ID")
+```
+
+
 ## License
 
 This tool is released under Apache License 2.0. See details [here](./LICENSE)
