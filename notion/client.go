@@ -98,7 +98,7 @@ func NewClient(accessKey string, opts ...ClientOption) *Client {
 }
 
 // NewRequest creates an API request.
-func (c *Client) NewRequest(method, urlStr string, body interface{}) (*http.Request, error) {
+func (c *Client) Request(ctx context.Context, method, urlStr string, body interface{}) (*http.Response, error) {
 	u, err := c.BaseURL.Parse(fmt.Sprintf("v1/%s", urlStr))
 	if err != nil {
 		return nil, err
@@ -131,27 +131,27 @@ func (c *Client) NewRequest(method, urlStr string, body interface{}) (*http.Requ
 		req.Header.Set("User-Agent", c.UserAgent)
 	}
 
-	return req, nil
+	return c.Do(ctx, req)
 }
 
-// NewGetRequest creates an API GET request.
-func (c *Client) NewGetRequest(urlStr string) (*http.Request, error) {
-	return c.NewRequest("GET", urlStr, nil)
+// Get requests API GET request.
+func (c *Client) Get(ctx context.Context, urlStr string) (*http.Response, error) {
+	return c.Request(ctx, "GET", urlStr, nil)
 }
 
-// NewPOSTRequest creates an API POST request.
-func (c *Client) NewPostRequest(urlStr string, body interface{}) (*http.Request, error) {
-	return c.NewRequest("POST", urlStr, body)
+// Post requests API POST request.
+func (c *Client) Post(ctx context.Context, urlStr string, body interface{}) (*http.Response, error) {
+	return c.Request(ctx, "POST", urlStr, body)
 }
 
-// NewPatchRequest creates an API Patch request.
-func (c *Client) NewPatchRequest(urlStr string, body interface{}) (*http.Request, error) {
-	return c.NewRequest("PATCH", urlStr, body)
+// Patch requests API Patch request.
+func (c *Client) Patch(ctx context.Context, urlStr string, body interface{}) (*http.Response, error) {
+	return c.Request(ctx, "PATCH", urlStr, body)
 }
 
-// NewDeleteRequest creates an API Delete request.
-func (c *Client) NewDeleteRequest(urlStr string) (*http.Request, error) {
-	return c.NewRequest("DELETE", urlStr, nil)
+// Delete requests API Delete request.
+func (c *Client) Delete(ctx context.Context, urlStr string) (*http.Response, error) {
+	return c.Request(ctx, "DELETE", urlStr, nil)
 }
 
 func (c *Client) Do(ctx context.Context, req *http.Request) (*http.Response, error) {
