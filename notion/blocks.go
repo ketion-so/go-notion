@@ -141,15 +141,15 @@ func (b *NumberedListItemBlock) GetType() string {
 //go:generate gomodifytags -file $GOFILE -struct NumberListItemBlock -clear-tags -w
 //go:generate gomodifytags --file $GOFILE --struct NumberListItemBlock -add-tags json -w -transform snakecase
 type NumberListItemBlock struct {
-	Object         object.Type
-	ID             string
-	Type           string
-	CreatedTime    string
-	LastEditedTime string
-	HasChildren    bool
-	Text           []RichTextType
-	Checked        bool
-	Children       []Block
+	Object         object.Type    `json:"object"`
+	ID             string         `json:"id"`
+	Type           string         `json:"type"`
+	CreatedTime    string         `json:"created_time"`
+	LastEditedTime string         `json:"last_edited_time"`
+	HasChildren    bool           `json:"has_children"`
+	Text           []RichTextType `json:"text"`
+	Checked        bool           `json:"checked"`
+	Children       []Block        `json:"children"`
 }
 
 func (b *NumberListItemBlock) GetType() string {
@@ -160,15 +160,15 @@ func (b *NumberListItemBlock) GetType() string {
 //go:generate gomodifytags -file $GOFILE -struct ToDoBlock -clear-tags -w
 //go:generate gomodifytags --file $GOFILE --struct ToDoBlock -add-tags json -w -transform snakecase
 type ToDoBlock struct {
-	Object         object.Type
-	ID             string
-	Type           string
-	CreatedTime    string
-	LastEditedTime string
-	HasChildren    bool
-	Text           []RichTextType
-	Checked        bool
-	Children       []Block
+	Object         object.Type    `json:"object"`
+	ID             string         `json:"id"`
+	Type           string         `json:"type"`
+	CreatedTime    string         `json:"created_time"`
+	LastEditedTime string         `json:"last_edited_time"`
+	HasChildren    bool           `json:"has_children"`
+	Text           []RichTextType `json:"text"`
+	Checked        bool           `json:"checked"`
+	Children       []Block        `json:"children"`
 }
 
 func (b *ToDoBlock) GetType() string {
@@ -197,13 +197,13 @@ func (b *ToggleBlock) GetType() string {
 //go:generate gomodifytags -file $GOFILE -struct ChildPageBlock -clear-tags -w
 //go:generate gomodifytags --file $GOFILE --struct ChildPageBlock -add-tags json -w -transform snakecase
 type ChildPageBlock struct {
-	Object         object.Type
-	ID             string
-	Type           string
-	CreatedTime    string
-	LastEditedTime string
-	HasChildren    bool
-	Title          string
+	Object         object.Type `json:"object"`
+	ID             string      `json:"id"`
+	Type           string      `json:"type"`
+	CreatedTime    string      `json:"created_time"`
+	LastEditedTime string      `json:"last_edited_time"`
+	HasChildren    bool        `json:"has_children"`
+	Title          string      `json:"title"`
 }
 
 func (b *ChildPageBlock) GetType() string {
@@ -233,12 +233,36 @@ func (s *BlocksService) ListChildren(ctx context.Context, blockID string) (*List
 		return nil, fmt.Errorf("status code not expected, got:%d, message:%s", resp.StatusCode, respErr.Message)
 	}
 
-	result := &ListBlockChildrenResult{}
-	if err := json.NewDecoder(resp.Body).Decode(result); err != nil {
+	data := map[string]interface{}{}
+	if err := json.NewDecoder(resp.Body).Decode(&data); err != nil {
 		return nil, err
 	}
 
-	return result, nil
+	v, ok := data["results"]
+	if !ok {
+		return nil, errors.New("no results returned")
+	}
+
+	results := v.([]interface{})
+	blocks := []Block{}
+	for _, result := range results {
+		blockData, ok := result.(map[string]interface{})
+		if !ok {
+			return nil, errors.New("not block type returns")
+		}
+
+		block, err := decodeBlock(blockData, object.BlockType(blockData["type"].(string)))
+		if err != nil {
+			return nil, err
+		}
+
+		blocks = append(blocks, block)
+	}
+
+	return &ListBlockChildrenResult{
+		Object:  object.Type(data["object"].(string)),
+		Results: blocks,
+	}, nil
 }
 
 // AppendChildren children block.
@@ -264,19 +288,23 @@ func (s *BlocksService) AppendChildren(ctx context.Context, blockID string, chil
 		return nil, fmt.Errorf("status code not expected, got:%d, message:%s", resp.StatusCode, respErr.Message)
 	}
 
-	var block map[string]interface{}
-	if err := json.NewDecoder(resp.Body).Decode(&block); err != nil {
+	var data map[string]interface{}
+	if err := json.NewDecoder(resp.Body).Decode(&data); err != nil {
 		return nil, err
 	}
 
-	blockType, ok := block["type"]
+	blockType, ok := data["type"]
 	if !ok {
 		return nil, errors.New("not block type returns")
 	}
 
+	return decodeBlock(data, object.BlockType(blockType.(string)))
+}
+
+func decodeBlock(data map[string]interface{}, blockType object.BlockType) (Block, error) {
 	var b Block
 
-	switch object.BlockType(blockType.(string)) {
+	switch blockType {
 	case object.ParagraphBlockType:
 		b = &ParagraphBlock{}
 	case object.HeadingOneBlockType:
@@ -301,7 +329,7 @@ func (s *BlocksService) AppendChildren(ctx context.Context, blockID string, chil
 		return nil, fmt.Errorf("%s block type not supported", blockType)
 	}
 
-	if err := mapstructure.Decode(block, &b); err != nil {
+	if err := mapstructure.Decode(data, &b); err != nil {
 		return nil, err
 	}
 
