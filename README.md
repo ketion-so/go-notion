@@ -4,8 +4,9 @@
 
 # go-notion
 
-[![Test](https://github.com/ketion-so/go-notion/actions/workflows/test.yml/badge.svg)](https://github.com/ketion-so/go-notion/actions/workflows/test.yml)
 [![Go Reference](https://pkg.go.dev/badge/github.com/ketion-so/go-notion.svg)](https://pkg.go.dev/github.com/ketion-so/go-notion)
+[![Test](https://github.com/ketion-so/go-notion/actions/workflows/test.yml/badge.svg)](https://github.com/ketion-so/go-notion/actions/workflows/test.yml)
+[![Coverage Status](https://coveralls.io/repos/github/ketion-so/go-notion/badge.svg?branch=main)](https://coveralls.io/github/ketion-so/go-notion?branch=main)
 
 Go written [Notion](https://www.notion.so) SDK.
 
