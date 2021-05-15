@@ -230,6 +230,10 @@ func TestPagesService_Create(t *testing.T) {
 				ID:             "251d2b5f-268c-4de2-afe9-c71ff92ca95c",
 				CreatedTime:    "2020-03-17T19:10:04.968Z",
 				LastEditedTime: "2020-03-17T21:49:37.913Z",
+				Parent: &DatabaseParent{
+					Type:       object.DatabaseParentType,
+					DatabaseID: "48f8fee9-cd79-4180-bc2f-ec0398253067",
+				},
 			},
 		},
 	}
@@ -300,7 +304,7 @@ func updatePageJSON() string {
 	  }`
 }
 
-func TestPagesService_Update(t *testing.T) {
+func TestPagesService_UpdateProperties(t *testing.T) {
 	client, mux, _, teardown := setup()
 	defer teardown()
 
@@ -317,6 +321,10 @@ func TestPagesService_Update(t *testing.T) {
 				ID:             "60bdc8bd-3880-44b8-a9cd-8a145b3ffbd7",
 				CreatedTime:    "2020-03-17T19:10:04.968Z",
 				LastEditedTime: "2020-03-17T21:49:37.913Z",
+				Parent: &DatabaseParent{
+					Type:       object.DatabaseParentType,
+					DatabaseID: "48f8fee9-cd79-4180-bc2f-ec0398253067",
+				},
 			},
 		},
 	}
@@ -331,7 +339,7 @@ func TestPagesService_Update(t *testing.T) {
 				fmt.Fprint(w, updatePageJSON())
 			})
 
-			got, err := client.Pages.Update(context.Background(), tc.id, tc.input)
+			got, err := client.Pages.UpdateProperties(context.Background(), tc.id, tc.input)
 			if err != nil {
 				t.Fatalf("Failed: %v", err)
 			}
