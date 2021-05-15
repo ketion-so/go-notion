@@ -26,10 +26,17 @@ type SearchRequest struct {
 	PageSize    int32  `json:"page_size" mapstructure:"page_size"`
 }
 
-// SearchResult object represents Notion Search params
-//go:generate gomodifytags -file $GOFILE -struct SearchResult -clear-tags -w
-//go:generate gomodifytags --file $GOFILE --struct SearchResult -add-tags json,mapstructure -w -transform snakecase
-type SearchResult struct {
+// SearchResults object represents Notion Search params
+//go:generate gomodifytags -file $GOFILE -struct SearchResults -clear-tags -w
+//go:generate gomodifytags --file $GOFILE --struct SearchResults -add-tags json,mapstructure -w -transform snakecase
+type SearchResults struct {
+	HasMore    bool       `json:"has_more" mapstructure:"has_more"`
+	NextCursor string     `json:"next_cursor" mapstructure:"next_cursor"`
+	Object     string     `json:"object" mapstructure:"object"`
+	Results    []Database `json:"results" mapstructure:"results"`
+}
+
+type searchResults struct {
 	HasMore    bool          `json:"has_more" mapstructure:"has_more"`
 	NextCursor string        `json:"next_cursor" mapstructure:"next_cursor"`
 	Object     string        `json:"object" mapstructure:"object"`
@@ -74,7 +81,7 @@ type Filter struct {
 // Get gets user by user ID.
 //
 // API doc: https://developers.notion.com/reference/get-user
-func (s *SearchService) Search(ctx context.Context, sreq *SearchRequest) (*SearchResult, error) {
+func (s *SearchService) Search(ctx context.Context, sreq *SearchRequest) (*SearchResults, error) {
 	req, err := s.client.NewPostRequest(searchPath, sreq)
 	if err != nil {
 		return nil, err
@@ -94,10 +101,27 @@ func (s *SearchService) Search(ctx context.Context, sreq *SearchRequest) (*Searc
 		return nil, fmt.Errorf("status code not expected, got:%d, message:%s", resp.StatusCode, respErr.Message)
 	}
 
-	result := &SearchResult{}
-	if err := json.NewDecoder(resp.Body).Decode(result); err != nil {
+	data := &searchResults{}
+	if err := json.NewDecoder(resp.Body).Decode(data); err != nil {
 		return nil, err
 	}
 
-	return result, nil
+	databases := []Database{}
+	for _, result := range data.Results {
+		switch v := result.(type) {
+		case *database:
+			database, err := convDatabase(v)
+			if err != nil {
+				return nil, err
+			}
+			databases = append(databases, *database)
+		}
+	}
+
+	return &SearchResults{
+		HasMore:    data.HasMore,
+		NextCursor: data.NextCursor,
+		Object:     data.Object,
+		Results:    databases,
+	}, nil
 }

@@ -102,7 +102,7 @@ func TestSearchService_Search(t *testing.T) {
 
 	tcs := map[string]struct {
 		input *SearchRequest
-		want  *SearchResult
+		want  *SearchResults
 	}{
 		"ok": {
 			&SearchRequest{
@@ -112,7 +112,7 @@ func TestSearchService_Search(t *testing.T) {
 					Timestamp: "last_edited_time",
 				},
 			},
-			&SearchResult{
+			&SearchResults{
 				HasMore:    false,
 				NextCursor: "",
 				Object:     "list",
