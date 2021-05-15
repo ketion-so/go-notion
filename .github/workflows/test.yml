@@ -6,7 +6,31 @@ on:
   pull_request:
 
 jobs:
+  fmt: 
+    name: Format
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-go@v1
+        with:
+          go-version: 1.16
+      - uses: actions/checkout@v2
+      - name: Cache go modules
+        uses: actions/cache@v1
+        with:
+          path: ~/go/pkg/mod
+          key: ${{ runner.os }}-go-${{ hashFiles('go.sum') }}
+          restore-keys: ${{ runner.os }}-go-
+      - name: Run go fmt
+        if: runner.os != 'Windows'
+        run: diff -u <(echo -n) <(gofmt -d -s .)
+      - name: Run go generate
+        if: runner.os != 'Windows'
+        run: diff -u <(echo -n) <(go generate ./...)
+      - name: Run go vet
+        run: go vet ./...
+
   test:
+    name: Test
     strategy:
       matrix:
         go-version: [1.x, 1.16.x]
@@ -23,11 +47,6 @@ jobs:
           path: ~/go/pkg/mod
           key: ${{ runner.os }}-go-${{ hashFiles('go.sum') }}
           restore-keys: ${{ runner.os }}-go-
-      - name: Run go fmt
-        if: runner.os != 'Windows'
-        run: diff -u <(echo -n) <(gofmt -d -s .)
-      - name: Run go vet
-        run: go vet ./...
       - name: Run go test
         run: go test -v -race -coverprofile profile.cov -covermode atomic ./...
       - name: Send coverage
