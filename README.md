@@ -4,7 +4,11 @@
 
 # go-notion
 
+![GitHub tag (latest SemVer)](https://img.shields.io/github/v/tag/ketion-so/go-notion?color=green)
 [![Go Reference](https://pkg.go.dev/badge/github.com/ketion-so/go-notion.svg)](https://pkg.go.dev/github.com/ketion-so/go-notion)
+![GitHub go.mod Go version](https://img.shields.io/github/go-mod/go-version/ketion-so/go-notion)
+![GitHub Repo stars](https://img.shields.io/github/stars/ketion-so/go-notion)
+
 [![Test](https://github.com/ketion-so/go-notion/actions/workflows/test.yml/badge.svg)](https://github.com/ketion-so/go-notion/actions/workflows/test.yml)
 [![Coverage Status](https://coveralls.io/repos/github/ketion-so/go-notion/badge.svg?branch=main)](https://coveralls.io/github/ketion-so/go-notion?branch=main)
 
