@@ -23,14 +23,14 @@ type PagesService service
 // Page object represents the retrieve page.
 //
 // API doc: https://developers.notion.com/reference/get-page
-//go:generate gomodifytags --file $GOFILE --struct Page -add-tags json -w -transform snakecase
+//go:generate gomodifytags --file $GOFILE --struct Page -add-tags json,mapstructure -w -transform snakecase
 type Page struct {
-	Object         object.Type `json:"object"`
-	ID             string      `json:"id"`
-	CreatedTime    string      `json:"created_time"`
-	LastEditedTime string      `json:"last_edited_time"`
-	Parent         Parent      `json:"parent"`
-	Properties     interface{} `json:"properties"`
+	Object         object.Type `json:"object" mapstructure:"object"`
+	ID             string      `json:"id" mapstructure:"id"`
+	CreatedTime    string      `json:"created_time" mapstructure:"created_time"`
+	LastEditedTime string      `json:"last_edited_time" mapstructure:"last_edited_time"`
+	Parent         Parent      `json:"parent" mapstructure:"parent"`
+	Properties     interface{} `json:"properties" mapstructure:"properties"`
 }
 
 type page struct {
@@ -47,9 +47,9 @@ type Parent interface {
 }
 
 // DatabaseParent object represents the retrieve parent.
-//go:generate gomodifytags --file $GOFILE --struct DatabaseParent -add-tags json -w -transform snakecase
+//go:generate gomodifytags --file $GOFILE --struct DatabaseParent -add-tags json,mapstructure -w -transform snakecase
 type DatabaseParent struct {
-	Type       object.ParentType `json:"type"`
+	Type       object.ParentType `json:"type" mapstructure:"type"`
 	DatabaseID string            `json:"database_id" mapstructure:"database_id"`
 }
 
@@ -59,10 +59,10 @@ func (p *DatabaseParent) GetType() object.ParentType {
 
 // PageParent object represents the retrieve parent.
 //go:generate gomodifytags -file $GOFILE -struct PageParent -clear-tags -w
-//go:generate gomodifytags --file $GOFILE --struct PageParent -add-tags json -w -transform snakecase
+//go:generate gomodifytags --file $GOFILE --struct PageParent -add-tags json,mapstructure -w -transform snakecase
 type PageParent struct {
-	Type   object.ParentType `json:"type"`
-	PageID string            `json:"page_id"`
+	Type   object.ParentType `json:"type" mapstructure:"type"`
+	PageID string            `json:"page_id" mapstructure:"page_id"`
 }
 
 func (p *PageParent) GetType() object.ParentType {
@@ -71,10 +71,10 @@ func (p *PageParent) GetType() object.ParentType {
 
 // WorkspaceParent object represents the retrieve parent.
 //go:generate gomodifytags -file $GOFILE -struct WorkspaceParent -clear-tags -w
-//go:generate gomodifytags --file $GOFILE --struct WorkspaceParent -add-tags json -w -transform snakecase
+//go:generate gomodifytags --file $GOFILE --struct WorkspaceParent -add-tags json,mapstructure -w -transform snakecase
 type WorkspaceParent struct {
-	Type      object.ParentType `json:"type"`
-	Workspace bool              `json:"workspace"`
+	Type      object.ParentType `json:"type" mapstructure:"type"`
+	Workspace bool              `json:"workspace" mapstructure:"workspace"`
 }
 
 func (p *WorkspaceParent) GetType() object.ParentType {
@@ -114,11 +114,11 @@ func (s *PagesService) Get(ctx context.Context, pageID string) (*Page, error) {
 
 // CreatePageRequest object represents the retrieve page.
 //go:generate gomodifytags -file $GOFILE -struct CreatePageRequest -clear-tags -w
-//go:generate gomodifytags --file $GOFILE --struct CreatePageRequest -add-tags json -w -transform snakecase
+//go:generate gomodifytags --file $GOFILE --struct CreatePageRequest -add-tags json,mapstructure -w -transform snakecase
 type CreatePageRequest struct {
-	Parent     *Parent     `json:"parent"`
-	Properties interface{} `json:"properties"`
-	Children   []Block     `json:"children"`
+	Parent     *Parent     `json:"parent" mapstructure:"parent"`
+	Properties interface{} `json:"properties" mapstructure:"properties"`
+	Children   []Block     `json:"children" mapstructure:"children"`
 }
 
 // Create page.
@@ -188,7 +188,6 @@ func convPage(data *page) (*Page, error) {
 	switch object.ParentType(data.Parent["type"].(string)) {
 	case object.DatabaseParentType:
 		p = &DatabaseParent{}
-		fmt.Println(data.Parent["database_id"])
 	case object.PageParentType:
 		p = &PageParent{}
 	case object.WorkspaceParentType:

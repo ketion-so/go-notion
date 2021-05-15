@@ -22,10 +22,10 @@ type BlocksService service
 
 // ListBlockChildrenResult object represents the retrieve block children.
 //go:generate gomodifytags -file $GOFILE -struct ListBlockChildrenResult -clear-tags -w
-//go:generate gomodifytags --file $GOFILE --struct ListBlockChildrenResult -add-tags json -w -transform snakecase
+//go:generate gomodifytags --file $GOFILE --struct ListBlockChildrenResult -add-tags json,mapstructure -w -transform snakecase
 type ListBlockChildrenResult struct {
-	Object  object.Type `json:"object"`
-	Results []Block     `json:"results"`
+	Object  object.Type `json:"object" mapstructure:"object"`
+	Results []Block     `json:"results" mapstructure:"results"`
 }
 
 type Block interface {
@@ -34,16 +34,16 @@ type Block interface {
 
 // ParagraphBlock object represents the retrieve block children.
 //go:generate gomodifytags -file $GOFILE -struct ParagraphBlock -clear-tags -w
-//go:generate gomodifytags --file $GOFILE --struct ParagraphBlock -add-tags json -w -transform snakecase
+//go:generate gomodifytags --file $GOFILE --struct ParagraphBlock -add-tags json,mapstructure -w -transform snakecase
 type ParagraphBlock struct {
-	Object         object.Type    `json:"object"`
-	ID             string         `json:"id"`
-	Type           string         `json:"type"`
-	CreatedTime    string         `json:"created_time"`
-	LastEditedTime string         `json:"last_edited_time"`
-	HasChildren    bool           `json:"has_children"`
-	Text           []RichTextType `json:"text"`
-	Children       []Block        `json:"children"`
+	Object         object.Type    `json:"object" mapstructure:"object"`
+	ID             string         `json:"id" mapstructure:"id"`
+	Type           string         `json:"type" mapstructure:"type"`
+	CreatedTime    string         `json:"created_time" mapstructure:"created_time"`
+	LastEditedTime string         `json:"last_edited_time" mapstructure:"last_edited_time"`
+	HasChildren    bool           `json:"has_children" mapstructure:"has_children"`
+	Text           []RichTextType `json:"text" mapstructure:"text"`
+	Children       []Block        `json:"children" mapstructure:"children"`
 }
 
 func (b *ParagraphBlock) GetType() string {
@@ -52,15 +52,15 @@ func (b *ParagraphBlock) GetType() string {
 
 // HeadingOneBlock object represents the retrieve block children.
 //go:generate gomodifytags -file $GOFILE -struct HeadingOneBlock -clear-tags -w
-//go:generate gomodifytags --file $GOFILE --struct HeadingOneBlock -add-tags json -w -transform snakecase
+//go:generate gomodifytags --file $GOFILE --struct HeadingOneBlock -add-tags json,mapstructure -w -transform snakecase
 type HeadingOneBlock struct {
-	Object         object.Type    `json:"object"`
-	ID             string         `json:"id"`
-	Type           string         `json:"type"`
-	CreatedTime    string         `json:"created_time"`
-	LastEditedTime string         `json:"last_edited_time"`
-	HasChildren    bool           `json:"has_children"`
-	Text           []RichTextType `json:"text"`
+	Object         object.Type    `json:"object" mapstructure:"object"`
+	ID             string         `json:"id" mapstructure:"id"`
+	Type           string         `json:"type" mapstructure:"type"`
+	CreatedTime    string         `json:"created_time" mapstructure:"created_time"`
+	LastEditedTime string         `json:"last_edited_time" mapstructure:"last_edited_time"`
+	HasChildren    bool           `json:"has_children" mapstructure:"has_children"`
+	Text           []RichTextType `json:"text" mapstructure:"text"`
 }
 
 func (b *HeadingOneBlock) GetType() string {
@@ -69,15 +69,15 @@ func (b *HeadingOneBlock) GetType() string {
 
 // HeadingTwoBlock object represents the retrieve block children.
 //go:generate gomodifytags -file $GOFILE -struct HeadingTwoBlock -clear-tags -w
-//go:generate gomodifytags --file $GOFILE --struct HeadingTwoBlock -add-tags json -w -transform snakecase
+//go:generate gomodifytags --file $GOFILE --struct HeadingTwoBlock -add-tags json,mapstructure -w -transform snakecase
 type HeadingTwoBlock struct {
-	Object         object.Type    `json:"object"`
-	ID             string         `json:"id"`
-	Type           string         `json:"type"`
-	CreatedTime    string         `json:"created_time"`
-	LastEditedTime string         `json:"last_edited_time"`
-	HasChildren    bool           `json:"has_children"`
-	Text           []RichTextType `json:"text"`
+	Object         object.Type    `json:"object" mapstructure:"object"`
+	ID             string         `json:"id" mapstructure:"id"`
+	Type           string         `json:"type" mapstructure:"type"`
+	CreatedTime    string         `json:"created_time" mapstructure:"created_time"`
+	LastEditedTime string         `json:"last_edited_time" mapstructure:"last_edited_time"`
+	HasChildren    bool           `json:"has_children" mapstructure:"has_children"`
+	Text           []RichTextType `json:"text" mapstructure:"text"`
 }
 
 func (b *HeadingTwoBlock) GetType() string {
@@ -86,15 +86,15 @@ func (b *HeadingTwoBlock) GetType() string {
 
 // HeadingThreeBlock object represents the retrieve block children.
 //go:generate gomodifytags -file $GOFILE -struct HeadingThreeBlock -clear-tags -w
-//go:generate gomodifytags --file $GOFILE --struct HeadingThreeBlock -add-tags json -w -transform snakecase
+//go:generate gomodifytags --file $GOFILE --struct HeadingThreeBlock -add-tags json,mapstructure -w -transform snakecase
 type HeadingThreeBlock struct {
-	Object         object.Type    `json:"object"`
-	ID             string         `json:"id"`
-	Type           string         `json:"type"`
-	CreatedTime    string         `json:"created_time"`
-	LastEditedTime string         `json:"last_edited_time"`
-	HasChildren    bool           `json:"has_children"`
-	Text           []RichTextType `json:"text"`
+	Object         object.Type    `json:"object" mapstructure:"object"`
+	ID             string         `json:"id" mapstructure:"id"`
+	Type           string         `json:"type" mapstructure:"type"`
+	CreatedTime    string         `json:"created_time" mapstructure:"created_time"`
+	LastEditedTime string         `json:"last_edited_time" mapstructure:"last_edited_time"`
+	HasChildren    bool           `json:"has_children" mapstructure:"has_children"`
+	Text           []RichTextType `json:"text" mapstructure:"text"`
 }
 
 func (b *HeadingThreeBlock) GetType() string {
@@ -103,16 +103,16 @@ func (b *HeadingThreeBlock) GetType() string {
 
 // BulletedListItemBlock object represents the retrieve block children.
 //go:generate gomodifytags -file $GOFILE -struct BulletedListItemBlock -clear-tags -w
-//go:generate gomodifytags --file $GOFILE --struct BulletedListItemBlock -add-tags json -w -transform snakecase
+//go:generate gomodifytags --file $GOFILE --struct BulletedListItemBlock -add-tags json,mapstructure -w -transform snakecase
 type BulletedListItemBlock struct {
-	Object         object.Type    `json:"object"`
-	ID             string         `json:"id"`
-	Type           string         `json:"type"`
-	CreatedTime    string         `json:"created_time"`
-	LastEditedTime string         `json:"last_edited_time"`
-	HasChildren    bool           `json:"has_children"`
-	Text           []RichTextType `json:"text"`
-	Children       []Block        `json:"children"`
+	Object         object.Type    `json:"object" mapstructure:"object"`
+	ID             string         `json:"id" mapstructure:"id"`
+	Type           string         `json:"type" mapstructure:"type"`
+	CreatedTime    string         `json:"created_time" mapstructure:"created_time"`
+	LastEditedTime string         `json:"last_edited_time" mapstructure:"last_edited_time"`
+	HasChildren    bool           `json:"has_children" mapstructure:"has_children"`
+	Text           []RichTextType `json:"text" mapstructure:"text"`
+	Children       []Block        `json:"children" mapstructure:"children"`
 }
 
 func (b *BulletedListItemBlock) GetType() string {
@@ -121,16 +121,16 @@ func (b *BulletedListItemBlock) GetType() string {
 
 // NumberedListItemBlock object represents the retrieve block children.
 //go:generate gomodifytags -file $GOFILE -struct NumberedListItemBlock -clear-tags -w
-//go:generate gomodifytags --file $GOFILE --struct NumberedListItemBlock -add-tags json -w -transform snakecase
+//go:generate gomodifytags --file $GOFILE --struct NumberedListItemBlock -add-tags json,mapstructure -w -transform snakecase
 type NumberedListItemBlock struct {
-	Object         object.Type    `json:"object"`
-	ID             string         `json:"id"`
-	Type           string         `json:"type"`
-	CreatedTime    string         `json:"created_time"`
-	LastEditedTime string         `json:"last_edited_time"`
-	HasChildren    bool           `json:"has_children"`
-	Text           []RichTextType `json:"text"`
-	Children       []Block        `json:"children"`
+	Object         object.Type    `json:"object" mapstructure:"object"`
+	ID             string         `json:"id" mapstructure:"id"`
+	Type           string         `json:"type" mapstructure:"type"`
+	CreatedTime    string         `json:"created_time" mapstructure:"created_time"`
+	LastEditedTime string         `json:"last_edited_time" mapstructure:"last_edited_time"`
+	HasChildren    bool           `json:"has_children" mapstructure:"has_children"`
+	Text           []RichTextType `json:"text" mapstructure:"text"`
+	Children       []Block        `json:"children" mapstructure:"children"`
 }
 
 func (b *NumberedListItemBlock) GetType() string {
@@ -139,17 +139,17 @@ func (b *NumberedListItemBlock) GetType() string {
 
 // NumberListItemBlock object represents the retrieve block children.
 //go:generate gomodifytags -file $GOFILE -struct NumberListItemBlock -clear-tags -w
-//go:generate gomodifytags --file $GOFILE --struct NumberListItemBlock -add-tags json -w -transform snakecase
+//go:generate gomodifytags --file $GOFILE --struct NumberListItemBlock -add-tags json,mapstructure -w -transform snakecase
 type NumberListItemBlock struct {
-	Object         object.Type    `json:"object"`
-	ID             string         `json:"id"`
-	Type           string         `json:"type"`
-	CreatedTime    string         `json:"created_time"`
-	LastEditedTime string         `json:"last_edited_time"`
-	HasChildren    bool           `json:"has_children"`
-	Text           []RichTextType `json:"text"`
-	Checked        bool           `json:"checked"`
-	Children       []Block        `json:"children"`
+	Object         object.Type    `json:"object" mapstructure:"object"`
+	ID             string         `json:"id" mapstructure:"id"`
+	Type           string         `json:"type" mapstructure:"type"`
+	CreatedTime    string         `json:"created_time" mapstructure:"created_time"`
+	LastEditedTime string         `json:"last_edited_time" mapstructure:"last_edited_time"`
+	HasChildren    bool           `json:"has_children" mapstructure:"has_children"`
+	Text           []RichTextType `json:"text" mapstructure:"text"`
+	Checked        bool           `json:"checked" mapstructure:"checked"`
+	Children       []Block        `json:"children" mapstructure:"children"`
 }
 
 func (b *NumberListItemBlock) GetType() string {
@@ -158,17 +158,17 @@ func (b *NumberListItemBlock) GetType() string {
 
 // ToDoBlock object represents the retrieve block children.
 //go:generate gomodifytags -file $GOFILE -struct ToDoBlock -clear-tags -w
-//go:generate gomodifytags --file $GOFILE --struct ToDoBlock -add-tags json -w -transform snakecase
+//go:generate gomodifytags --file $GOFILE --struct ToDoBlock -add-tags json,mapstructure -w -transform snakecase
 type ToDoBlock struct {
-	Object         object.Type    `json:"object"`
-	ID             string         `json:"id"`
-	Type           string         `json:"type"`
-	CreatedTime    string         `json:"created_time"`
-	LastEditedTime string         `json:"last_edited_time"`
-	HasChildren    bool           `json:"has_children"`
-	Text           []RichTextType `json:"text"`
-	Checked        bool           `json:"checked"`
-	Children       []Block        `json:"children"`
+	Object         object.Type    `json:"object" mapstructure:"object"`
+	ID             string         `json:"id" mapstructure:"id"`
+	Type           string         `json:"type" mapstructure:"type"`
+	CreatedTime    string         `json:"created_time" mapstructure:"created_time"`
+	LastEditedTime string         `json:"last_edited_time" mapstructure:"last_edited_time"`
+	HasChildren    bool           `json:"has_children" mapstructure:"has_children"`
+	Text           []RichTextType `json:"text" mapstructure:"text"`
+	Checked        bool           `json:"checked" mapstructure:"checked"`
+	Children       []Block        `json:"children" mapstructure:"children"`
 }
 
 func (b *ToDoBlock) GetType() string {
@@ -177,16 +177,16 @@ func (b *ToDoBlock) GetType() string {
 
 // ToggleBlock object represents the retrieve block children.
 //go:generate gomodifytags -file $GOFILE -struct ToggleBlock -clear-tags -w
-//go:generate gomodifytags --file $GOFILE --struct ToggleBlock -add-tags json -w -transform snakecase
+//go:generate gomodifytags --file $GOFILE --struct ToggleBlock -add-tags json,mapstructure -w -transform snakecase
 type ToggleBlock struct {
-	Object         object.Type    `json:"object"`
-	ID             string         `json:"id"`
-	Type           string         `json:"type"`
-	CreatedTime    string         `json:"created_time"`
-	LastEditedTime string         `json:"last_edited_time"`
-	HasChildren    bool           `json:"has_children"`
-	Text           []RichTextType `json:"text"`
-	Children       []Block        `json:"children"`
+	Object         object.Type    `json:"object" mapstructure:"object"`
+	ID             string         `json:"id" mapstructure:"id"`
+	Type           string         `json:"type" mapstructure:"type"`
+	CreatedTime    string         `json:"created_time" mapstructure:"created_time"`
+	LastEditedTime string         `json:"last_edited_time" mapstructure:"last_edited_time"`
+	HasChildren    bool           `json:"has_children" mapstructure:"has_children"`
+	Text           []RichTextType `json:"text" mapstructure:"text"`
+	Children       []Block        `json:"children" mapstructure:"children"`
 }
 
 func (b *ToggleBlock) GetType() string {
@@ -195,15 +195,15 @@ func (b *ToggleBlock) GetType() string {
 
 // ChildPageBlock object represents the retrieve block children.
 //go:generate gomodifytags -file $GOFILE -struct ChildPageBlock -clear-tags -w
-//go:generate gomodifytags --file $GOFILE --struct ChildPageBlock -add-tags json -w -transform snakecase
+//go:generate gomodifytags --file $GOFILE --struct ChildPageBlock -add-tags json,mapstructure -w -transform snakecase
 type ChildPageBlock struct {
-	Object         object.Type `json:"object"`
-	ID             string      `json:"id"`
-	Type           string      `json:"type"`
-	CreatedTime    string      `json:"created_time"`
-	LastEditedTime string      `json:"last_edited_time"`
-	HasChildren    bool        `json:"has_children"`
-	Title          string      `json:"title"`
+	Object         object.Type `json:"object" mapstructure:"object"`
+	ID             string      `json:"id" mapstructure:"id"`
+	Type           string      `json:"type" mapstructure:"type"`
+	CreatedTime    string      `json:"created_time" mapstructure:"created_time"`
+	LastEditedTime string      `json:"last_edited_time" mapstructure:"last_edited_time"`
+	HasChildren    bool        `json:"has_children" mapstructure:"has_children"`
+	Title          string      `json:"title" mapstructure:"title"`
 }
 
 func (b *ChildPageBlock) GetType() string {
