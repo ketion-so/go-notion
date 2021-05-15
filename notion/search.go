@@ -87,7 +87,7 @@ func (s *SearchService) Search(ctx context.Context, sreq *SearchRequest) (*Searc
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		respErr := &RespError{}
+		respErr := &Error{}
 		if err := json.NewDecoder(resp.Body).Decode(respErr); err != nil {
 			return nil, err
 		}

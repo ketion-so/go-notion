@@ -349,7 +349,7 @@ func (s *DatabasesService) Get(ctx context.Context, databaseID string) (*Databas
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		respErr := &RespError{}
+		respErr := &Error{}
 		if err := json.NewDecoder(resp.Body).Decode(respErr); err != nil {
 			return nil, err
 		}
@@ -405,7 +405,7 @@ func (s *DatabasesService) List(ctx context.Context) (*ListDatabaseResponse, err
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		respErr := &RespError{}
+		respErr := &Error{}
 		if err := json.NewDecoder(resp.Body).Decode(respErr); err != nil {
 			return nil, err
 		}

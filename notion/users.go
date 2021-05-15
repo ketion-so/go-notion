@@ -61,7 +61,7 @@ func (s *UsersService) Get(ctx context.Context, userID string) (*User, error) {
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		respErr := &RespError{}
+		respErr := &Error{}
 		if err := json.NewDecoder(resp.Body).Decode(respErr); err != nil {
 			return nil, err
 		}
@@ -103,7 +103,7 @@ func (s *UsersService) List(ctx context.Context) (*ListUserResponse, error) {
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		respErr := &RespError{}
+		respErr := &Error{}
 		if err := json.NewDecoder(resp.Body).Decode(respErr); err != nil {
 			return nil, err
 		}

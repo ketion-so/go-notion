@@ -226,7 +226,7 @@ func (s *BlocksService) ListChildren(ctx context.Context, blockID string) (*List
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		respErr := &RespError{}
+		respErr := &Error{}
 		if err := json.NewDecoder(resp.Body).Decode(respErr); err != nil {
 			return nil, err
 		}
@@ -281,7 +281,7 @@ func (s *BlocksService) AppendChildren(ctx context.Context, blockID string, chil
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		respErr := &RespError{}
+		respErr := &Error{}
 		if err := json.NewDecoder(resp.Body).Decode(respErr); err != nil {
 			return nil, err
 		}
