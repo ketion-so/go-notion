@@ -3,8 +3,12 @@ package notion
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http"
+
+	"github.com/ketion-so/go-notion/notion/object"
+	"github.com/mitchellh/mapstructure"
 )
 
 const (
@@ -19,14 +23,62 @@ type PagesService service
 // Page object represents the retrieve page.
 //
 // API doc: https://developers.notion.com/reference/get-page
-//go:generate gomodifytags -file $GOFILE -struct Page -clear-tags -w
 //go:generate gomodifytags --file $GOFILE --struct Page -add-tags json -w -transform snakecase
 type Page struct {
-	Object         string      `json:"object"`
+	Object         object.Type `json:"object"`
 	ID             string      `json:"id"`
 	CreatedTime    string      `json:"created_time"`
 	LastEditedTime string      `json:"last_edited_time"`
+	Parent         Parent      `json:"parent"`
 	Properties     interface{} `json:"properties"`
+}
+
+type page struct {
+	Object         object.Type            `json:"object"`
+	ID             string                 `json:"id"`
+	CreatedTime    string                 `json:"created_time"`
+	LastEditedTime string                 `json:"last_edited_time"`
+	Parent         map[string]interface{} `json:"parent"`
+	Properties     interface{}            `json:"properties"`
+}
+
+type Parent interface {
+	GetType() object.ParentType
+}
+
+// DatabaseParent object represents the retrieve parent.
+//go:generate gomodifytags --file $GOFILE --struct DatabaseParent -add-tags json -w -transform snakecase
+type DatabaseParent struct {
+	Type       object.ParentType `json:"type"`
+	DatabaseID string            `json:"database_id" mapstructure:"database_id"`
+}
+
+func (p *DatabaseParent) GetType() object.ParentType {
+	return object.ParentType(p.Type)
+}
+
+// PageParent object represents the retrieve parent.
+//go:generate gomodifytags -file $GOFILE -struct PageParent -clear-tags -w
+//go:generate gomodifytags --file $GOFILE --struct PageParent -add-tags json -w -transform snakecase
+type PageParent struct {
+	Type   object.ParentType `json:"type"`
+	PageID string            `json:"page_id"`
+}
+
+func (p *PageParent) GetType() object.ParentType {
+	return object.ParentType(p.Type)
+}
+
+// WorkspaceParent object represents the retrieve parent.
+//go:generate gomodifytags -file $GOFILE -struct WorkspaceParent -clear-tags -w
+//go:generate gomodifytags --file $GOFILE --struct WorkspaceParent -add-tags json -w -transform snakecase
+type WorkspaceParent struct {
+	Type      object.ParentType `json:"type"`
+	Workspace bool              `json:"workspace"`
+}
+
+func (p *WorkspaceParent) GetType() object.ParentType {
+	return object.ParentType(p.Type)
 }
 
 // List page list.
@@ -52,29 +104,21 @@ func (s *PagesService) Get(ctx context.Context, pageID string) (*Page, error) {
 		return nil, fmt.Errorf("status code not expected, got:%d, message:%s", resp.StatusCode, respErr.Message)
 	}
 
-	page := &Page{}
-	if err := json.NewDecoder(resp.Body).Decode(page); err != nil {
+	data := page{}
+	if err := json.NewDecoder(resp.Body).Decode(&data); err != nil {
 		return nil, err
 	}
 
-	return page, nil
+	return convPage(&data)
 }
 
 // CreatePageRequest object represents the retrieve page.
 //go:generate gomodifytags -file $GOFILE -struct CreatePageRequest -clear-tags -w
 //go:generate gomodifytags --file $GOFILE --struct CreatePageRequest -add-tags json -w -transform snakecase
 type CreatePageRequest struct {
-	Parent     *Parent       `json:"parent"`
-	Properties interface{}   `json:"properties"`
-	Children   []interface{} `json:"children"`
-}
-
-// Parent represents database parent or page parent.
-//go:generate gomodifytags --file $GOFILE --struct Parent -add-tags json -w -transform snakecase
-type Parent struct {
-	Type       string `json:"type"`
-	DatabaseID string `json:"database_id,omitempty"`
-	PageID     string `json:"page_id,omitempty"`
+	Parent     *Parent     `json:"parent"`
+	Properties interface{} `json:"properties"`
+	Children   []Block     `json:"children"`
 }
 
 // Create page.
@@ -100,18 +144,18 @@ func (s *PagesService) Create(ctx context.Context, pageID string, preq *CreatePa
 		return nil, fmt.Errorf("status code not expected, got:%d, message:%s", resp.StatusCode, respErr.Message)
 	}
 
-	page := &Page{}
-	if err := json.NewDecoder(resp.Body).Decode(page); err != nil {
+	data := page{}
+	if err := json.NewDecoder(resp.Body).Decode(&data); err != nil {
 		return nil, err
 	}
 
-	return page, nil
+	return convPage(&data)
 }
 
 // Updateupdates page properties.
 //
 // API doc: https://developers.notion.com/reference/patch-page
-func (s *PagesService) Update(ctx context.Context, pageID string, properties interface{}) (*Page, error) {
+func (s *PagesService) UpdateProperties(ctx context.Context, pageID string, properties interface{}) (*Page, error) {
 	req, err := s.client.NewPostRequest(fmt.Sprintf("%s/%s", pagesPath, pageID), properties)
 	if err != nil {
 		return nil, err
@@ -131,9 +175,39 @@ func (s *PagesService) Update(ctx context.Context, pageID string, properties int
 		return nil, fmt.Errorf("status code not expected, got:%d, message:%s", resp.StatusCode, respErr.Message)
 	}
 
-	page := &Page{}
-	if err := json.NewDecoder(resp.Body).Decode(page); err != nil {
+	data := page{}
+	if err := json.NewDecoder(resp.Body).Decode(&data); err != nil {
 		return nil, err
+	}
+
+	return convPage(&data)
+}
+
+func convPage(data *page) (*Page, error) {
+	var p Parent
+	switch object.ParentType(data.Parent["type"].(string)) {
+	case object.DatabaseParentType:
+		p = &DatabaseParent{}
+		fmt.Println(data.Parent["database_id"])
+	case object.PageParentType:
+		p = &PageParent{}
+	case object.WorkspaceParentType:
+		p = &WorkspaceParent{}
+	default:
+		return nil, errors.New("not type found for parent properties")
+	}
+
+	if err := mapstructure.Decode(data.Parent, &p); err != nil {
+		return nil, err
+	}
+
+	page := &Page{
+		Object:         data.Object,
+		ID:             data.ID,
+		CreatedTime:    data.CreatedTime,
+		LastEditedTime: data.LastEditedTime,
+		Properties:     data.Properties,
+		Parent:         p,
 	}
 
 	return page, nil

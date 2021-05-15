@@ -36,9 +36,6 @@ type SearchResult struct {
 	Results    []interface{} `json:"results"`
 }
 
-// Direction represents the sort direction.
-//go:generate gomodifytags -file $GOFILE -struct Direction -clear-tags -w
-//go:generate gomodifytags --file $GOFILE --struct Direction -add-tags json -w -transform snakecase
 type Direction string
 
 const (
@@ -50,8 +47,8 @@ const (
 //go:generate gomodifytags -file $GOFILE -struct Sort -clear-tags -w
 //go:generate gomodifytags --file $GOFILE --struct Sort -add-tags json -w -transform snakecase
 type Sort struct {
-	Direction Direction
-	Timestamp string
+	Direction Direction `json:"direction"`
+	Timestamp string    `json:"timestamp"`
 }
 
 type FilterValue string
@@ -70,8 +67,8 @@ const (
 //go:generate gomodifytags -file $GOFILE -struct Filter -clear-tags -w
 //go:generate gomodifytags --file $GOFILE --struct Filter -add-tags json -w -transform snakecase
 type Filter struct {
-	Value    FilterValue
-	Property FilterPropertyValue
+	Value    FilterValue         `json:"value"`
+	Property FilterPropertyValue `json:"property"`
 }
 
 // Get gets user by user ID.

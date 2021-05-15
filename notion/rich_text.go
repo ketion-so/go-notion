@@ -91,9 +91,9 @@ type MentionObject struct {
 	User     *User
 }
 
-// Equation object represents Notion rich text object
-//go:generate gomodifytags -file $GOFILE -struct Equation -clear-tags -w
-//go:generate gomodifytags --file $GOFILE --struct Equation -add-tags json -w -transform snakecase
+// EquationObject object represents Notion rich text object
+//go:generate gomodifytags -file $GOFILE -struct EquationObject -clear-tags -w
+//go:generate gomodifytags --file $GOFILE --struct EquationObject -add-tags json -w -transform snakecase
 type EquationObject struct {
-	Expression string
+	Expression string `json:"expression"`
 }

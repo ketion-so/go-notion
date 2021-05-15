@@ -8,6 +8,7 @@ import (
 
 	"github.com/google/go-cmp/cmp"
 	"github.com/google/go-cmp/cmp/cmpopts"
+	"github.com/ketion-so/go-notion/notion/object"
 )
 
 func getPageJSON() string {
@@ -16,6 +17,10 @@ func getPageJSON() string {
 		"id": "b55c9c91-384d-452b-81db-d1ef79372b75",
 		"created_time": "2020-03-17T19:10:04.968Z",
 		"last_edited_time": "2020-03-17T21:49:37.913Z",
+		"parent": {
+			"type": "workspace",
+			"workspace": true
+		},
 		"properties": {
 		  "Name": [
 			{
@@ -95,12 +100,16 @@ func TestPagesService_Get(t *testing.T) {
 		want *Page
 	}{
 		"ok": {
-			"d40e767c-d7af-4b18-a86d-55c61f1e39a4",
+			"b55c9c91-384d-452b-81db-d1ef79372b75",
 			&Page{
 				Object:         "page",
 				ID:             "b55c9c91-384d-452b-81db-d1ef79372b75",
 				CreatedTime:    "2020-03-17T19:10:04.968Z",
 				LastEditedTime: "2020-03-17T21:49:37.913Z",
+				Parent: &WorkspaceParent{
+					Type:      object.WorkspaceParentType,
+					Workspace: true,
+				},
 			},
 		},
 	}
@@ -221,6 +230,10 @@ func TestPagesService_Create(t *testing.T) {
 				ID:             "251d2b5f-268c-4de2-afe9-c71ff92ca95c",
 				CreatedTime:    "2020-03-17T19:10:04.968Z",
 				LastEditedTime: "2020-03-17T21:49:37.913Z",
+				Parent: &DatabaseParent{
+					Type:       object.DatabaseParentType,
+					DatabaseID: "48f8fee9-cd79-4180-bc2f-ec0398253067",
+				},
 			},
 		},
 	}
@@ -291,7 +304,7 @@ func updatePageJSON() string {
 	  }`
 }
 
-func TestPagesService_Update(t *testing.T) {
+func TestPagesService_UpdateProperties(t *testing.T) {
 	client, mux, _, teardown := setup()
 	defer teardown()
 
@@ -308,6 +321,10 @@ func TestPagesService_Update(t *testing.T) {
 				ID:             "60bdc8bd-3880-44b8-a9cd-8a145b3ffbd7",
 				CreatedTime:    "2020-03-17T19:10:04.968Z",
 				LastEditedTime: "2020-03-17T21:49:37.913Z",
+				Parent: &DatabaseParent{
+					Type:       object.DatabaseParentType,
+					DatabaseID: "48f8fee9-cd79-4180-bc2f-ec0398253067",
+				},
 			},
 		},
 	}
@@ -322,7 +339,7 @@ func TestPagesService_Update(t *testing.T) {
 				fmt.Fprint(w, updatePageJSON())
 			})
 
-			got, err := client.Pages.Update(context.Background(), tc.id, tc.input)
+			got, err := client.Pages.UpdateProperties(context.Background(), tc.id, tc.input)
 			if err != nil {
 				t.Fatalf("Failed: %v", err)
 			}
