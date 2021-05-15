@@ -11,6 +11,8 @@ import (
 	"strconv"
 	"sync"
 	"time"
+
+	"github.com/ketion-so/go-notion/notion/object"
 )
 
 var (
@@ -191,12 +193,17 @@ func (c *Client) Do(ctx context.Context, req *http.Request) (*http.Response, err
 	return resp, nil
 }
 
-// RespError represents error response from Notion
-type RespError struct {
-	Message string `json:"message"`
+// Error represents error response from Notion
+//go:generate gomodifytags -file $GOFILE -struct Error -clear-tags -w
+//go:generate gomodifytags --file $GOFILE --struct Error -add-tags json,mapstructure -w -transform snakecase
+type Error struct {
+	Object  string           `json:"object" mapstructure:"object"`
+	Status  int              `json:"status" mapstructure:"status"`
+	Code    object.ErrorCode `json:"code" mapstructure:"code"`
+	Message string           `json:"message" mapstructure:"message"`
 }
 
 // Error implements the error interface
-func (e *RespError) Error() string {
+func (e *Error) Error() string {
 	return e.Message
 }

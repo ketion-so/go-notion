@@ -97,7 +97,7 @@ func (s *PagesService) Get(ctx context.Context, pageID string) (*Page, error) {
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		respErr := &RespError{}
+		respErr := &Error{}
 		if err := json.NewDecoder(resp.Body).Decode(respErr); err != nil {
 			return nil, err
 		}
@@ -137,7 +137,7 @@ func (s *PagesService) Create(ctx context.Context, pageID string, preq *CreatePa
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		respErr := &RespError{}
+		respErr := &Error{}
 		if err := json.NewDecoder(resp.Body).Decode(respErr); err != nil {
 			return nil, err
 		}
@@ -168,7 +168,7 @@ func (s *PagesService) UpdateProperties(ctx context.Context, pageID string, prop
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		respErr := &RespError{}
+		respErr := &Error{}
 		if err := json.NewDecoder(resp.Body).Decode(respErr); err != nil {
 			return nil, err
 		}
