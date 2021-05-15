@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"net/http"
 
 	"github.com/ketion-so/go-notion/notion/object"
 )
@@ -55,14 +54,6 @@ func (s *UsersService) Get(ctx context.Context, userID string) (*User, error) {
 	}
 	defer resp.Body.Close()
 
-	if resp.StatusCode != http.StatusOK {
-		respErr := &Error{}
-		if err := json.NewDecoder(resp.Body).Decode(respErr); err != nil {
-			return nil, err
-		}
-		return nil, fmt.Errorf("status code not expected, got:%d, message:%s", resp.StatusCode, respErr.Message)
-	}
-
 	user := &User{}
 	if err := json.NewDecoder(resp.Body).Decode(user); err != nil {
 		return nil, err
@@ -91,14 +82,6 @@ func (s *UsersService) List(ctx context.Context) (*ListUserResponse, error) {
 		return nil, err
 	}
 	defer resp.Body.Close()
-
-	if resp.StatusCode != http.StatusOK {
-		respErr := &Error{}
-		if err := json.NewDecoder(resp.Body).Decode(respErr); err != nil {
-			return nil, err
-		}
-		return nil, fmt.Errorf("status code not expected, got:%d, message:%s", resp.StatusCode, respErr.Message)
-	}
 
 	luResp := &ListUserResponse{}
 	if err := json.NewDecoder(resp.Body).Decode(luResp); err != nil {

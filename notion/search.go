@@ -3,8 +3,6 @@ package notion
 import (
 	"context"
 	"encoding/json"
-	"fmt"
-	"net/http"
 )
 
 const (
@@ -87,14 +85,6 @@ func (s *SearchService) Search(ctx context.Context, sreq *SearchRequest) (*Searc
 		return nil, err
 	}
 	defer resp.Body.Close()
-
-	if resp.StatusCode != http.StatusOK {
-		respErr := &Error{}
-		if err := json.NewDecoder(resp.Body).Decode(respErr); err != nil {
-			return nil, err
-		}
-		return nil, fmt.Errorf("status code not expected, got:%d, message:%s", resp.StatusCode, respErr.Message)
-	}
 
 	data := &searchResults{}
 	if err := json.NewDecoder(resp.Body).Decode(data); err != nil {

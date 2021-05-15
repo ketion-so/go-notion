@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"net/http"
 
 	"github.com/ketion-so/go-notion/notion/object"
 	"github.com/mitchellh/mapstructure"
@@ -343,14 +342,6 @@ func (s *DatabasesService) Get(ctx context.Context, databaseID string) (*Databas
 	}
 	defer resp.Body.Close()
 
-	if resp.StatusCode != http.StatusOK {
-		respErr := &Error{}
-		if err := json.NewDecoder(resp.Body).Decode(respErr); err != nil {
-			return nil, err
-		}
-		return nil, fmt.Errorf("status code not expected, got:%d, message:%s", resp.StatusCode, respErr.Message)
-	}
-
 	data := database{}
 	if err := json.NewDecoder(resp.Body).Decode(&data); err != nil {
 		return nil, err
@@ -393,14 +384,6 @@ func (s *DatabasesService) List(ctx context.Context) (*ListDatabaseResponse, err
 		return nil, err
 	}
 	defer resp.Body.Close()
-
-	if resp.StatusCode != http.StatusOK {
-		respErr := &Error{}
-		if err := json.NewDecoder(resp.Body).Decode(respErr); err != nil {
-			return nil, err
-		}
-		return nil, fmt.Errorf("status code not expected, got:%d, message:%s", resp.StatusCode, respErr.Message)
-	}
 
 	results := &ListDatabaseResponse{}
 	if err := json.NewDecoder(resp.Body).Decode(results); err != nil {

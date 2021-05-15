@@ -190,6 +190,14 @@ func (c *Client) Do(ctx context.Context, req *http.Request) (*http.Response, err
 		c.mu.Unlock()
 	}
 
+	if resp.StatusCode != http.StatusOK {
+		apiErr := &Error{}
+		if err := json.NewDecoder(resp.Body).Decode(apiErr); err != nil {
+			return nil, err
+		}
+		return nil, apiErr
+	}
+
 	return resp, nil
 }
 

@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"net/http"
 
 	"github.com/ketion-so/go-notion/notion/object"
 	"github.com/mitchellh/mapstructure"
@@ -220,14 +219,6 @@ func (s *BlocksService) ListChildren(ctx context.Context, blockID string) (*List
 	}
 	defer resp.Body.Close()
 
-	if resp.StatusCode != http.StatusOK {
-		respErr := &Error{}
-		if err := json.NewDecoder(resp.Body).Decode(respErr); err != nil {
-			return nil, err
-		}
-		return nil, fmt.Errorf("status code not expected, got:%d, message:%s", resp.StatusCode, respErr.Message)
-	}
-
 	data := map[string]interface{}{}
 	if err := json.NewDecoder(resp.Body).Decode(&data); err != nil {
 		return nil, err
@@ -269,14 +260,6 @@ func (s *BlocksService) AppendChildren(ctx context.Context, blockID string, chil
 		return nil, err
 	}
 	defer resp.Body.Close()
-
-	if resp.StatusCode != http.StatusOK {
-		respErr := &Error{}
-		if err := json.NewDecoder(resp.Body).Decode(respErr); err != nil {
-			return nil, err
-		}
-		return nil, fmt.Errorf("status code not expected, got:%d, message:%s", resp.StatusCode, respErr.Message)
-	}
 
 	var data map[string]interface{}
 	if err := json.NewDecoder(resp.Body).Decode(&data); err != nil {
