@@ -5,6 +5,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+
+	"github.com/ketion-so/go-notion/notion/object"
 )
 
 const (
@@ -20,8 +22,84 @@ type BlocksService service
 //go:generate gomodifytags -file $GOFILE -struct ListBlockChildrenResult -clear-tags -w
 //go:generate gomodifytags --file $GOFILE --struct ListBlockChildrenResult -add-tags json -w -transform snakecase
 type ListBlockChildrenResult struct {
-	Object  string        `json:"object"`
+	Object  object.Type   `json:"object"`
 	Results []interface{} `json:"results"`
+}
+
+type ParagraphBlock struct {
+	Object         object.Type
+	ID             string
+	Type           string
+	CreatedTime    string
+	LastEditedTime string
+	HasChildren    bool
+	Text           []RichTextType
+	Children       []interface{}
+}
+
+type HeadingBlock struct {
+	Object         object.Type
+	ID             string
+	Type           string
+	CreatedTime    string
+	LastEditedTime string
+	HasChildren    bool
+	Text           []RichTextType
+}
+
+type BulletedListItemBlock struct {
+	Object         object.Type
+	ID             string
+	Type           string
+	CreatedTime    string
+	LastEditedTime string
+	HasChildren    bool
+	Text           []RichTextType
+	Children       []interface{}
+}
+
+type NumberedListItemBlock struct {
+	Object         object.Type
+	ID             string
+	Type           string
+	CreatedTime    string
+	LastEditedTime string
+	HasChildren    bool
+	Text           []RichTextType
+	Children       []interface{}
+}
+
+type TodoBlock struct {
+	Object         object.Type
+	ID             string
+	Type           string
+	CreatedTime    string
+	LastEditedTime string
+	HasChildren    bool
+	Text           []RichTextType
+	Checked        bool
+	Children       []interface{}
+}
+
+type ToggleBlock struct {
+	Object         object.Type
+	ID             string
+	Type           string
+	CreatedTime    string
+	LastEditedTime string
+	HasChildren    bool
+	Text           []RichTextType
+	Children       []interface{}
+}
+
+type ChildPageBlock struct {
+	Object         object.Type
+	ID             string
+	Type           string
+	CreatedTime    string
+	LastEditedTime string
+	HasChildren    bool
+	Title          string
 }
 
 // ListChildren blocks list.
