@@ -61,11 +61,11 @@ func TestUsersService_Get(t *testing.T) {
 
 	tcs := map[string]struct {
 		id   string
-		want *GetUserResponse
+		want *User
 	}{
 		"ok": {
 			"d40e767c-d7af-4b18-a86d-55c61f1e39a4",
-			&GetUserResponse{
+			&User{
 				ID:   "d40e767c-d7af-4b18-a86d-55c61f1e39a4",
 				Type: "person",
 				Person: &People{

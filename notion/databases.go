@@ -1,5 +1,12 @@
 package notion
 
+import (
+	"context"
+	"encoding/json"
+	"fmt"
+	"net/http"
+)
+
 const (
 	databasesPath = "databases"
 )
@@ -7,7 +14,7 @@ const (
 // Databaseservice handles communication to Notion Databases API.
 //
 // API doc: https://developers.notion.com/reference/database
-type Databaseservice service
+type DatabasesService service
 
 // Database object represents Notion Database.
 //
@@ -15,39 +22,65 @@ type Databaseservice service
 //go:generate gomodifytags -file $GOFILE -struct Database -clear-tags -w
 //go:generate gomodifytags --file $GOFILE --struct Database -add-tags json -w -transform snakecase
 type Database struct {
-	Object         string             `json:"object"`
-	ID             string             `json:"id"`
-	CreatedTime    string             `json:"created_time"`
-	LastEditedTime string             `json:"last_edited_time"`
-	Title          []RichText         `json:"title"`
-	Properties     []DatabaseProperty `json:"properties"`
+	Object         string                 `json:"object"`
+	ID             string                 `json:"id"`
+	CreatedTime    string                 `json:"created_time"`
+	LastEditedTime string                 `json:"last_edited_time"`
+	Title          []RichText             `json:"title"`
+	Properties     map[string]interface{} `json:"properties"`
 }
 
 type DatabasePropertyType string
 
 const (
-	TitleDatabase          DatabasePropertyType = "title"
-	RichTextDatabase       DatabasePropertyType = "rich_text"
-	NumberDatabase         DatabasePropertyType = "number"
-	SelectDatabase         DatabasePropertyType = "select"
-	MultiSelectDatabase    DatabasePropertyType = "multi_select"
-	DateDatabase           DatabasePropertyType = "date"
-	PeopleDatabase         DatabasePropertyType = "people"
-	FileDatabase           DatabasePropertyType = "file"
-	CheckboxDatabase       DatabasePropertyType = "checkbox"
-	URLDatabase            DatabasePropertyType = "url"
-	EmailDatabase          DatabasePropertyType = "email"
-	PhoneNumberDatabase    DatabasePropertyType = "phone_number"
-	FormulaDatabase        DatabasePropertyType = "formula"
-	RelationDatabase       DatabasePropertyType = "relation"
-	RollupDatabase         DatabasePropertyType = "rollup"
-	CreatedTypeDatabase    DatabasePropertyType = "created_time"
-	CreatedByDatabase      DatabasePropertyType = "created_by"
-	LastEditedTimeDatabase DatabasePropertyType = "last_edited_time"
-	LastEditedByDatabase   DatabasePropertyType = "last_edited_by"
+	TitleDatabaseType          DatabasePropertyType = "title"
+	RichTextDatabaseType       DatabasePropertyType = "rich_text"
+	NumberDatabaseType         DatabasePropertyType = "number"
+	SelectDatabaseType         DatabasePropertyType = "select"
+	MultiSelectDatabaseType    DatabasePropertyType = "multi_select"
+	DateDatabaseType           DatabasePropertyType = "date"
+	PeopleDatabaseType         DatabasePropertyType = "people"
+	FileDatabaseType           DatabasePropertyType = "file"
+	CheckboxDatabaseType       DatabasePropertyType = "checkbox"
+	URLDatabaseType            DatabasePropertyType = "url"
+	EmailDatabaseType          DatabasePropertyType = "email"
+	PhoneNumberDatabaseType    DatabasePropertyType = "phone_number"
+	FormulaDatabaseType        DatabasePropertyType = "formula"
+	RelationDatabaseType       DatabasePropertyType = "relation"
+	RollupDatabaseType         DatabasePropertyType = "rollup"
+	CreatedTypeDatabaseType    DatabasePropertyType = "created_time"
+	CreatedByDatabaseType      DatabasePropertyType = "created_by"
+	LastEditedTimeDatabaseType DatabasePropertyType = "last_edited_time"
+	LastEditedByDatabaseType   DatabasePropertyType = "last_edited_by"
 )
 
-type DatabaseProperty struct {
-	ID   string
-	Type DatabasePropertyType
+// Get retrieves database by database ID.
+//
+// API doc: https://developers.notion.com/reference/get-database
+func (s *DatabasesService) Get(ctx context.Context, databaseID string) (*Database, error) {
+	req, err := s.client.NewGetRequest(fmt.Sprintf("%s/%s", databasesPath, databaseID))
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := s.client.Do(ctx, req)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		respErr := &RespError{}
+		if err := json.NewDecoder(resp.Body).Decode(respErr); err != nil {
+			return nil, err
+		}
+		return nil, fmt.Errorf("status code not expected, got:%d, message:%s", resp.StatusCode, respErr.Message)
+	}
+
+	db := &Database{}
+	if err := json.NewDecoder(resp.Body).Decode(db); err != nil {
+		return nil, err
+	}
+
+	return db, nil
 }

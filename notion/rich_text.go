@@ -15,10 +15,10 @@ const (
 //go:generate gomodifytags -file $GOFILE -struct RichText -clear-tags -w
 //go:generate gomodifytags --file $GOFILE --struct RichText -add-tags json -w -transform snakecase
 type RichText struct {
-	PlainText   string        `json:"plain_text"`
-	Href        string        `json:"href"`
-	Annotations *Annotations  `json:"annotations"`
-	Type        *RichTextType `json:"type"`
+	PlainText   string       `json:"plain_text"`
+	Href        string       `json:"href"`
+	Annotations *Annotations `json:"annotations"`
+	Type        RichTextType `json:"type"`
 }
 
 // Annotations object represents Notion rich text annotation
@@ -36,25 +36,25 @@ type Annotations struct {
 type Color string
 
 const (
-	Default          Color = "default"
-	Gray             Color = "gray"
-	Brown            Color = "brown"
-	Orange           Color = "orange"
-	Yellow           Color = "yellow"
-	Green            Color = "green"
-	Blue             Color = "blue"
-	Purple           Color = "purple"
-	Pink             Color = "ping"
-	Red              Color = "red"
-	GrayBackGround   Color = "gray_background"
-	BrownBackGround  Color = "brown_background"
-	OrangeBackGround Color = "orange_background"
-	YellowBackGround Color = "yellow_background"
-	GreenBackGround  Color = "green_background"
-	BlueBackGround   Color = "blue_background"
-	PurpleBackGround Color = "purple_background"
-	PinkBackGround   Color = "pink_background"
-	RedBackGround    Color = "red_background"
+	DefaultColor          Color = "default"
+	GrayColor             Color = "gray"
+	BrownColor            Color = "brown"
+	OrangeColor           Color = "orange"
+	YellowColor           Color = "yellow"
+	GreenColor            Color = "green"
+	BlueColor             Color = "blue"
+	PurpleColor           Color = "purple"
+	PinkColor             Color = "ping"
+	RedColor              Color = "red"
+	GrayBackGroundColor   Color = "gray_background"
+	BrownBackGroundColor  Color = "brown_background"
+	OrangeBackGroundColor Color = "orange_background"
+	YellowBackGroundColor Color = "yellow_background"
+	GreenBackGroundColor  Color = "green_background"
+	BlueBackGroundColor   Color = "blue_background"
+	PurpleBackGroundColor Color = "purple_background"
+	PinkBackGroundColor   Color = "pink_background"
+	RedBackGroundColor    Color = "red_background"
 )
 
 // TextObject object represents Notion rich text object

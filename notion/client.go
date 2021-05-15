@@ -47,8 +47,9 @@ type Client struct {
 	BaseURL     *url.URL
 	version     string
 
-	Search *SearchService
-	Users  *UsersService
+	Databases *DatabasesService
+	Search    *SearchService
+	Users     *UsersService
 }
 
 // RateLimit represents the rate limit info for the API
@@ -84,6 +85,7 @@ func NewClient(accessKey string, opts ...ClientOption) *Client {
 	c.client = http.DefaultClient
 	c.RateLimit = defaultRateLimit
 
+	c.Databases = (*DatabasesService)(&c.common)
 	c.Search = (*SearchService)(&c.common)
 	c.Users = (*UsersService)(&c.common)
 	return c
