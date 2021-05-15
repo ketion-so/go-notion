@@ -214,12 +214,7 @@ func (b *ChildPageBlock) GetType() string {
 //
 // API doc: https://developers.notion.com/reference/get-block-children
 func (s *BlocksService) ListChildren(ctx context.Context, blockID string) (*ListBlockChildrenResult, error) {
-	req, err := s.client.NewGetRequest(fmt.Sprintf("%s/%s/children", blocksPath, blockID))
-	if err != nil {
-		return nil, err
-	}
-
-	resp, err := s.client.Do(ctx, req)
+	resp, err := s.client.Get(ctx, fmt.Sprintf("%s/%s/children", blocksPath, blockID))
 	if err != nil {
 		return nil, err
 	}
@@ -269,12 +264,7 @@ func (s *BlocksService) ListChildren(ctx context.Context, blockID string) (*List
 //
 // API doc: https://developers.notion.com/reference/get-block-children
 func (s *BlocksService) AppendChildren(ctx context.Context, blockID string, children Block) (Block, error) {
-	req, err := s.client.NewPostRequest(fmt.Sprintf("%s/%s/children", databasesPath, blockID), children)
-	if err != nil {
-		return nil, err
-	}
-
-	resp, err := s.client.Do(ctx, req)
+	resp, err := s.client.Post(ctx, fmt.Sprintf("%s/%s/children", databasesPath, blockID), children)
 	if err != nil {
 		return nil, err
 	}
