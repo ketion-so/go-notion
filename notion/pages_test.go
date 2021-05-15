@@ -8,6 +8,7 @@ import (
 
 	"github.com/google/go-cmp/cmp"
 	"github.com/google/go-cmp/cmp/cmpopts"
+	"github.com/ketion-so/go-notion/notion/object"
 )
 
 func getPageJSON() string {
@@ -16,6 +17,10 @@ func getPageJSON() string {
 		"id": "b55c9c91-384d-452b-81db-d1ef79372b75",
 		"created_time": "2020-03-17T19:10:04.968Z",
 		"last_edited_time": "2020-03-17T21:49:37.913Z",
+		"parent": {
+			"type": "workspace",
+			"workspace": true
+		},
 		"properties": {
 		  "Name": [
 			{
@@ -95,12 +100,16 @@ func TestPagesService_Get(t *testing.T) {
 		want *Page
 	}{
 		"ok": {
-			"d40e767c-d7af-4b18-a86d-55c61f1e39a4",
+			"b55c9c91-384d-452b-81db-d1ef79372b75",
 			&Page{
 				Object:         "page",
 				ID:             "b55c9c91-384d-452b-81db-d1ef79372b75",
 				CreatedTime:    "2020-03-17T19:10:04.968Z",
 				LastEditedTime: "2020-03-17T21:49:37.913Z",
+				Parent: &WorkspaceParent{
+					Type:      object.WorkspaceParentType,
+					Workspace: true,
+				},
 			},
 		},
 	}
