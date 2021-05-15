@@ -69,12 +69,12 @@ func (s *UsersService) Get(ctx context.Context, userID string) (*GetUserResponse
 		return nil, fmt.Errorf("status code not expected, got:%d, message:%s", resp.StatusCode, respErr.Message)
 	}
 
-	board := &GetUserResponse{}
-	if err := json.NewDecoder(resp.Body).Decode(board); err != nil {
+	user := &GetUserResponse{}
+	if err := json.NewDecoder(resp.Body).Decode(user); err != nil {
 		return nil, err
 	}
 
-	return board, nil
+	return user, nil
 }
 
 // ListUserResponse represents the response from the list User API
