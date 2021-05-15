@@ -49,6 +49,7 @@ type Client struct {
 
 	Blocks    *BlocksService
 	Databases *DatabasesService
+	Pages     *PagesService
 	Search    *SearchService
 	Users     *UsersService
 }
@@ -88,6 +89,7 @@ func NewClient(accessKey string, opts ...ClientOption) *Client {
 
 	c.Blocks = (*BlocksService)(&c.common)
 	c.Databases = (*DatabasesService)(&c.common)
+	c.Pages = (*PagesService)(&c.common)
 	c.Search = (*SearchService)(&c.common)
 	c.Users = (*UsersService)(&c.common)
 	return c
