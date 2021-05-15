@@ -47,6 +47,7 @@ type Client struct {
 	BaseURL     *url.URL
 	version     string
 
+	Blocks    *BlocksService
 	Databases *DatabasesService
 	Search    *SearchService
 	Users     *UsersService
@@ -85,6 +86,7 @@ func NewClient(accessKey string, opts ...ClientOption) *Client {
 	c.client = http.DefaultClient
 	c.RateLimit = defaultRateLimit
 
+	c.Blocks = (*BlocksService)(&c.common)
 	c.Databases = (*DatabasesService)(&c.common)
 	c.Search = (*SearchService)(&c.common)
 	c.Users = (*UsersService)(&c.common)
