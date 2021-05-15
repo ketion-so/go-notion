@@ -18,22 +18,22 @@ type SearchService service
 
 // SearchRequest object represents Notion Search params
 //go:generate gomodifytags -file $GOFILE -struct SearchRequest -clear-tags -w
-//go:generate gomodifytags --file $GOFILE --struct SearchRequest -add-tags json -w -transform snakecase
+//go:generate gomodifytags --file $GOFILE --struct SearchRequest -add-tags json,mapstructure -w -transform snakecase
 type SearchRequest struct {
-	Query       string `json:"query"`
-	Sort        *Sort  `json:"sort"`
-	StartCursor string `json:"start_cursor"`
-	PageSize    int32  `json:"page_size"`
+	Query       string `json:"query" mapstructure:"query"`
+	Sort        *Sort  `json:"sort" mapstructure:"sort"`
+	StartCursor string `json:"start_cursor" mapstructure:"start_cursor"`
+	PageSize    int32  `json:"page_size" mapstructure:"page_size"`
 }
 
 // SearchResult object represents Notion Search params
 //go:generate gomodifytags -file $GOFILE -struct SearchResult -clear-tags -w
-//go:generate gomodifytags --file $GOFILE --struct SearchResult -add-tags json -w -transform snakecase
+//go:generate gomodifytags --file $GOFILE --struct SearchResult -add-tags json,mapstructure -w -transform snakecase
 type SearchResult struct {
-	HasMore    bool          `json:"has_more"`
-	NextCursor string        `json:"next_cursor"`
-	Object     string        `json:"object"`
-	Results    []interface{} `json:"results"`
+	HasMore    bool          `json:"has_more" mapstructure:"has_more"`
+	NextCursor string        `json:"next_cursor" mapstructure:"next_cursor"`
+	Object     string        `json:"object" mapstructure:"object"`
+	Results    []interface{} `json:"results" mapstructure:"results"`
 }
 
 type Direction string
@@ -45,10 +45,10 @@ const (
 
 // Sort object represents Notion User.
 //go:generate gomodifytags -file $GOFILE -struct Sort -clear-tags -w
-//go:generate gomodifytags --file $GOFILE --struct Sort -add-tags json -w -transform snakecase
+//go:generate gomodifytags --file $GOFILE --struct Sort -add-tags json,mapstructure -w -transform snakecase
 type Sort struct {
-	Direction Direction `json:"direction"`
-	Timestamp string    `json:"timestamp"`
+	Direction Direction `json:"direction" mapstructure:"direction"`
+	Timestamp string    `json:"timestamp" mapstructure:"timestamp"`
 }
 
 type FilterValue string
@@ -65,10 +65,10 @@ const (
 
 // Filter object represents Notion User.
 //go:generate gomodifytags -file $GOFILE -struct Filter -clear-tags -w
-//go:generate gomodifytags --file $GOFILE --struct Filter -add-tags json -w -transform snakecase
+//go:generate gomodifytags --file $GOFILE --struct Filter -add-tags json,mapstructure -w -transform snakecase
 type Filter struct {
-	Value    FilterValue         `json:"value"`
-	Property FilterPropertyValue `json:"property"`
+	Value    FilterValue         `json:"value" mapstructure:"value"`
+	Property FilterPropertyValue `json:"property" mapstructure:"property"`
 }
 
 // Get gets user by user ID.

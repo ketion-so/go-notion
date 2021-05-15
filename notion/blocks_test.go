@@ -209,9 +209,12 @@ func TestDatabasesService_AppendChildren(t *testing.T) {
 			"668d797c-76fa-4934-9b05-ad288df2d136",
 			nil,
 			&ToggleBlock{
-				Object: "block",
-				Type:   "toggle",
-				ID:     "9bd15f8d-8082-429b-82db-e6c4ea88413b",
+				Object:         "block",
+				Type:           "toggle",
+				ID:             "9bd15f8d-8082-429b-82db-e6c4ea88413b",
+				CreatedTime:    "2020-03-17T19:10:04.968Z",
+				LastEditedTime: "2020-03-17T21:49:37.913Z",
+				HasChildren:    true,
 			},
 		},
 	}
