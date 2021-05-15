@@ -12,6 +12,18 @@ Go written [Notion](https://www.notion.so) SDK.
 
 *Note: The [Notion API](https://developers.notion.com/) is in beta phase*
 
+## Supported APIs
+
+It supports all APIs for Notion API (as for 2021-05-15).
+
+* [x] Blocks
+* [x] Databases
+* [x] Pages
+* [x] Search
+* [x] Users
+
+Is this package needs update, please raise an issue or a PR.
+
 ## Installation
 
 Include this  in your code as below:
