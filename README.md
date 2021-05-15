@@ -14,6 +14,8 @@
 [![reviewdog](https://github.com/ketion-so/go-notion/actions/workflows/reviewdog.yml/badge.svg)](https://github.com/ketion-so/go-notion/actions/workflows/reviewdog.yml)
 [![Coverage Status](https://coveralls.io/repos/github/ketion-so/go-notion/badge.svg?branch=main)](https://coveralls.io/github/ketion-so/go-notion?branch=main)
 
+[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.0-4baaaa.svg)](code_of_conduct.md)
+
 Go written [Notion](https://www.notion.so) SDK.
 
 *Note: The [Notion API](https://developers.notion.com/) is in beta phase*
