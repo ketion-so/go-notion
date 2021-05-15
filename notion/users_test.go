@@ -7,12 +7,7 @@ import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
-)
-
-const (
-	testBoardName     = "test-name"
-	testBoardViewLink = "https://test-test.com"
-	testBoardDesc     = ""
+	"github.com/ketion-so/go-notion/notion/object"
 )
 
 func getListUserSON() string {
@@ -67,7 +62,7 @@ func TestUsersService_Get(t *testing.T) {
 			"d40e767c-d7af-4b18-a86d-55c61f1e39a4",
 			&User{
 				ID:   "d40e767c-d7af-4b18-a86d-55c61f1e39a4",
-				Type: "person",
+				Type: object.Person,
 				Person: &People{
 					Email: "avo@example.org",
 				},
@@ -111,7 +106,7 @@ func TestUsersService_List(t *testing.T) {
 				Results: []User{
 					{
 						ID:   "d40e767c-d7af-4b18-a86d-55c61f1e39a4",
-						Type: "person",
+						Type: object.Person,
 						Person: &People{
 							Email: "avo@example.org",
 						},
@@ -120,7 +115,7 @@ func TestUsersService_List(t *testing.T) {
 					},
 					{
 						ID:        "9a3b5ae0-c6e6-482d-b0e1-ed315ee6dc57",
-						Type:      "bot",
+						Type:      object.Bot,
 						Bot:       &Bot{},
 						Name:      "Doug Engelbot",
 						AvatarURL: "https://secure.notion-static.com/6720d746-3402-4171-8ebb-28d15144923c.jpg",
