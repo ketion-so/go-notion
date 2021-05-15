@@ -6,6 +6,8 @@
 
 Go written [Notion](https://www.notion.so) SDK.
 
+*Note: The [Notion API](https://developers.notion.com/) is in beta phase*
+
 ## Installation
 
 Include this  in your code as below:
