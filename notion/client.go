@@ -45,6 +45,7 @@ type Client struct {
 	UserAgent   string
 	AccessToken string
 	BaseURL     *url.URL
+	version     string
 
 	Users *UsersService
 }
@@ -56,16 +57,25 @@ type RateLimit struct {
 	Reset     time.Time
 }
 
+type ClientOption func(c *Client)
+
+func WithVersion(version string) ClientOption {
+	return func(c *Client) {
+		c.version = version
+	}
+}
+
 // NewClient returns the API client for Notion
-func NewClient(accessKey string) *Client {
+func NewClient(accessKey string, opts ...ClientOption) *Client {
 	baseURL, _ := url.Parse(baseURL)
 	c := &Client{
 		BaseURL:   baseURL,
 		accessKey: accessKey,
+		UserAgent: defaultUserAgent,
 	}
 
-	if c.UserAgent != "" {
-		c.UserAgent = defaultUserAgent
+	for _, opt := range opts {
+		opt(c)
 	}
 
 	c.common.client = c
@@ -100,6 +110,7 @@ func (c *Client) NewRequest(method, urlStr string, body interface{}) (*http.Requ
 	}
 
 	req.Header.Add("Authorization", fmt.Sprintf("Bearer %s", c.accessKey))
+	req.Header.Add("Notion-Version", c.version)
 
 	if body != nil {
 		req.Header.Set("Content-Type", "application/json")
