@@ -72,6 +72,7 @@ func NewClient(accessKey string, opts ...ClientOption) *Client {
 		BaseURL:   baseURL,
 		accessKey: accessKey,
 		UserAgent: defaultUserAgent,
+		version:   defaultVersion,
 	}
 
 	for _, opt := range opts {
@@ -110,7 +111,7 @@ func (c *Client) NewRequest(method, urlStr string, body interface{}) (*http.Requ
 	}
 
 	req.Header.Add("Authorization", fmt.Sprintf("Bearer %s", c.accessKey))
-	req.Header.Add("Notion-Version", c.version)
+	req.Header.Add(notionVersionHeader, c.version)
 
 	if body != nil {
 		req.Header.Set("Content-Type", "application/json")

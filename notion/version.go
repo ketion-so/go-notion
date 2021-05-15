@@ -1,5 +1,6 @@
 package notion
 
 const (
-	defaultVersion = " 2021-05-13"
+	notionVersionHeader = "Notion-Version"
+	defaultVersion      = " 2021-05-13"
 )

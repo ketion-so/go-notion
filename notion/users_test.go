@@ -80,6 +80,10 @@ func TestUsersService_Get(t *testing.T) {
 	for n, tc := range tcs {
 		t.Run(n, func(t *testing.T) {
 			mux.HandleFunc(fmt.Sprintf("/%s/%s", usersPath, tc.id), func(w http.ResponseWriter, r *http.Request) {
+				if r.Header.Get(notionVersionHeader) == "" {
+					t.Fatalf("no notion version header to request")
+				}
+
 				fmt.Fprint(w, getUserJSON(tc.id))
 			})
 
@@ -131,6 +135,10 @@ func TestUsersService_List(t *testing.T) {
 	for n, tc := range tcs {
 		t.Run(n, func(t *testing.T) {
 			mux.HandleFunc("/"+usersPath, func(w http.ResponseWriter, r *http.Request) {
+				if r.Header.Get(notionVersionHeader) == "" {
+					t.Fatalf("no notion version header to request")
+				}
+
 				fmt.Fprint(w, getListUserSON())
 			})
 
