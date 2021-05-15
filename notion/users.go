@@ -5,6 +5,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+
+	"github.com/ketion-so/go-notion/notion/object"
 )
 
 const (
@@ -19,15 +21,14 @@ type UsersService service
 // Users object represents Notion User.
 //
 // API doc: https://developers.notion.com/reference/user
-//go:generate gomodifytags -file $GOFILE -struct User -clear-tags -w
 //go:generate gomodifytags --file $GOFILE --struct User -add-tags json -w -transform snakecase
 type User struct {
-	ID        string  `json:"id"`
-	Type      string  `json:"type"`
-	Name      string  `json:"name"`
-	AvatarURL string  `json:"avatar_url"`
-	Person    *People `json:"person"`
-	Bot       *Bot    `json:"bot"`
+	ID        string      `json:"id"`
+	Type      object.Type `json:"type"`
+	Name      string      `json:"name"`
+	AvatarURL string      `json:"avatar_url"`
+	Person    *People     `json:"person,omitempty"`
+	Bot       *Bot        `json:"bot,omitempty"`
 }
 
 // People object represents Notion human account.
@@ -80,10 +81,10 @@ func (s *UsersService) Get(ctx context.Context, userID string) (*User, error) {
 //go:generate gomodifytags -file $GOFILE -struct ListUserResponse -clear-tags -w
 //go:generate gomodifytags --file $GOFILE --struct ListUserResponse -add-tags json -w -transform snakecase
 type ListUserResponse struct {
-	Object     string `json:"object"`
-	Results    []User `json:"results"`
-	NextCursor string `json:"next_cursor"`
-	HasMore    bool   `json:"has_more"`
+	Object     object.Type `json:"object"`
+	Results    []User      `json:"results"`
+	NextCursor string      `json:"next_cursor"`
+	HasMore    bool        `json:"has_more"`
 }
 
 // List gets the list of users.
