@@ -3,10 +3,12 @@ package notion
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http"
 
 	"github.com/ketion-so/go-notion/notion/object"
+	"github.com/mitchellh/mapstructure"
 )
 
 const (
@@ -22,54 +24,123 @@ type BlocksService service
 //go:generate gomodifytags -file $GOFILE -struct ListBlockChildrenResult -clear-tags -w
 //go:generate gomodifytags --file $GOFILE --struct ListBlockChildrenResult -add-tags json -w -transform snakecase
 type ListBlockChildrenResult struct {
-	Object  object.Type   `json:"object"`
-	Results []interface{} `json:"results"`
+	Object  object.Type `json:"object"`
+	Results []Block     `json:"results"`
 }
 
+type Block interface {
+	GetType() string
+}
+
+// ParagraphBlock object represents the retrieve block children.
+//go:generate gomodifytags -file $GOFILE -struct ParagraphBlock -clear-tags -w
+//go:generate gomodifytags --file $GOFILE --struct ParagraphBlock -add-tags json -w -transform snakecase
 type ParagraphBlock struct {
-	Object         object.Type
-	ID             string
-	Type           string
-	CreatedTime    string
-	LastEditedTime string
-	HasChildren    bool
-	Text           []RichTextType
-	Children       []interface{}
+	Object         object.Type    `json:"object"`
+	ID             string         `json:"id"`
+	Type           string         `json:"type"`
+	CreatedTime    string         `json:"created_time"`
+	LastEditedTime string         `json:"last_edited_time"`
+	HasChildren    bool           `json:"has_children"`
+	Text           []RichTextType `json:"text"`
+	Children       []Block        `json:"children"`
 }
 
-type HeadingBlock struct {
-	Object         object.Type
-	ID             string
-	Type           string
-	CreatedTime    string
-	LastEditedTime string
-	HasChildren    bool
-	Text           []RichTextType
+func (b *ParagraphBlock) GetType() string {
+	return string(b.Type)
 }
 
+// HeadingOneBlock object represents the retrieve block children.
+//go:generate gomodifytags -file $GOFILE -struct HeadingOneBlock -clear-tags -w
+//go:generate gomodifytags --file $GOFILE --struct HeadingOneBlock -add-tags json -w -transform snakecase
+type HeadingOneBlock struct {
+	Object         object.Type    `json:"object"`
+	ID             string         `json:"id"`
+	Type           string         `json:"type"`
+	CreatedTime    string         `json:"created_time"`
+	LastEditedTime string         `json:"last_edited_time"`
+	HasChildren    bool           `json:"has_children"`
+	Text           []RichTextType `json:"text"`
+}
+
+func (b *HeadingOneBlock) GetType() string {
+	return string(b.Type)
+}
+
+// HeadingTwoBlock object represents the retrieve block children.
+//go:generate gomodifytags -file $GOFILE -struct HeadingTwoBlock -clear-tags -w
+//go:generate gomodifytags --file $GOFILE --struct HeadingTwoBlock -add-tags json -w -transform snakecase
+type HeadingTwoBlock struct {
+	Object         object.Type    `json:"object"`
+	ID             string         `json:"id"`
+	Type           string         `json:"type"`
+	CreatedTime    string         `json:"created_time"`
+	LastEditedTime string         `json:"last_edited_time"`
+	HasChildren    bool           `json:"has_children"`
+	Text           []RichTextType `json:"text"`
+}
+
+func (b *HeadingTwoBlock) GetType() string {
+	return string(b.Type)
+}
+
+// HeadingThreeBlock object represents the retrieve block children.
+//go:generate gomodifytags -file $GOFILE -struct HeadingThreeBlock -clear-tags -w
+//go:generate gomodifytags --file $GOFILE --struct HeadingThreeBlock -add-tags json -w -transform snakecase
+type HeadingThreeBlock struct {
+	Object         object.Type    `json:"object"`
+	ID             string         `json:"id"`
+	Type           string         `json:"type"`
+	CreatedTime    string         `json:"created_time"`
+	LastEditedTime string         `json:"last_edited_time"`
+	HasChildren    bool           `json:"has_children"`
+	Text           []RichTextType `json:"text"`
+}
+
+func (b *HeadingThreeBlock) GetType() string {
+	return string(b.Type)
+}
+
+// BulletedListItemBlock object represents the retrieve block children.
+//go:generate gomodifytags -file $GOFILE -struct BulletedListItemBlock -clear-tags -w
+//go:generate gomodifytags --file $GOFILE --struct BulletedListItemBlock -add-tags json -w -transform snakecase
 type BulletedListItemBlock struct {
-	Object         object.Type
-	ID             string
-	Type           string
-	CreatedTime    string
-	LastEditedTime string
-	HasChildren    bool
-	Text           []RichTextType
-	Children       []interface{}
+	Object         object.Type    `json:"object"`
+	ID             string         `json:"id"`
+	Type           string         `json:"type"`
+	CreatedTime    string         `json:"created_time"`
+	LastEditedTime string         `json:"last_edited_time"`
+	HasChildren    bool           `json:"has_children"`
+	Text           []RichTextType `json:"text"`
+	Children       []Block        `json:"children"`
 }
 
+func (b *BulletedListItemBlock) GetType() string {
+	return string(b.Type)
+}
+
+// NumberedListItemBlock object represents the retrieve block children.
+//go:generate gomodifytags -file $GOFILE -struct NumberedListItemBlock -clear-tags -w
+//go:generate gomodifytags --file $GOFILE --struct NumberedListItemBlock -add-tags json -w -transform snakecase
 type NumberedListItemBlock struct {
-	Object         object.Type
-	ID             string
-	Type           string
-	CreatedTime    string
-	LastEditedTime string
-	HasChildren    bool
-	Text           []RichTextType
-	Children       []interface{}
+	Object         object.Type    `json:"object"`
+	ID             string         `json:"id"`
+	Type           string         `json:"type"`
+	CreatedTime    string         `json:"created_time"`
+	LastEditedTime string         `json:"last_edited_time"`
+	HasChildren    bool           `json:"has_children"`
+	Text           []RichTextType `json:"text"`
+	Children       []Block        `json:"children"`
 }
 
-type TodoBlock struct {
+func (b *NumberedListItemBlock) GetType() string {
+	return string(b.Type)
+}
+
+// NumberListItemBlock object represents the retrieve block children.
+//go:generate gomodifytags -file $GOFILE -struct NumberListItemBlock -clear-tags -w
+//go:generate gomodifytags --file $GOFILE --struct NumberListItemBlock -add-tags json -w -transform snakecase
+type NumberListItemBlock struct {
 	Object         object.Type
 	ID             string
 	Type           string
@@ -78,10 +149,17 @@ type TodoBlock struct {
 	HasChildren    bool
 	Text           []RichTextType
 	Checked        bool
-	Children       []interface{}
+	Children       []Block
 }
 
-type ToggleBlock struct {
+func (b *NumberListItemBlock) GetType() string {
+	return string(b.Type)
+}
+
+// ToDoBlock object represents the retrieve block children.
+//go:generate gomodifytags -file $GOFILE -struct ToDoBlock -clear-tags -w
+//go:generate gomodifytags --file $GOFILE --struct ToDoBlock -add-tags json -w -transform snakecase
+type ToDoBlock struct {
 	Object         object.Type
 	ID             string
 	Type           string
@@ -89,9 +167,35 @@ type ToggleBlock struct {
 	LastEditedTime string
 	HasChildren    bool
 	Text           []RichTextType
-	Children       []interface{}
+	Checked        bool
+	Children       []Block
 }
 
+func (b *ToDoBlock) GetType() string {
+	return string(b.Type)
+}
+
+// ToggleBlock object represents the retrieve block children.
+//go:generate gomodifytags -file $GOFILE -struct ToggleBlock -clear-tags -w
+//go:generate gomodifytags --file $GOFILE --struct ToggleBlock -add-tags json -w -transform snakecase
+type ToggleBlock struct {
+	Object         object.Type    `json:"object"`
+	ID             string         `json:"id"`
+	Type           string         `json:"type"`
+	CreatedTime    string         `json:"created_time"`
+	LastEditedTime string         `json:"last_edited_time"`
+	HasChildren    bool           `json:"has_children"`
+	Text           []RichTextType `json:"text"`
+	Children       []Block        `json:"children"`
+}
+
+func (b *ToggleBlock) GetType() string {
+	return string(b.Type)
+}
+
+// ChildPageBlock object represents the retrieve block children.
+//go:generate gomodifytags -file $GOFILE -struct ChildPageBlock -clear-tags -w
+//go:generate gomodifytags --file $GOFILE --struct ChildPageBlock -add-tags json -w -transform snakecase
 type ChildPageBlock struct {
 	Object         object.Type
 	ID             string
@@ -100,6 +204,10 @@ type ChildPageBlock struct {
 	LastEditedTime string
 	HasChildren    bool
 	Title          string
+}
+
+func (b *ChildPageBlock) GetType() string {
+	return string(b.Type)
 }
 
 // ListChildren blocks list.
@@ -136,7 +244,7 @@ func (s *BlocksService) ListChildren(ctx context.Context, blockID string) (*List
 // AppendChildren children block.
 //
 // API doc: https://developers.notion.com/reference/get-block-children
-func (s *BlocksService) AppendChildren(ctx context.Context, blockID string, children interface{}) (interface{}, error) {
+func (s *BlocksService) AppendChildren(ctx context.Context, blockID string, children Block) (Block, error) {
 	req, err := s.client.NewPostRequest(fmt.Sprintf("%s/%s/children", databasesPath, blockID), children)
 	if err != nil {
 		return nil, err
@@ -156,10 +264,46 @@ func (s *BlocksService) AppendChildren(ctx context.Context, blockID string, chil
 		return nil, fmt.Errorf("status code not expected, got:%d, message:%s", resp.StatusCode, respErr.Message)
 	}
 
-	var block interface{}
+	var block map[string]interface{}
 	if err := json.NewDecoder(resp.Body).Decode(&block); err != nil {
 		return nil, err
 	}
 
-	return block, nil
+	blockType, ok := block["type"]
+	if !ok {
+		return nil, errors.New("not block type returns")
+	}
+
+	var b Block
+
+	switch object.BlockType(blockType.(string)) {
+	case object.ParagraphBlockType:
+		b = &ParagraphBlock{}
+	case object.HeadingOneBlockType:
+		b = &HeadingOneBlock{}
+	case object.HeadingTwoBlockType:
+		b = &HeadingTwoBlock{}
+	case object.HeadingThreeBlockType:
+		b = &HeadingThreeBlock{}
+	case object.BulletedListItemBlockType:
+		b = &BulletedListItemBlock{}
+	case object.NumberListItemBlockType:
+		b = &NumberListItemBlock{}
+	case object.ToggleBlockType:
+		b = &ToggleBlock{}
+	case object.ToDoBlockType:
+		b = &ToDoBlock{}
+	case object.ChildPageBlockType:
+		b = &ChildPageBlock{}
+	case object.UnsupportedBlockType:
+		return nil, fmt.Errorf("%s block type not supported", blockType)
+	default:
+		return nil, fmt.Errorf("%s block type not supported", blockType)
+	}
+
+	if err := mapstructure.Decode(block, &b); err != nil {
+		return nil, err
+	}
+
+	return b, nil
 }

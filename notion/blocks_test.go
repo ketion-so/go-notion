@@ -202,14 +202,16 @@ func TestDatabasesService_AppendChildren(t *testing.T) {
 
 	tcs := map[string]struct {
 		id    string
-		input interface{}
-		want  *ListBlockChildrenResult
+		input Block
+		want  Block
 	}{
 		"ok": {
 			"668d797c-76fa-4934-9b05-ad288df2d136",
 			nil,
-			&ListBlockChildrenResult{
-				Object: "list",
+			&ToggleBlock{
+				Object: "block",
+				Type:   "toggle",
+				ID:     "9bd15f8d-8082-429b-82db-e6c4ea88413b",
 			},
 		},
 	}
@@ -224,9 +226,22 @@ func TestDatabasesService_AppendChildren(t *testing.T) {
 				fmt.Fprint(w, getAppendChildrenJSON())
 			})
 
-			_, err := client.Blocks.AppendChildren(context.Background(), tc.id, tc.input)
+			resp, err := client.Blocks.AppendChildren(context.Background(), tc.id, tc.input)
 			if err != nil {
 				t.Fatalf("Failed: %v", err)
+			}
+
+			if resp.GetType() != "toggle" {
+				t.Fatalf("block type not toggle")
+			}
+
+			got, ok := resp.(*ToggleBlock)
+			if !ok {
+				t.Fatalf("failed to cast object, got: %T, want: %T", tc.input, tc.want)
+			}
+
+			if diff := cmp.Diff(got, tc.want); diff != "" {
+				t.Fatalf("Diff: %s(-got +want)", diff)
 			}
 		})
 	}
