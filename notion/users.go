@@ -17,7 +17,7 @@ const (
 // API doc: https://developers.notion.com/reference/user
 type UsersService service
 
-// Users object represents Notion User.
+// User object represents Notion User.
 //
 // API doc: https://developers.notion.com/reference/user
 //go:generate gomodifytags --file $GOFILE --struct User -add-tags json,mapstructure -w -transform snakecase

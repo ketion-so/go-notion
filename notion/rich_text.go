@@ -33,6 +33,7 @@ type Annotations struct {
 	Color         Color `json:"color" mapstructure:"color"`
 }
 
+// Color is type for text and background colors.
 type Color string
 
 const (
