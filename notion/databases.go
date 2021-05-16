@@ -43,6 +43,7 @@ type database struct {
 	Properties     map[string]interface{} `json:"properties" mapstructure:"properties"`
 }
 
+// Property represents database properties.
 type Property interface {
 	GetType() object.PropertyType
 }
