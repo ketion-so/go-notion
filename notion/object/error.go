@@ -1,5 +1,7 @@
 package object
 
+// ErrorCode represents the Notion API errors.
+// See details: https://developers.notion.com/reference/errors
 type ErrorCode string
 
 const (
