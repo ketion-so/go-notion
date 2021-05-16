@@ -85,7 +85,7 @@ func (p *WorkspaceParent) GetType() object.ParentType {
 	return object.ParentType(p.Type)
 }
 
-// List page list.
+// Get retrieves a page.
 //
 // API doc: https://developers.notion.com/reference/get-page
 func (s *PagesService) Get(ctx context.Context, pageID string) (*Page, error) {
@@ -130,7 +130,7 @@ func (s *PagesService) Create(ctx context.Context, pageID string, preq *CreatePa
 	return convPage(&data)
 }
 
-// Updateupdates page properties.
+// UpdateProperties page properties.
 //
 // API doc: https://developers.notion.com/reference/patch-page
 func (s *PagesService) UpdateProperties(ctx context.Context, pageID string, properties interface{}) (*Page, error) {
