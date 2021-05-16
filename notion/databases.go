@@ -13,7 +13,7 @@ const (
 	databasesPath = "databases"
 )
 
-// Databaseservice handles communication to Notion Databases API.
+// DatabasesService handles communication to Notion Databases API.
 //
 // API doc: https://developers.notion.com/reference/database
 type DatabasesService service
