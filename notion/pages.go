@@ -41,6 +41,7 @@ type page struct {
 	Properties     interface{}            `json:"properties"`
 }
 
+// Parent represens the interface for all parents of the page.
 type Parent interface {
 	GetType() object.ParentType
 }
@@ -52,6 +53,8 @@ type DatabaseParent struct {
 	DatabaseID string            `json:"database_id" mapstructure:"database_id"`
 }
 
+// GetType returns the ty
+// GetType returns the type of the parent.pe of the parent.
 func (p *DatabaseParent) GetType() object.ParentType {
 	return object.ParentType(p.Type)
 }
@@ -64,6 +67,7 @@ type PageParent struct {
 	PageID string            `json:"page_id" mapstructure:"page_id"`
 }
 
+// GetType returns the type of the parent.
 func (p *PageParent) GetType() object.ParentType {
 	return object.ParentType(p.Type)
 }
@@ -76,6 +80,7 @@ type WorkspaceParent struct {
 	Workspace bool              `json:"workspace" mapstructure:"workspace"`
 }
 
+// GetType returns the type of the parent.
 func (p *WorkspaceParent) GetType() object.ParentType {
 	return object.ParentType(p.Type)
 }
