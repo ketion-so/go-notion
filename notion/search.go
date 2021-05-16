@@ -57,7 +57,7 @@ type Sort struct {
 	Timestamp string    `json:"timestamp" mapstructure:"timestamp"`
 }
 
-// FiterValue is a type for specifing what to filter
+// FiterValue is a type for specifying what to filter
 type FilterValue string
 
 const (
