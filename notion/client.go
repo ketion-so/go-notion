@@ -63,6 +63,7 @@ type RateLimit struct {
 	Reset     time.Time
 }
 
+// ClientOption represents options to configure this Notion API client.
 type ClientOption func(c *Client)
 
 // WithHTTPClient overrides the default http.Client.
