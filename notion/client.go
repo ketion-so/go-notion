@@ -65,6 +65,14 @@ type RateLimit struct {
 
 type ClientOption func(c *Client)
 
+// WithHTTPClient overrides the default http.Client.
+func WithHTTPClient(client *http.Client) ClientOption {
+	return func(c *Client) {
+		c.client = client
+	}
+}
+
+// WithVersion overrides the Notion API version to communicate.
 func WithVersion(version string) ClientOption {
 	return func(c *Client) {
 		c.version = version
@@ -79,6 +87,7 @@ func NewClient(accessKey string, opts ...ClientOption) *Client {
 		accessKey: accessKey,
 		UserAgent: defaultUserAgent,
 		version:   defaultVersion,
+		client:    http.DefaultClient,
 	}
 
 	for _, opt := range opts {
@@ -86,7 +95,6 @@ func NewClient(accessKey string, opts ...ClientOption) *Client {
 	}
 
 	c.common.client = c
-	c.client = http.DefaultClient
 	c.RateLimit = defaultRateLimit
 
 	c.Blocks = (*BlocksService)(&c.common)
