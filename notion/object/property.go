@@ -1,5 +1,6 @@
 package object
 
+// PropertyType is type for specifying the property type.
 type PropertyType string
 
 const (

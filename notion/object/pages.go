@@ -1,5 +1,6 @@
 package object
 
+// ParentType is a type for Parents.
 type ParentType string
 
 const (

@@ -1,5 +1,6 @@
 package object
 
+// Type is the object type.
 type Type string
 
 const (
