@@ -7,6 +7,9 @@ import (
 	"net/http/httptest"
 	"net/url"
 	"testing"
+	"time"
+
+	"github.com/google/go-cmp/cmp"
 )
 
 const (
@@ -38,6 +41,32 @@ func setup() (*Client, *http.ServeMux, string, func()) {
 	url, _ := url.Parse(server.URL + baseURLPath)
 	client.BaseURL = url
 	return client, mux, server.URL, server.Close
+}
+
+func TestWithHTTPClient(t *testing.T) {
+	type testCase struct {
+		client *http.Client
+	}
+
+	tcs := map[string]testCase{
+		"ok": {
+			&http.Client{
+				Timeout: time.Duration(10),
+			},
+		},
+	}
+
+	for n, tc := range tcs {
+		tc := tc
+		t.Run(n, func(t *testing.T) {
+			t.Parallel()
+
+			got := NewClient(testAccessKey, WithHTTPClient(tc.client))
+			if diff := cmp.Diff(got.client, tc.client); diff != "" {
+				t.Fatalf("Diff: %s(-got +want)", diff)
+			}
+		})
+	}
 }
 
 func TestWithVersion(t *testing.T) {
