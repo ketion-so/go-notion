@@ -214,7 +214,7 @@ func (b *ChildPageBlock) GetType() object.BlockType {
 //
 // API doc: https://developers.notion.com/reference/get-block-children
 func (s *BlocksService) ListChildren(ctx context.Context, blockID string) (*ListBlockChildrenResult, error) {
-	resp, err := s.client.Get(ctx, fmt.Sprintf("%s/%s/children", blocksPath, blockID))
+	resp, err := s.client.get(ctx, fmt.Sprintf("%s/%s/children", blocksPath, blockID))
 	if err != nil {
 		return nil, err
 	}
@@ -256,7 +256,7 @@ func (s *BlocksService) ListChildren(ctx context.Context, blockID string) (*List
 //
 // API doc: https://developers.notion.com/reference/get-block-children
 func (s *BlocksService) AppendChildren(ctx context.Context, blockID string, children Block) (Block, error) {
-	resp, err := s.client.Patch(ctx, fmt.Sprintf("%s/%s/children", databasesPath, blockID), children)
+	resp, err := s.client.patch(ctx, fmt.Sprintf("%s/%s/children", databasesPath, blockID), children)
 	if err != nil {
 		return nil, err
 	}
