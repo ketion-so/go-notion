@@ -106,8 +106,7 @@ func NewClient(accessKey string, opts ...ClientOption) *Client {
 	return c
 }
 
-// NewRequest creates an API request.
-func (c *Client) Request(ctx context.Context, method, urlStr string, body interface{}) (*http.Response, error) {
+func (c *Client) request(ctx context.Context, method, urlStr string, body interface{}) (*http.Response, error) {
 	u, err := c.BaseURL.Parse(fmt.Sprintf("v1/%s", urlStr))
 	if err != nil {
 		return nil, err
@@ -145,22 +144,22 @@ func (c *Client) Request(ctx context.Context, method, urlStr string, body interf
 
 // Get requests API GET request.
 func (c *Client) Get(ctx context.Context, urlStr string) (*http.Response, error) {
-	return c.Request(ctx, "GET", urlStr, nil)
+	return c.request(ctx, "GET", urlStr, nil)
 }
 
 // Post requests API POST request.
 func (c *Client) Post(ctx context.Context, urlStr string, body interface{}) (*http.Response, error) {
-	return c.Request(ctx, "POST", urlStr, body)
+	return c.request(ctx, "POST", urlStr, body)
 }
 
 // Patch requests API Patch request.
 func (c *Client) Patch(ctx context.Context, urlStr string, body interface{}) (*http.Response, error) {
-	return c.Request(ctx, "PATCH", urlStr, body)
+	return c.request(ctx, "PATCH", urlStr, body)
 }
 
 // Delete requests API Delete request.
 func (c *Client) Delete(ctx context.Context, urlStr string) (*http.Response, error) {
-	return c.Request(ctx, "DELETE", urlStr, nil)
+	return c.request(ctx, "DELETE", urlStr, nil)
 }
 
 func (c *Client) Do(ctx context.Context, req *http.Request) (*http.Response, error) {
