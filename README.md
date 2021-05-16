@@ -9,6 +9,7 @@
 ![GitHub go.mod Go version](https://img.shields.io/github/go-mod/go-version/ketion-so/go-notion)
 ![GitHub Repo stars](https://img.shields.io/github/stars/ketion-so/go-notion)
 
+[![Go Report Card](https://goreportcard.com/badge/github.com/ketion-so/go-notion)](https://goreportcard.com/report/github.com/ketion-so/go-notion)
  [![Renovate enabled](https://img.shields.io/badge/renovate-enabled-brightgreen.svg)](https://renovatebot.com/)
 [![Test](https://github.com/ketion-so/go-notion/actions/workflows/test.yml/badge.svg)](https://github.com/ketion-so/go-notion/actions/workflows/test.yml)
 [![reviewdog](https://github.com/ketion-so/go-notion/actions/workflows/reviewdog.yml/badge.svg)](https://github.com/ketion-so/go-notion/actions/workflows/reviewdog.yml)
