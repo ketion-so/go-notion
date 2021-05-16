@@ -157,11 +157,6 @@ func (c *Client) patch(ctx context.Context, urlStr string, body interface{}) (*h
 	return c.request(ctx, "PATCH", urlStr, body)
 }
 
-// Delete requests API Delete request.
-func (c *Client) delete(ctx context.Context, urlStr string) (*http.Response, error) {
-	return c.request(ctx, "DELETE", urlStr, nil)
-}
-
 func (c *Client) do(ctx context.Context, req *http.Request) (*http.Response, error) {
 	resp, err := c.client.Do(req.WithContext(ctx))
 	if err != nil {

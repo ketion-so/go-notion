@@ -123,7 +123,7 @@ func TestError_Error(t *testing.T) {
 	}
 }
 
-func TesClient_Do(t *testing.T) {
+func TestClient_Do(t *testing.T) {
 	client, mux, _, teardown := setup()
 	defer teardown()
 
@@ -139,11 +139,6 @@ func TesClient_Do(t *testing.T) {
 			4987,
 			1350085394,
 		},
-		"empty rate limit header": {
-			0,
-			0,
-			0,
-		},
 	}
 
 	for n, tc := range tcs {
@@ -158,7 +153,7 @@ func TesClient_Do(t *testing.T) {
 					w.Header().Set(rateLimitRemainingHeader, fmt.Sprint(tc.rateLimitRemaining))
 					w.Header().Set(rateLimitLimitHeader, fmt.Sprint(tc.rateLimiLimit))
 				}
-				fmt.Fprint(w, "")
+				w.Write([]byte("{}"))
 			})
 
 			_, err := client.Users.List(context.Background())
