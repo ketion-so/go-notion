@@ -48,7 +48,7 @@ type Bot struct{}
 //
 // API doc: https://developers.notion.com/reference/get-user
 func (s *UsersService) Get(ctx context.Context, userID string) (*User, error) {
-	resp, err := s.client.Get(ctx, fmt.Sprintf("%s/%s", usersPath, userID))
+	resp, err := s.client.get(ctx, fmt.Sprintf("%s/%s", usersPath, userID))
 	if err != nil {
 		return nil, err
 	}
@@ -77,7 +77,7 @@ type ListUserResponse struct {
 //
 // API doc: https://developers.notion.com/reference/get-users
 func (s *UsersService) List(ctx context.Context) (*ListUserResponse, error) {
-	resp, err := s.client.Get(ctx, usersPath)
+	resp, err := s.client.get(ctx, usersPath)
 	if err != nil {
 		return nil, err
 	}

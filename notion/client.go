@@ -139,30 +139,30 @@ func (c *Client) request(ctx context.Context, method, urlStr string, body interf
 		req.Header.Set("User-Agent", c.UserAgent)
 	}
 
-	return c.Do(ctx, req)
+	return c.do(ctx, req)
 }
 
 // Get requests API GET request.
-func (c *Client) Get(ctx context.Context, urlStr string) (*http.Response, error) {
+func (c *Client) get(ctx context.Context, urlStr string) (*http.Response, error) {
 	return c.request(ctx, "GET", urlStr, nil)
 }
 
 // Post requests API POST request.
-func (c *Client) Post(ctx context.Context, urlStr string, body interface{}) (*http.Response, error) {
+func (c *Client) post(ctx context.Context, urlStr string, body interface{}) (*http.Response, error) {
 	return c.request(ctx, "POST", urlStr, body)
 }
 
 // Patch requests API Patch request.
-func (c *Client) Patch(ctx context.Context, urlStr string, body interface{}) (*http.Response, error) {
+func (c *Client) patch(ctx context.Context, urlStr string, body interface{}) (*http.Response, error) {
 	return c.request(ctx, "PATCH", urlStr, body)
 }
 
 // Delete requests API Delete request.
-func (c *Client) Delete(ctx context.Context, urlStr string) (*http.Response, error) {
+func (c *Client) delete(ctx context.Context, urlStr string) (*http.Response, error) {
 	return c.request(ctx, "DELETE", urlStr, nil)
 }
 
-func (c *Client) Do(ctx context.Context, req *http.Request) (*http.Response, error) {
+func (c *Client) do(ctx context.Context, req *http.Request) (*http.Response, error) {
 	resp, err := c.client.Do(req.WithContext(ctx))
 	if err != nil {
 		return nil, err

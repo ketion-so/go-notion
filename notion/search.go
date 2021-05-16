@@ -80,7 +80,7 @@ type Filter struct {
 //
 // API doc: https://developers.notion.com/reference/get-user
 func (s *SearchService) Search(ctx context.Context, sreq *SearchRequest) (*SearchResults, error) {
-	resp, err := s.client.Post(ctx, searchPath, sreq)
+	resp, err := s.client.post(ctx, searchPath, sreq)
 	if err != nil {
 		return nil, err
 	}

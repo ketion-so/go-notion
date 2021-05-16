@@ -89,7 +89,7 @@ func (p *WorkspaceParent) GetType() object.ParentType {
 //
 // API doc: https://developers.notion.com/reference/get-page
 func (s *PagesService) Get(ctx context.Context, pageID string) (*Page, error) {
-	resp, err := s.client.Get(ctx, fmt.Sprintf("%s/%s", pagesPath, pageID))
+	resp, err := s.client.get(ctx, fmt.Sprintf("%s/%s", pagesPath, pageID))
 	if err != nil {
 		return nil, err
 	}
@@ -116,7 +116,7 @@ type CreatePageRequest struct {
 //
 // API doc: https://developers.notion.com/reference/post-page
 func (s *PagesService) Create(ctx context.Context, pageID string, preq *CreatePageRequest) (*Page, error) {
-	resp, err := s.client.Post(ctx, fmt.Sprintf("%s/%s", pagesPath, pageID), preq)
+	resp, err := s.client.post(ctx, fmt.Sprintf("%s/%s", pagesPath, pageID), preq)
 	if err != nil {
 		return nil, err
 	}
@@ -134,7 +134,7 @@ func (s *PagesService) Create(ctx context.Context, pageID string, preq *CreatePa
 //
 // API doc: https://developers.notion.com/reference/patch-page
 func (s *PagesService) UpdateProperties(ctx context.Context, pageID string, properties interface{}) (*Page, error) {
-	resp, err := s.client.Patch(ctx, fmt.Sprintf("%s/%s", pagesPath, pageID), properties)
+	resp, err := s.client.patch(ctx, fmt.Sprintf("%s/%s", pagesPath, pageID), properties)
 	if err != nil {
 		return nil, err
 	}

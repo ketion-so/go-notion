@@ -355,7 +355,7 @@ func (p *LastEditedByProperty) GetType() object.PropertyType {
 //
 // API doc: https://developers.notion.com/reference/get-database
 func (s *DatabasesService) Get(ctx context.Context, databaseID string) (*Database, error) {
-	resp, err := s.client.Get(ctx, fmt.Sprintf("%s/%s", databasesPath, databaseID))
+	resp, err := s.client.get(ctx, fmt.Sprintf("%s/%s", databasesPath, databaseID))
 	if err != nil {
 		return nil, err
 	}
@@ -398,7 +398,7 @@ type ListDatabaseResponse struct {
 //
 // API doc: https://developers.notion.com/reference/get-databases
 func (s *DatabasesService) List(ctx context.Context) (*ListDatabaseResponse, error) {
-	resp, err := s.client.Get(ctx, databasesPath)
+	resp, err := s.client.get(ctx, databasesPath)
 	if err != nil {
 		return nil, err
 	}
