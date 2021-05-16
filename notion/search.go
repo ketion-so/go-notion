@@ -41,6 +41,7 @@ type searchResults struct {
 	Results    []interface{} `json:"results" mapstructure:"results"`
 }
 
+// Direction is a type to specify how to sort the search results.
 type Direction string
 
 const (
@@ -56,12 +57,14 @@ type Sort struct {
 	Timestamp string    `json:"timestamp" mapstructure:"timestamp"`
 }
 
+// FiterValue is a type for specifing what to filter
 type FilterValue string
 
 const (
 	Object FilterValue = "object"
 )
 
+// FilterPropertyValue is a type for what value to filter.
 type FilterPropertyValue string
 
 const (
