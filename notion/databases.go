@@ -56,6 +56,7 @@ type TitleProperty struct {
 	Title interface{}         `json:"title" mapstructure:"title"`
 }
 
+// GetType returns the type of the property.
 func (p *TitleProperty) GetType() object.PropertyType {
 	return object.PropertyType(p.Type)
 }
@@ -69,6 +70,7 @@ type TextProperty struct {
 	Title *RichText           `json:"title" mapstructure:"title"`
 }
 
+// GetType returns the type of the property.
 func (p *TextProperty) GetType() object.PropertyType {
 	return object.PropertyType(p.Type)
 }
@@ -82,6 +84,7 @@ type NumberProperty struct {
 	Format string              `json:"format" mapstructure:"format"`
 }
 
+// GetType returns the type of the property.
 func (p *NumberProperty) GetType() object.PropertyType {
 	return object.PropertyType(p.Type)
 }
@@ -104,6 +107,7 @@ type SelectOption struct {
 	Color Color  `json:"color" mapstructure:"color"`
 }
 
+// GetType returns the type of the property.
 func (p *SelectProperty) GetType() object.PropertyType {
 	return object.PropertyType(p.Type)
 }
@@ -126,6 +130,7 @@ type MultiSelectOption struct {
 	Color Color  `json:"color" mapstructure:"color"`
 }
 
+// GetType returns the type of the property.
 func (p *MultiSelectProperty) GetType() object.PropertyType {
 	return object.PropertyType(p.Type)
 }
@@ -139,6 +144,7 @@ type DateProperty struct {
 	Date interface{}         `json:"date" mapstructure:"date"`
 }
 
+// GetType returns the type of the property.
 func (p *DateProperty) GetType() object.PropertyType {
 	return object.PropertyType(p.Type)
 }
@@ -152,6 +158,7 @@ type PeopleProperty struct {
 	People interface{}         `json:"people" mapstructure:"people"`
 }
 
+// GetType returns the type of the property.
 func (p *PeopleProperty) GetType() object.PropertyType {
 	return object.PropertyType(p.Type)
 }
@@ -165,6 +172,7 @@ type FilesProperty struct {
 	File interface{}         `json:"file" mapstructure:"file"`
 }
 
+// GetType returns the type of the property.
 func (p *FilesProperty) GetType() object.PropertyType {
 	return object.PropertyType(p.Type)
 }
@@ -178,6 +186,7 @@ type CheckboxProperty struct {
 	Checkbox interface{}         `json:"checkbox" mapstructure:"checkbox"`
 }
 
+// GetType returns the type of the property.
 func (p *CheckboxProperty) GetType() object.PropertyType {
 	return object.PropertyType(p.Type)
 }
@@ -191,6 +200,7 @@ type URLProperty struct {
 	URL  interface{}         `json:"url" mapstructure:"url"`
 }
 
+// GetType returns the type of the property.
 func (p *URLProperty) GetType() object.PropertyType {
 	return object.PropertyType(p.Type)
 }
@@ -204,6 +214,7 @@ type EmailProperty struct {
 	Email interface{}         `json:"email" mapstructure:"email"`
 }
 
+// GetType returns the type of the property.
 func (p *EmailProperty) GetType() object.PropertyType {
 	return object.PropertyType(p.Type)
 }
@@ -217,6 +228,7 @@ type PhoneNumberProperty struct {
 	PhoneNumber interface{}         `json:"phone_number" mapstructure:"phone_number"`
 }
 
+// GetType returns the type of the property.
 func (p *PhoneNumberProperty) GetType() object.PropertyType {
 	return object.PropertyType(p.Type)
 }
@@ -230,6 +242,7 @@ type FormulaProperty struct {
 	Expression string              `json:"expression" mapstructure:"expression"`
 }
 
+// GetType returns the type of the property.
 func (p *FormulaProperty) GetType() object.PropertyType {
 	return object.PropertyType(p.Type)
 }
@@ -252,6 +265,7 @@ type Relation struct {
 	SyncedPropertyID   string `json:"synced_property_id" mapstructure:"synced_property_id"`
 }
 
+// GetType returns the type of the property.
 func (p *RelationProperty) GetType() object.PropertyType {
 	return object.PropertyType(p.Type)
 }
@@ -265,6 +279,7 @@ type RollupProperty struct {
 	Rollup *Rollup             `json:"rollup" mapstructure:"rollup"`
 }
 
+// GetType returns the type of the property.
 func (p *RollupProperty) GetType() object.PropertyType {
 	return object.PropertyType(p.Type)
 }
@@ -289,6 +304,7 @@ type CreatedTimeProperty struct {
 	CreatedTime interface{}         `json:"created_time" mapstructure:"created_time"`
 }
 
+// GetType returns the type of the property.
 func (p *CreatedTimeProperty) GetType() object.PropertyType {
 	return object.PropertyType(p.Type)
 }
@@ -302,6 +318,7 @@ type CreatedByProperty struct {
 	CreatedBy interface{}         `json:"created_by" mapstructure:"created_by"`
 }
 
+// GetType returns the type of the property.
 func (p *CreatedByProperty) GetType() object.PropertyType {
 	return object.PropertyType(p.Type)
 }
@@ -315,6 +332,7 @@ type LastEditedTimeProperty struct {
 	LastEditedTime interface{}         `json:"last_edited_time" mapstructure:"last_edited_time"`
 }
 
+// GetType returns the type of the property.
 func (p *LastEditedTimeProperty) GetType() object.PropertyType {
 	return object.PropertyType(p.Type)
 }
@@ -328,6 +346,7 @@ type LastEditedByProperty struct {
 	LastEditedBy interface{}         `json:"last_edited_by" mapstructure:"last_edited_by"`
 }
 
+// GetType returns the type of the property.
 func (p *LastEditedByProperty) GetType() object.PropertyType {
 	return object.PropertyType(p.Type)
 }
