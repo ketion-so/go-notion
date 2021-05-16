@@ -73,6 +73,7 @@ type LinkObject struct {
 	URL  string `json:"url" mapstructure:"url"`
 }
 
+// MentionObjectType is for types of mentions.
 type MentionObjectType string
 
 const (
