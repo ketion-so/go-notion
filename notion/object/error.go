@@ -3,15 +3,15 @@ package object
 type ErrorCode string
 
 const (
-	InvalidJsonErrorCode        ErrorCode = "invalid_json"
-	InvalidRequestURLErrorCode  ErrorCode = "invalid_request_url"
-	InvalidRequestErrorCode     ErrorCode = "Invalid_request"
-	ValidationErroreErrorCode   ErrorCode = "validation_error"
-	UnauthorizedCode            ErrorCode = "invalid_json"
-	RestrictedResourceErrorCode ErrorCode = "restricted_resource"
-	ObjectNotFoundErrorCode     ErrorCode = "object_not_found"
-	ConflictErrorErrorCode      ErrorCode = "invalid_json"
-	RateLimitedErrorCode        ErrorCode = "conflict_error"
-	InternalServerErrorCode     ErrorCode = "rate_limited"
-	ServiceUnavailableErrorCode ErrorCode = "internal_server_error"
+	ErrInvalidJson        ErrorCode = "invalid_json"
+	ErrInvalidRequestURL  ErrorCode = "invalid_request_url"
+	ErrInvalidRequest     ErrorCode = "Invalid_request"
+	ErrValidationErrore   ErrorCode = "validation_error"
+	ErrUnautho            ErrorCode = "invalid_json"
+	ErrRestrictedResource ErrorCode = "restricted_resource"
+	ErrObjectNotFound     ErrorCode = "object_not_found"
+	ErrConflictError      ErrorCode = "invalid_json"
+	ErrRateLimited        ErrorCode = "conflict_error"
+	ErrInternalServer     ErrorCode = "rate_limited"
+	ErrServiceUnavailable ErrorCode = "internal_server_error"
 )
