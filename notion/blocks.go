@@ -255,7 +255,7 @@ func (s *BlocksService) ListChildren(ctx context.Context, blockID string) (*List
 //
 // API doc: https://developers.notion.com/reference/get-block-children
 func (s *BlocksService) AppendChildren(ctx context.Context, blockID string, children Block) (Block, error) {
-	resp, err := s.client.Post(ctx, fmt.Sprintf("%s/%s/children", databasesPath, blockID), children)
+	resp, err := s.client.Patch(ctx, fmt.Sprintf("%s/%s/children", databasesPath, blockID), children)
 	if err != nil {
 		return nil, err
 	}
