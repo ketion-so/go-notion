@@ -63,6 +63,7 @@ type RateLimit struct {
 	Reset     time.Time
 }
 
+// ClientOption represents options to configure this Notion API client.
 type ClientOption func(c *Client)
 
 // WithHTTPClient overrides the default http.Client.
@@ -105,8 +106,7 @@ func NewClient(accessKey string, opts ...ClientOption) *Client {
 	return c
 }
 
-// NewRequest creates an API request.
-func (c *Client) Request(ctx context.Context, method, urlStr string, body interface{}) (*http.Response, error) {
+func (c *Client) request(ctx context.Context, method, urlStr string, body interface{}) (*http.Response, error) {
 	u, err := c.BaseURL.Parse(fmt.Sprintf("v1/%s", urlStr))
 	if err != nil {
 		return nil, err
@@ -139,30 +139,30 @@ func (c *Client) Request(ctx context.Context, method, urlStr string, body interf
 		req.Header.Set("User-Agent", c.UserAgent)
 	}
 
-	return c.Do(ctx, req)
+	return c.do(ctx, req)
 }
 
 // Get requests API GET request.
-func (c *Client) Get(ctx context.Context, urlStr string) (*http.Response, error) {
-	return c.Request(ctx, "GET", urlStr, nil)
+func (c *Client) get(ctx context.Context, urlStr string) (*http.Response, error) {
+	return c.request(ctx, "GET", urlStr, nil)
 }
 
 // Post requests API POST request.
-func (c *Client) Post(ctx context.Context, urlStr string, body interface{}) (*http.Response, error) {
-	return c.Request(ctx, "POST", urlStr, body)
+func (c *Client) post(ctx context.Context, urlStr string, body interface{}) (*http.Response, error) {
+	return c.request(ctx, "POST", urlStr, body)
 }
 
 // Patch requests API Patch request.
-func (c *Client) Patch(ctx context.Context, urlStr string, body interface{}) (*http.Response, error) {
-	return c.Request(ctx, "PATCH", urlStr, body)
+func (c *Client) patch(ctx context.Context, urlStr string, body interface{}) (*http.Response, error) {
+	return c.request(ctx, "PATCH", urlStr, body)
 }
 
 // Delete requests API Delete request.
-func (c *Client) Delete(ctx context.Context, urlStr string) (*http.Response, error) {
-	return c.Request(ctx, "DELETE", urlStr, nil)
+func (c *Client) delete(ctx context.Context, urlStr string) (*http.Response, error) {
+	return c.request(ctx, "DELETE", urlStr, nil)
 }
 
-func (c *Client) Do(ctx context.Context, req *http.Request) (*http.Response, error) {
+func (c *Client) do(ctx context.Context, req *http.Request) (*http.Response, error) {
 	resp, err := c.client.Do(req.WithContext(ctx))
 	if err != nil {
 		return nil, err

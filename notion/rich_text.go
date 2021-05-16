@@ -33,6 +33,7 @@ type Annotations struct {
 	Color         Color `json:"color" mapstructure:"color"`
 }
 
+// Color is type for text and background colors.
 type Color string
 
 const (
@@ -73,6 +74,7 @@ type LinkObject struct {
 	URL  string `json:"url" mapstructure:"url"`
 }
 
+// MentionObjectType is for types of mentions.
 type MentionObjectType string
 
 const (

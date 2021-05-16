@@ -46,6 +46,7 @@ type ParagraphBlock struct {
 	Children       []Block          `json:"children" mapstructure:"children"`
 }
 
+// GetType retrieves the block type.
 func (b *ParagraphBlock) GetType() object.BlockType {
 	return b.Type
 }
@@ -63,6 +64,7 @@ type HeadingOneBlock struct {
 	Text           []RichTextType   `json:"text" mapstructure:"text"`
 }
 
+// GetType retrieves the block type.
 func (b *HeadingOneBlock) GetType() object.BlockType {
 	return b.Type
 }
@@ -80,6 +82,7 @@ type HeadingTwoBlock struct {
 	Text           []RichTextType   `json:"text" mapstructure:"text"`
 }
 
+// GetType retrieves the block type.
 func (b *HeadingTwoBlock) GetType() object.BlockType {
 	return b.Type
 }
@@ -97,6 +100,7 @@ type HeadingThreeBlock struct {
 	Text           []RichTextType   `json:"text" mapstructure:"text"`
 }
 
+// GetType retrieves the block type.
 func (b *HeadingThreeBlock) GetType() object.BlockType {
 	return b.Type
 }
@@ -115,6 +119,7 @@ type BulletedListItemBlock struct {
 	Children       []Block          `json:"children" mapstructure:"children"`
 }
 
+// GetType retrieves the block type.
 func (b *BulletedListItemBlock) GetType() object.BlockType {
 	return b.Type
 }
@@ -133,6 +138,7 @@ type NumberedListItemBlock struct {
 	Children       []Block          `json:"children" mapstructure:"children"`
 }
 
+// GetType retrieves the block type.
 func (b *NumberedListItemBlock) GetType() object.BlockType {
 	return b.Type
 }
@@ -152,6 +158,7 @@ type NumberListItemBlock struct {
 	Children       []Block          `json:"children" mapstructure:"children"`
 }
 
+// GetType retrieves the block type.
 func (b *NumberListItemBlock) GetType() object.BlockType {
 	return b.Type
 }
@@ -171,6 +178,7 @@ type ToDoBlock struct {
 	Children       []Block          `json:"children" mapstructure:"children"`
 }
 
+// GetType retrieves the block type.
 func (b *ToDoBlock) GetType() object.BlockType {
 	return b.Type
 }
@@ -189,6 +197,7 @@ type ToggleBlock struct {
 	Children       []Block          `json:"children" mapstructure:"children"`
 }
 
+// GetType retrieves the block type.
 func (b *ToggleBlock) GetType() object.BlockType {
 	return b.Type
 }
@@ -206,6 +215,7 @@ type ChildPageBlock struct {
 	Title          string           `json:"title" mapstructure:"title"`
 }
 
+// GetType retrieves the block type.
 func (b *ChildPageBlock) GetType() object.BlockType {
 	return b.Type
 }
@@ -214,7 +224,7 @@ func (b *ChildPageBlock) GetType() object.BlockType {
 //
 // API doc: https://developers.notion.com/reference/get-block-children
 func (s *BlocksService) ListChildren(ctx context.Context, blockID string) (*ListBlockChildrenResult, error) {
-	resp, err := s.client.Get(ctx, fmt.Sprintf("%s/%s/children", blocksPath, blockID))
+	resp, err := s.client.get(ctx, fmt.Sprintf("%s/%s/children", blocksPath, blockID))
 	if err != nil {
 		return nil, err
 	}
@@ -256,7 +266,7 @@ func (s *BlocksService) ListChildren(ctx context.Context, blockID string) (*List
 //
 // API doc: https://developers.notion.com/reference/get-block-children
 func (s *BlocksService) AppendChildren(ctx context.Context, blockID string, children Block) (Block, error) {
-	resp, err := s.client.Patch(ctx, fmt.Sprintf("%s/%s/children", databasesPath, blockID), children)
+	resp, err := s.client.patch(ctx, fmt.Sprintf("%s/%s/children", databasesPath, blockID), children)
 	if err != nil {
 		return nil, err
 	}
