@@ -19,6 +19,10 @@ const (
 	testAccessKey = "notion-test"
 )
 
+const (
+	invalidJSON = "{jo,"
+)
+
 func getErrorJSON(status int) string {
 	return fmt.Sprintf(`{
 	"status": %d,
@@ -126,64 +130,86 @@ func TestError_Error(t *testing.T) {
 }
 
 func TestClient_Do(t *testing.T) {
-	client, mux, _, teardown := setup()
-	defer teardown()
-
 	type testCase struct {
-		rateLimitReset     int
-		rateLimitRemaining int
-		rateLimiLimit      int
+		rateLimitResetStr     string
+		rateLimitRemainingStr string
+		rateLimiLimitStr      string
+		shouldPass            bool
 	}
 
 	tcs := map[string]testCase{
 		"ok": {
-			5000,
-			4987,
-			1350085394,
+			"5000",
+			"4987",
+			"1350085394",
+			true,
+		},
+		"invalid_rate_limit_reset": {
+			"hello",
+			"4987",
+			"1350085394",
+			false,
+		},
+		"invalid_rate_limit_remaning": {
+			"5000",
+			"good morning",
+			"1350085394",
+			false,
+		},
+		"invalid_rate_limit_limit": {
+			"5000",
+			"4987",
+			"Back to the future",
+			false,
 		},
 	}
 
 	for n, tc := range tcs {
 		t.Run(n, func(t *testing.T) {
+			client, mux, _, teardown := setup()
+			defer teardown()
+
 			mux.HandleFunc(fmt.Sprintf("/%s", usersPath), func(w http.ResponseWriter, r *http.Request) {
 				if r.Header.Get(notionVersionHeader) == "" {
 					t.Fatalf("no notion version header to request")
 				}
 
-				if tc.rateLimiLimit != 0 && tc.rateLimitRemaining != 0 && tc.rateLimitReset != 0 {
-					w.Header().Set(rateLimitResetHeader, fmt.Sprint(tc.rateLimitReset))
-					w.Header().Set(rateLimitRemainingHeader, fmt.Sprint(tc.rateLimitRemaining))
-					w.Header().Set(rateLimitLimitHeader, fmt.Sprint(tc.rateLimiLimit))
+				if tc.rateLimiLimitStr != "0" && tc.rateLimitRemainingStr != "0" && tc.rateLimitResetStr != "0" {
+					w.Header().Set(rateLimitResetHeader, tc.rateLimitResetStr)
+					w.Header().Set(rateLimitRemainingHeader, tc.rateLimitRemainingStr)
+					w.Header().Set(rateLimitLimitHeader, tc.rateLimiLimitStr)
 				}
 				w.Write([]byte("{}"))
 			})
 
 			_, err := client.Users.List(context.Background())
 			if err != nil {
-				t.Fatalf("failed: %v", err)
+				if tc.shouldPass {
+					t.Fatalf("failed: %v", err)
+				}
+
+				return
 			}
 
-			if client.RateLimit.Limit != tc.rateLimiLimit {
-				t.Fatalf("rate limit has not been configured got:%d, want:%d", client.RateLimit.Limit, tc.rateLimiLimit)
+			if fmt.Sprint(client.RateLimit.Limit) != tc.rateLimiLimitStr {
+				t.Fatalf("rate limit has not been configured got:%d, want:%s", client.RateLimit.Limit, tc.rateLimiLimitStr)
 			}
 
-			if client.RateLimit.Remaining != tc.rateLimitRemaining {
-				t.Fatalf("rate remaning has not been configured got:%d, want:%d", client.RateLimit.Remaining, tc.rateLimitRemaining)
+			if fmt.Sprint(client.RateLimit.Remaining) != tc.rateLimitRemainingStr {
+				t.Fatalf("rate remaning has not been configured got:%d, want:%s", client.RateLimit.Remaining, tc.rateLimitRemainingStr)
 			}
 
-			if client.RateLimit.Reset.Unix() != int64(tc.rateLimitReset) {
-				t.Fatalf("rate reset timestamp has not been configured got:%d, want:%d", client.RateLimit.Reset.Unix(), tc.rateLimitReset)
+			if fmt.Sprint(client.RateLimit.Reset.Unix()) != tc.rateLimitResetStr {
+				t.Fatalf("rate reset timestamp has not been configured got:%d, want:%s", client.RateLimit.Reset.Unix(), tc.rateLimitResetStr)
 			}
 		})
 	}
 }
 
 func TestClient_Do_Error(t *testing.T) {
-	client, mux, _, teardown := setup()
-	defer teardown()
-
 	type testCase struct {
-		want *Error
+		want       interface{}
+		shouldPass bool
 	}
 
 	tcs := map[string]testCase{
@@ -194,23 +220,41 @@ func TestClient_Do_Error(t *testing.T) {
 				object.ErrInternalServer,
 				"internal server error",
 			},
+			true,
+		},
+		"invalid json": {
+			invalidJSON,
+			false,
 		},
 	}
 
 	for n, tc := range tcs {
+		tc := tc
 		t.Run(n, func(t *testing.T) {
+			t.Parallel()
+
+			client, mux, _, teardown := setup()
+			defer teardown()
+
 			mux.HandleFunc(fmt.Sprintf("/%s", usersPath), func(w http.ResponseWriter, r *http.Request) {
 				if r.Header.Get(notionVersionHeader) == "" {
 					t.Fatalf("no notion version header to request")
 				}
 
-				w.WriteHeader(tc.want.Status)
+				w.WriteHeader(http.StatusInternalServerError)
 				_ = json.NewEncoder(w).Encode(tc.want)
 			})
 
 			_, err := client.Users.List(context.Background())
-			if diff := cmp.Diff(err.(*Error), tc.want); diff != "" {
-				t.Fatalf("Diff: %s(-got +want)", diff)
+			switch v := err.(type) {
+			case *Error:
+				if diff := cmp.Diff(v, tc.want); diff != "" {
+					t.Fatalf("Diff: %s(-got +want)", diff)
+				}
+			default:
+				if tc.shouldPass {
+					t.Fatalf("failed: %v", v)
+				}
 			}
 		})
 	}
