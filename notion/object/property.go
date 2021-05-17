@@ -4,7 +4,7 @@ package object
 type PropertyType string
 
 const (
-	RichTextPropertyType       PropertyType = "rich_text"
+	TextPropertyType           PropertyType = "text"
 	TitlePropertyType          PropertyType = "title"
 	NumberPropertyType         PropertyType = "number"
 	SelectPropertyType         PropertyType = "select"

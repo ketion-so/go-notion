@@ -40,17 +40,17 @@ func (p *DatabaseTitleProperty) GetType() object.PropertyType {
 	return object.PropertyType(p.Type)
 }
 
-// RichTextProperty object represents Notion rich text Property.
-//go:generate gomodifytags -file $GOFILE -struct RichTextProperty -clear-tags -w
-//go:generate gomodifytags --file $GOFILE --struct RichTextProperty -add-tags json,mapstructure -w -transform snakecase
-type RichTextProperty struct {
-	Type     object.PropertyType `json:"type" mapstructure:"type"`
-	ID       string              `json:"id" mapstructure:"id"`
-	RichText []RichText          `json:"rich_text" mapstructure:"rich_text"`
+// TextProperty object represents Notion rich text Property.
+//go:generate gomodifytags -file $GOFILE -struct TextProperty -clear-tags -w
+//go:generate gomodifytags --file $GOFILE --struct TextProperty -add-tags json,mapstructure -w -transform snakecase
+type TextProperty struct {
+	Type object.PropertyType `json:"type" mapstructure:"type"`
+	ID   string              `json:"id" mapstructure:"id"`
+	Text []RichText          `json:"text" mapstructure:"text"`
 }
 
 // GetType returns the type of the property.
-func (p *RichTextProperty) GetType() object.PropertyType {
+func (p *TextProperty) GetType() object.PropertyType {
 	return object.PropertyType(p.Type)
 }
 
@@ -232,7 +232,7 @@ func (p *FormulaProperty) GetType() object.PropertyType {
 type RelationProperty struct {
 	Type     object.PropertyType `json:"type" mapstructure:"type"`
 	ID       string              `json:"id" mapstructure:"id"`
-	Relation *Relation           `json:"relation" mapstructure:"relation"`
+	Relation []Relation          `json:"relation" mapstructure:"relation"`
 }
 
 // Relation object represents Notion relation.
@@ -336,16 +336,9 @@ func convProperties(input map[string]interface{}) (map[string]Property, error) {
 		var p Property
 		switch obj := v.(type) {
 		case map[string]interface{}:
-			objType, ok := obj["type"]
-			if !ok {
-				// Note(KeisukeYamashita):
-				// As for 2021/05/17, only "title" property of a page is supported.
-				continue
-			}
-
-			switch object.PropertyType(objType.(string)) {
-			case object.RichTextPropertyType:
-				p = &RichTextProperty{}
+			switch object.PropertyType(obj["type"].(string)) {
+			case object.TextPropertyType:
+				p = &TextProperty{}
 			case object.TitlePropertyType:
 				switch v.(map[string]interface{})["title"].(type) {
 				case map[string]interface{}:

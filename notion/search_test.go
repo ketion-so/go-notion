@@ -108,9 +108,6 @@ func getSearchPageJSON() string {
 }
 
 func TestSearchService_Search(t *testing.T) {
-	client, mux, _, teardown := setup()
-	defer teardown()
-
 	tcs := map[string]struct {
 		input *SearchRequest
 		want  *SearchResults
@@ -193,6 +190,8 @@ func TestSearchService_Search(t *testing.T) {
 
 	for n, tc := range tcs {
 		t.Run(n, func(t *testing.T) {
+			client, mux, _, teardown := setup()
+			defer teardown()
 			mux.HandleFunc(fmt.Sprintf("/%s", searchPath), func(w http.ResponseWriter, r *http.Request) {
 				if r.Header.Get(notionVersionHeader) == "" {
 					t.Fatalf("no notion version header to request")

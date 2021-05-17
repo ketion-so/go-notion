@@ -41,11 +41,6 @@ func getDatabaseSON() string {
 			"type": "title",
 			"title": {}
 		  },
-		  "Description": {
-			"id": "J@cS",
-			"type": "text",
-			"text": {}
-		  },
 		  "In stock": {
 			"id": "{xY",
 			"type": "checkbox",
@@ -92,13 +87,6 @@ func getDatabaseSON() string {
 			"id": "]\\R[",
 			"type": "date",
 			"date": {}
-		  },
-		  "Meals": {
-			"type": "relation",
-			"relation": {
-			  "database": "668d797c-76fa-4934-9b05-ad288df2d136",
-			  "synced_property_name": null
-			}
 		  },
 		  "Number of meals": {
 			"id": "Z\\Eh",
@@ -213,10 +201,6 @@ func getListDatabaseJSON() string {
 			  "Name": {
 				"type": "title",
 				"title": {}
-			  },
-			  "Description": {
-				"type": "text",
-				"text": {}
 			  }
 			}
 		  },
@@ -228,10 +212,6 @@ func getListDatabaseJSON() string {
 			  "Name": {
 				"type": "title",
 				"title": {}
-			  },
-			  "Description": {
-				"type": "rich_text",
-				"rich_text": {}
 			  }
 			}
 		  }
