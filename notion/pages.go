@@ -111,7 +111,7 @@ func (s *PagesService) Get(ctx context.Context, pageID string) (*Page, error) {
 //go:generate gomodifytags -file $GOFILE -struct CreatePageRequest -clear-tags -w
 //go:generate gomodifytags --file $GOFILE --struct CreatePageRequest -add-tags json,mapstructure -w -transform snakecase
 type CreatePageRequest struct {
-	Parent     *Parent             `json:"parent" mapstructure:"parent"`
+	Parent     Parent              `json:"parent" mapstructure:"parent"`
 	Properties map[string]Property `json:"properties" mapstructure:"properties"`
 	Children   []Block             `json:"children" mapstructure:"children"`
 }

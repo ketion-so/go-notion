@@ -218,7 +218,9 @@ func TestPagesService_Create(t *testing.T) {
 		want  *Page
 	}{
 		"ok": {
-			&CreatePageRequest{},
+			&CreatePageRequest{
+				Parent: &DatabaseParent{},
+			},
 			&Page{
 				Object:         "page",
 				ID:             "251d2b5f-268c-4de2-afe9-c71ff92ca95c",
