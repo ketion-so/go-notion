@@ -108,7 +108,6 @@ func (s *PagesService) Get(ctx context.Context, pageID string) (*Page, error) {
 }
 
 // CreatePageRequest object represents the retrieve page.
-//go:generate gomodifytags -file $GOFILE -struct CreatePageRequest -clear-tags -w
 //go:generate gomodifytags --file $GOFILE --struct CreatePageRequest -add-tags json,mapstructure -w -transform snakecase
 type CreatePageRequest struct {
 	Parent     Parent              `json:"parent" mapstructure:"parent"`
@@ -134,11 +133,16 @@ func (s *PagesService) Create(ctx context.Context, preq *CreatePageRequest) (*Pa
 	return convPage(&data)
 }
 
+// UpdatePageRequest object represents the update request
+type UpdatePageRequest struct {
+	Properties map[string]Property `json:"properties" mapstructure:"properties"`
+}
+
 // UpdateProperties page properties.
 //
 // API doc: https://developers.notion.com/reference/patch-page
-func (s *PagesService) UpdateProperties(ctx context.Context, pageID string, properties map[string]Property) (*Page, error) {
-	resp, err := s.client.patch(ctx, fmt.Sprintf("%s/%s", pagesPath, pageID), properties)
+func (s *PagesService) UpdateProperties(ctx context.Context, pageID string, ureq *UpdatePageRequest) (*Page, error) {
+	resp, err := s.client.patch(ctx, fmt.Sprintf("%s/%s", pagesPath, pageID), ureq)
 	if err != nil {
 		return nil, err
 	}
