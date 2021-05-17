@@ -2,7 +2,6 @@ package notion
 
 import (
 	"fmt"
-	"time"
 
 	"github.com/ketion-so/go-notion/notion/object"
 	"github.com/mitchellh/mapstructure"
@@ -112,13 +111,13 @@ func (p *MultiSelectProperty) GetType() object.PropertyType {
 type DateProperty struct {
 	Type object.PropertyType `json:"type,omitempty" mapstructure:"type" `
 	ID   string              `json:"id,omitempty" mapstructure:"id" `
-	Date *Date               `json:"date" mapstructure:"date" `
+	Date *Date               `json:"date" mapstructure:"date"`
 }
 
 // Date represents data object's date
 type Date struct {
-	Start time.Time `json:"start" mapstructure:"start"`
-	End   time.Time `json:"end,omitempty" mapstructure:"end"`
+	Start string `json:"start" mapstructure:"start"`
+	End   string `json:"end,omitempty" mapstructure:"end"`
 }
 
 // GetType returns the type of the property.
