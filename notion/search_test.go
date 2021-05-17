@@ -143,7 +143,7 @@ func TestSearchService_Search(t *testing.T) {
 						},
 
 						Properties: map[string]Property{
-							"Name":      &TitleProperty{Type: "title", ID: "title", Title: []RichText{}},
+							"Name":      &DatabaseTitleProperty{Type: "title", ID: "title", Title: &RichText{}},
 							"Task Type": &MultiSelectProperty{Type: "multi_select", ID: "vd@l"},
 						},
 					},
@@ -172,7 +172,7 @@ func TestSearchService_Search(t *testing.T) {
 							DatabaseID: "e6c6f8ff-c70e-4970-91ba-98f03e0d7fc6",
 						},
 						Properties: map[string]Property{
-							"Name": &TitleProperty{
+							"Name": &PageTitleProperty{
 								ID: "title",
 								Title: []RichText{
 									{

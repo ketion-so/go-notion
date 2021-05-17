@@ -12,17 +12,31 @@ type Property interface {
 	GetType() object.PropertyType
 }
 
-// TitleProperty object represents Notion title Property.
+// PageTitleProperty object represents Notion title Property.
 //go:generate gomodifytags -file $GOFILE -struct TitleProperty -clear-tags -w
 //go:generate gomodifytags --file $GOFILE --struct TitleProperty -add-tags json,mapstructure -w -transform snakecase
-type TitleProperty struct {
+type PageTitleProperty struct {
 	Type  object.PropertyType `json:"type" mapstructure:"type"`
 	ID    string              `json:"id" mapstructure:"id"`
 	Title []RichText          `json:"title" mapstructure:"title"`
 }
 
 // GetType returns the type of the property.
-func (p *TitleProperty) GetType() object.PropertyType {
+func (p *PageTitleProperty) GetType() object.PropertyType {
+	return object.PropertyType(p.Type)
+}
+
+// DatabaseTitleProperty object represents Notion title Property.
+//go:generate gomodifytags -file $GOFILE -struct DatabaseTitleProperty -clear-tags -w
+//go:generate gomodifytags --file $GOFILE --struct DatabaseTitleProperty -add-tags json,mapstructure -w -transform snakecase
+type DatabaseTitleProperty struct {
+	Type  object.PropertyType `json:"type" mapstructure:"type"`
+	ID    string              `json:"id" mapstructure:"id"`
+	Title *RichText           `json:"title" mapstructure:"title"`
+}
+
+// GetType returns the type of the property.
+func (p *DatabaseTitleProperty) GetType() object.PropertyType {
 	return object.PropertyType(p.Type)
 }
 
@@ -320,56 +334,71 @@ func convProperties(input map[string]interface{}) (map[string]Property, error) {
 	properties := map[string]Property{}
 	for k, v := range input {
 		var p Property
+		switch obj := v.(type) {
+		case map[string]interface{}:
+			objType, ok := obj["type"]
+			if !ok {
+				// Note(KeisukeYamashita):
+				// As for 2021/05/17, only "title" property of a page is supported.
+				continue
+			}
 
-		propertyType := object.PropertyType(v.(map[string]interface{})["type"].(string))
-		switch object.PropertyType(v.(map[string]interface{})["type"].(string)) {
-		case object.RichTextPropertyType:
-			p = &RichTextProperty{}
-		case object.TitlePropertyType:
-			p = &TitleProperty{}
-		case object.NumberPropertyType:
-			p = &NumberProperty{}
-		case object.SelectPropertyType:
-			p = &SelectProperty{}
-		case object.MultiSelectPropertyType:
-			p = &MultiSelectProperty{}
-		case object.DatePropertyType:
-			p = &DateProperty{}
-		case object.PeoplePropertyType:
-			p = &PeopleProperty{}
-		case object.FilesPropertyType:
-			p = &FilesProperty{}
-		case object.CheckboxPropertyType:
-			p = &CheckboxProperty{}
-		case object.URLPropertyType:
-			p = &URLProperty{}
-		case object.EmailPropertyType:
-			p = &EmailProperty{}
-		case object.PhoneNumberPropertyType:
-			p = &PhoneNumberProperty{}
-		case object.FormulaPropertyType:
-			p = &FormulaProperty{}
-		case object.RelationPropertyType:
-			p = &RelationProperty{}
-		case object.RollupPropertyType:
-			p = &RollupProperty{}
-		case object.CreatedTimePropertyType:
-			p = &CreatedTimeProperty{}
-		case object.CreatedByPropertyType:
-			p = &CreatedByProperty{}
-		case object.LastEditedTimePropertyType:
-			p = &LastEditedTimeProperty{}
-		case object.LastEditedByPropertyType:
-			p = &LastEditedByProperty{}
+			switch object.PropertyType(objType.(string)) {
+			case object.RichTextPropertyType:
+				p = &RichTextProperty{}
+			case object.TitlePropertyType:
+				switch v.(map[string]interface{})["title"].(type) {
+				case map[string]interface{}:
+					p = &DatabaseTitleProperty{}
+				default:
+					p = &PageTitleProperty{}
+				}
+
+			case object.NumberPropertyType:
+				p = &NumberProperty{}
+			case object.SelectPropertyType:
+				p = &SelectProperty{}
+			case object.MultiSelectPropertyType:
+				p = &MultiSelectProperty{}
+			case object.DatePropertyType:
+				p = &DateProperty{}
+			case object.PeoplePropertyType:
+				p = &PeopleProperty{}
+			case object.FilesPropertyType:
+				p = &FilesProperty{}
+			case object.CheckboxPropertyType:
+				p = &CheckboxProperty{}
+			case object.URLPropertyType:
+				p = &URLProperty{}
+			case object.EmailPropertyType:
+				p = &EmailProperty{}
+			case object.PhoneNumberPropertyType:
+				p = &PhoneNumberProperty{}
+			case object.FormulaPropertyType:
+				p = &FormulaProperty{}
+			case object.RelationPropertyType:
+				p = &RelationProperty{}
+			case object.RollupPropertyType:
+				p = &RollupProperty{}
+			case object.CreatedTimePropertyType:
+				p = &CreatedTimeProperty{}
+			case object.CreatedByPropertyType:
+				p = &CreatedByProperty{}
+			case object.LastEditedTimePropertyType:
+				p = &LastEditedTimeProperty{}
+			case object.LastEditedByPropertyType:
+				p = &LastEditedByProperty{}
+			default:
+				return nil, fmt.Errorf("%v type is not suppported propert type", obj["type"])
+			}
+
+			if err := mapstructure.Decode(v, &p); err != nil {
+				return nil, err
+			}
+
+			properties[k] = p
 		default:
-			return nil, fmt.Errorf("%v type is not suppported propert type", propertyType)
 		}
-
-		if err := mapstructure.Decode(v, &p); err != nil {
-			return nil, err
-		}
-
-		properties[k] = p
 	}
 
 	return properties, nil
