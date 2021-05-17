@@ -3,6 +3,10 @@ package notion
 import (
 	"context"
 	"encoding/json"
+	"fmt"
+
+	"github.com/ketion-so/go-notion/notion/object"
+	"github.com/mitchellh/mapstructure"
 )
 
 const (
@@ -28,10 +32,10 @@ type SearchRequest struct {
 //go:generate gomodifytags -file $GOFILE -struct SearchResults -clear-tags -w
 //go:generate gomodifytags --file $GOFILE --struct SearchResults -add-tags json,mapstructure -w -transform snakecase
 type SearchResults struct {
-	HasMore    bool       `json:"has_more" mapstructure:"has_more"`
-	NextCursor string     `json:"next_cursor" mapstructure:"next_cursor"`
-	Object     string     `json:"object" mapstructure:"object"`
-	Results    []Database `json:"results" mapstructure:"results"`
+	HasMore    bool            `json:"has_more" mapstructure:"has_more"`
+	NextCursor string          `json:"next_cursor" mapstructure:"next_cursor"`
+	Object     string          `json:"object" mapstructure:"object"`
+	Results    []object.Object `json:"results" mapstructure:"results"`
 }
 
 type searchResults struct {
@@ -94,15 +98,34 @@ func (s *SearchService) Search(ctx context.Context, sreq *SearchRequest) (*Searc
 		return nil, err
 	}
 
-	databases := []Database{}
+	objects := []object.Object{}
 	for _, result := range data.Results {
-		switch v := result.(type) {
-		case *database:
-			database, err := convDatabase(v)
+		objectType := result.(map[string]interface{})["object"].(string)
+		switch object.Type(objectType) {
+		case object.Database:
+			var db database
+			if err := mapstructure.Decode(result, &db); err != nil {
+				return nil, err
+			}
+
+			database, err := convDatabase(&db)
 			if err != nil {
 				return nil, err
 			}
-			databases = append(databases, *database)
+			objects = append(objects, database)
+		case object.Page:
+			var p page
+			if err := mapstructure.Decode(result, &p); err != nil {
+				return nil, err
+			}
+
+			page, err := convPage(&p)
+			if err != nil {
+				return nil, err
+			}
+			objects = append(objects, page)
+		default:
+			fmt.Println(objectType)
 		}
 	}
 
@@ -110,6 +133,6 @@ func (s *SearchService) Search(ctx context.Context, sreq *SearchRequest) (*Searc
 		HasMore:    data.HasMore,
 		NextCursor: data.NextCursor,
 		Object:     data.Object,
-		Results:    databases,
+		Results:    objects,
 	}, nil
 }
