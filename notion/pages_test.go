@@ -304,7 +304,7 @@ func TestPagesService_UpdateProperties(t *testing.T) {
 
 	tcs := map[string]struct {
 		id    string
-		input interface{}
+		input *UpdatePageRequest
 		want  *Page
 	}{
 		"ok": {
