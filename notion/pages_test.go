@@ -327,6 +327,7 @@ func TestPagesService_UpdateProperties(t *testing.T) {
 							PlainText:   "Avocado",
 							Annotations: &Annotations{Color: "default"},
 							Type:        "text",
+							Text:        &Text{Content: "Avocado"},
 						},
 					}},
 				},
