@@ -18,12 +18,12 @@ type RichText interface {
 //go:generate gomodifytags -file $GOFILE -struct Annotations -clear-tags -w
 //go:generate gomodifytags --file $GOFILE --struct Annotations -add-tags json,mapstructure -w -transform snakecase
 type Annotations struct {
-	Bold          bool  `json:"bold" mapstructure:"bold"`
-	Italic        bool  `json:"italic" mapstructure:"italic"`
-	StrikeThrough bool  `json:"strike_through" mapstructure:"strike_through"`
-	Underline     bool  `json:"underline" mapstructure:"underline"`
-	Code          bool  `json:"code" mapstructure:"code"`
-	Color         Color `json:"color" mapstructure:"color"`
+	Bold          bool  `json:"bold,omitempty" mapstructure:"bold"`
+	Italic        bool  `json:"italic,omitempty" mapstructure:"italic"`
+	StrikeThrough bool  `json:"strike_through,omitempty" mapstructure:"strike_through"`
+	Underline     bool  `json:"underline,omitempty" mapstructure:"underline"`
+	Code          bool  `json:"code,omitempty" mapstructure:"code"`
+	Color         Color `json:"color,omitempty" mapstructure:"color"`
 }
 
 // Color is type for text and background colors.
@@ -55,17 +55,18 @@ const (
 //go:generate gomodifytags -file $GOFILE -struct TextObject -clear-tags -w
 //go:generate gomodifytags --file $GOFILE --struct TextObject -add-tags json,mapstructure -w -transform snakecase
 type TextObject struct {
-	PlainText   string       `json:"plain_text" mapstructure:"plain_text"`
-	Href        string       `json:"href" mapstructure:"href"`
-	Annotations *Annotations `json:"annotations" mapstructure:"annotations"`
-	Type        RichTextType `json:"type" mapstructure:"type"`
-	Text        *Text        `json:"text" mapstructure:"text"`
-	Link        *LinkObject  `json:"link" mapstructure:"link"`
+	PlainText   string       `json:"plain_text,omitempty" mapstructure:"plain_text"`
+	Href        string       `json:"href,omitempty" mapstructure:"href"`
+	Annotations *Annotations `json:"annotations,omitempty" mapstructure:"annotations"`
+	Type        RichTextType `json:"type,omitempty" mapstructure:"type"`
+	Text        *Text        `json:"text,omitempty" mapstructure:"text"`
+	Link        *LinkObject  `json:"link,omitempty" mapstructure:"link"`
 }
 
+// Text represents text object's text content.
 type Text struct {
-	Type    RichTextType
-	Content string
+	Type    RichTextType `json:"type,omitempty" mapstructure:"type"`
+	Content string       `json:"content,omitempty" mapstructure:"content"`
 }
 
 // GetType returns the object type
@@ -77,11 +78,11 @@ func (obj *TextObject) GetType() RichTextType {
 //go:generate gomodifytags -file $GOFILE -struct LinkObject -clear-tags -w
 //go:generate gomodifytags --file $GOFILE --struct LinkObject -add-tags json,mapstructure -w -transform snakecase
 type LinkObject struct {
-	PlainText   string       `json:"plain_text" mapstructure:"plain_text"`
-	Href        string       `json:"href" mapstructure:"href"`
-	Annotations *Annotations `json:"annotations" mapstructure:"annotations"`
-	Type        RichTextType `json:"type" mapstructure:"type"`
-	URL         string       `json:"url" mapstructure:"url"`
+	PlainText   string       `json:"plain_text,omitempty" mapstructure:"plain_text"`
+	Href        string       `json:"href,omitempty" mapstructure:"href"`
+	Annotations *Annotations `json:"annotations,omitempty" mapstructure:"annotations"`
+	Type        RichTextType `json:"type,omitempty" mapstructure:"type"`
+	URL         string       `json:"url,omitempty" mapstructure:"url"`
 }
 
 // GetType returns the object type
@@ -103,12 +104,12 @@ const (
 //go:generate gomodifytags -file $GOFILE -struct MentionObject -clear-tags -w
 //go:generate gomodifytags --file $GOFILE --struct MentionObject -add-tags json,mapstructure -w -transform snakecase
 type MentionObject struct {
-	PlainText   string       `json:"plain_text" mapstructure:"plain_text"`
-	Href        string       `json:"href" mapstructure:"href"`
-	Annotations *Annotations `json:"annotations" mapstructure:"annotations"`
-	Type        RichTextType `json:"type" mapstructure:"type"`
-	Database    *Database    `json:"database" mapstructure:"database"`
-	User        *User        `json:"user" mapstructure:"user"`
+	PlainText   string       `json:"plain_text,omitempty" mapstructure:"plain_text"`
+	Href        string       `json:"href,omitempty" mapstructure:"href"`
+	Annotations *Annotations `json:"annotations,omitempty" mapstructure:"annotations"`
+	Type        RichTextType `json:"type,omitempty" mapstructure:"type"`
+	Database    *Database    `json:"database,omitempty" mapstructure:"database"`
+	User        *User        `json:"user,omitempty" mapstructure:"user"`
 }
 
 // GetType returns the object type
@@ -120,11 +121,11 @@ func (obj *MentionObject) GetType() RichTextType {
 //go:generate gomodifytags -file $GOFILE -struct EquationObject -clear-tags -w
 //go:generate gomodifytags --file $GOFILE --struct EquationObject -add-tags json,mapstructure -w -transform snakecase
 type EquationObject struct {
-	PlainText   string       `json:"plain_text" mapstructure:"plain_text"`
-	Href        string       `json:"href" mapstructure:"href"`
-	Annotations *Annotations `json:"annotations" mapstructure:"annotations"`
-	Type        RichTextType `json:"type" mapstructure:"type"`
-	Expression  string       `json:"expression" mapstructure:"expression"`
+	PlainText   string       `json:"plain_text,omitempty" mapstructure:"plain_text"`
+	Href        string       `json:"href,omitempty" mapstructure:"href"`
+	Annotations *Annotations `json:"annotations,omitempty" mapstructure:"annotations"`
+	Type        RichTextType `json:"type,omitempty" mapstructure:"type"`
+	Expression  string       `json:"expression,omitempty" mapstructure:"expression"`
 }
 
 // GetType returns the object type

@@ -113,7 +113,7 @@ func (s *PagesService) Get(ctx context.Context, pageID string) (*Page, error) {
 type CreatePageRequest struct {
 	Parent     Parent              `json:"parent" mapstructure:"parent"`
 	Properties map[string]Property `json:"properties" mapstructure:"properties"`
-	Children   []Block             `json:"children" mapstructure:"children"`
+	Children   []Block             `json:"children,omitempty" mapstructure:"children"`
 }
 
 // Create page.

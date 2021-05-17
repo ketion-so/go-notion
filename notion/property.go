@@ -13,12 +13,11 @@ type Property interface {
 }
 
 // PageTitleProperty object represents Notion title Property.
-//go:generate gomodifytags -file $GOFILE -struct PageTitleProperty -clear-tags -w
 //go:generate gomodifytags --file $GOFILE --struct PageTitleProperty -add-tags json,mapstructure -w -transform snakecase
 type PageTitleProperty struct {
-	Type  object.PropertyType `json:"type" mapstructure:"type"`
-	ID    string              `json:"id" mapstructure:"id"`
-	Title []TextObject        `json:"title" mapstructure:"title"`
+	Type  object.PropertyType `json:"type,omitempty" mapstructure:"type" `
+	ID    string              `json:"id,omitempty" mapstructure:"id" `
+	Title []TextObject        `json:"title,omitempty" mapstructure:"title" `
 }
 
 // GetType returns the type of the property.
@@ -27,12 +26,11 @@ func (p *PageTitleProperty) GetType() object.PropertyType {
 }
 
 // DatabaseTitleProperty object represents Notion title Property.
-//go:generate gomodifytags -file $GOFILE -struct DatabaseTitleProperty -clear-tags -w
 //go:generate gomodifytags --file $GOFILE --struct DatabaseTitleProperty -add-tags json,mapstructure -w -transform snakecase
 type DatabaseTitleProperty struct {
-	Type  object.PropertyType `json:"type" mapstructure:"type"`
-	ID    string              `json:"id" mapstructure:"id"`
-	Title *TextObject         `json:"title" mapstructure:"title"`
+	Type  object.PropertyType `json:"type,omitempty" mapstructure:"type" `
+	ID    string              `json:"id,omitempty" mapstructure:"id" `
+	Title *TextObject         `json:"title,omitempty" mapstructure:"title" `
 }
 
 // GetType returns the type of the property.
@@ -41,12 +39,11 @@ func (p *DatabaseTitleProperty) GetType() object.PropertyType {
 }
 
 // TextProperty object represents Notion rich text Property.
-//go:generate gomodifytags -file $GOFILE -struct TextProperty -clear-tags -w
 //go:generate gomodifytags --file $GOFILE --struct TextProperty -add-tags json,mapstructure -w -transform snakecase
 type TextProperty struct {
-	Type object.PropertyType `json:"type" mapstructure:"type"`
-	ID   string              `json:"id" mapstructure:"id"`
-	Text interface{}         `json:"text" mapstructure:"text"`
+	Type object.PropertyType `json:"type,omitempty" mapstructure:"type" `
+	ID   string              `json:"id,omitempty" mapstructure:"id" `
+	Text interface{}         `json:"text,omitempty" mapstructure:"text" `
 }
 
 // GetType returns the type of the property.
@@ -55,12 +52,11 @@ func (p *TextProperty) GetType() object.PropertyType {
 }
 
 // NumberProperty object represents Notion number Property.
-//go:generate gomodifytags -file $GOFILE -struct NumberProperty -clear-tags -w
 //go:generate gomodifytags --file $GOFILE --struct NumberProperty -add-tags json,mapstructure -w -transform snakecase
 type NumberProperty struct {
-	Type   object.PropertyType `json:"type" mapstructure:"type"`
-	ID     string              `json:"id" mapstructure:"id"`
-	Format string              `json:"format" mapstructure:"format"`
+	Type   object.PropertyType `json:"type,omitempty" mapstructure:"type" `
+	ID     string              `json:"id,omitempty" mapstructure:"id" `
+	Format string              `json:"format,omitempty" mapstructure:"format" `
 }
 
 // GetType returns the type of the property.
@@ -69,21 +65,19 @@ func (p *NumberProperty) GetType() object.PropertyType {
 }
 
 // SelectProperty object represents Notion select Property.
-//go:generate gomodifytags -file $GOFILE -struct SelectProperty -clear-tags -w
 //go:generate gomodifytags --file $GOFILE --struct SelectProperty -add-tags json,mapstructure -w -transform snakecase
 type SelectProperty struct {
-	Type    object.PropertyType `json:"type" mapstructure:"type"`
-	ID      string              `json:"id" mapstructure:"id"`
-	Options []SelectOption      `json:"options" mapstructure:"options"`
+	Type    object.PropertyType `json:"type,omitempty" mapstructure:"type" `
+	ID      string              `json:"id,omitempty" mapstructure:"id" `
+	Options []SelectOption      `json:"options,omitempty" mapstructure:"options" `
 }
 
 // SelectOption object represents Notion select Property.
-//go:generate gomodifytags -file $GOFILE -struct SelectOption -clear-tags -w
 //go:generate gomodifytags --file $GOFILE --struct SelectOption -add-tags json,mapstructure -w -transform snakecase
 type SelectOption struct {
-	Name  string `json:"name" mapstructure:"name"`
-	ID    string `json:"id" mapstructure:"id"`
-	Color Color  `json:"color" mapstructure:"color"`
+	Name  string `json:"name,omitempty" mapstructure:"name" `
+	ID    string `json:"id,omitempty" mapstructure:"id" `
+	Color Color  `json:"color,omitempty" mapstructure:"color" `
 }
 
 // GetType returns the type of the property.
@@ -92,21 +86,19 @@ func (p *SelectProperty) GetType() object.PropertyType {
 }
 
 // MultiSelectProperty object represents Notion multi select Property.
-//go:generate gomodifytags -file $GOFILE -struct MultiSelectProperty -clear-tags -w
 //go:generate gomodifytags --file $GOFILE --struct MultiSelectProperty -add-tags json,mapstructure -w -transform snakecase
 type MultiSelectProperty struct {
-	Type    object.PropertyType `json:"type" mapstructure:"type"`
-	ID      string              `json:"id" mapstructure:"id"`
-	Options []MultiSelectOption `json:"options" mapstructure:"options"`
+	Type    object.PropertyType `json:"type,omitempty" mapstructure:"type" `
+	ID      string              `json:"id,omitempty" mapstructure:"id" `
+	Options []MultiSelectOption `json:"options,omitempty" mapstructure:"options" `
 }
 
 // MultiSelectOption object represents Notion select Property.
-//go:generate gomodifytags -file $GOFILE -struct MultiSelectOption -clear-tags -w
 //go:generate gomodifytags --file $GOFILE --struct MultiSelectOption -add-tags json,mapstructure -w -transform snakecase
 type MultiSelectOption struct {
-	Name  string `json:"name" mapstructure:"name"`
-	ID    string `json:"id" mapstructure:"id"`
-	Color Color  `json:"color" mapstructure:"color"`
+	Name  string `json:"name,omitempty" mapstructure:"name" `
+	ID    string `json:"id,omitempty" mapstructure:"id" `
+	Color Color  `json:"color,omitempty" mapstructure:"color" `
 }
 
 // GetType returns the type of the property.
@@ -115,12 +107,11 @@ func (p *MultiSelectProperty) GetType() object.PropertyType {
 }
 
 // DateProperty object represents Notion date Property.
-//go:generate gomodifytags -file $GOFILE -struct DateProperty -clear-tags -w
 //go:generate gomodifytags --file $GOFILE --struct DateProperty -add-tags json,mapstructure -w -transform snakecase
 type DateProperty struct {
-	Type object.PropertyType `json:"type" mapstructure:"type"`
-	ID   string              `json:"id" mapstructure:"id"`
-	Date interface{}         `json:"date" mapstructure:"date"`
+	Type object.PropertyType `json:"type,omitempty" mapstructure:"type" `
+	ID   string              `json:"id,omitempty" mapstructure:"id" `
+	Date interface{}         `json:"date,omitempty" mapstructure:"date" `
 }
 
 // GetType returns the type of the property.
@@ -129,12 +120,11 @@ func (p *DateProperty) GetType() object.PropertyType {
 }
 
 // PeopleProperty object represents Notion people Property.
-//go:generate gomodifytags -file $GOFILE -struct PeopleProperty -clear-tags -w
 //go:generate gomodifytags --file $GOFILE --struct PeopleProperty -add-tags json,mapstructure -w -transform snakecase
 type PeopleProperty struct {
-	Type   object.PropertyType `json:"type" mapstructure:"type"`
-	ID     string              `json:"id" mapstructure:"id"`
-	People interface{}         `json:"people" mapstructure:"people"`
+	Type   object.PropertyType `json:"type,omitempty" mapstructure:"type" `
+	ID     string              `json:"id,omitempty" mapstructure:"id" `
+	People interface{}         `json:"people,omitempty" mapstructure:"people" `
 }
 
 // GetType returns the type of the property.
@@ -143,12 +133,11 @@ func (p *PeopleProperty) GetType() object.PropertyType {
 }
 
 // FilesProperty object represents Notion file Property.
-//go:generate gomodifytags -file $GOFILE -struct FilesProperty -clear-tags -w
 //go:generate gomodifytags --file $GOFILE --struct FilesProperty -add-tags json,mapstructure -w -transform snakecase
 type FilesProperty struct {
-	Type object.PropertyType `json:"type" mapstructure:"type"`
-	ID   string              `json:"id" mapstructure:"id"`
-	File interface{}         `json:"file" mapstructure:"file"`
+	Type object.PropertyType `json:"type,omitempty" mapstructure:"type" `
+	ID   string              `json:"id,omitempty" mapstructure:"id" `
+	File interface{}         `json:"file,omitempty" mapstructure:"file" `
 }
 
 // GetType returns the type of the property.
@@ -157,12 +146,11 @@ func (p *FilesProperty) GetType() object.PropertyType {
 }
 
 // CheckboxProperty object represents Notion CheckboxProperty Property.
-//go:generate gomodifytags -file $GOFILE -struct CheckboxProperty -clear-tags -w
 //go:generate gomodifytags --file $GOFILE --struct CheckboxProperty -add-tags json,mapstructure -w -transform snakecase
 type CheckboxProperty struct {
-	Type     object.PropertyType `json:"type" mapstructure:"type"`
-	ID       string              `json:"id" mapstructure:"id"`
-	Checkbox interface{}         `json:"checkbox" mapstructure:"checkbox"`
+	Type     object.PropertyType `json:"type,omitempty" mapstructure:"type" `
+	ID       string              `json:"id,omitempty" mapstructure:"id" `
+	Checkbox interface{}         `json:"checkbox,omitempty" mapstructure:"checkbox" `
 }
 
 // GetType returns the type of the property.
@@ -171,12 +159,11 @@ func (p *CheckboxProperty) GetType() object.PropertyType {
 }
 
 // URLProperty object represents Notion text Property.
-//go:generate gomodifytags -file $GOFILE -struct URLProperty -clear-tags -w
 //go:generate gomodifytags --file $GOFILE --struct URLProperty -add-tags json,mapstructure -w -transform snakecase
 type URLProperty struct {
-	Type object.PropertyType `json:"type" mapstructure:"type"`
-	ID   string              `json:"id" mapstructure:"id"`
-	URL  interface{}         `json:"url" mapstructure:"url"`
+	Type object.PropertyType `json:"type,omitempty" mapstructure:"type" `
+	ID   string              `json:"id,omitempty" mapstructure:"id" `
+	URL  interface{}         `json:"url,omitempty" mapstructure:"url" `
 }
 
 // GetType returns the type of the property.
@@ -185,12 +172,11 @@ func (p *URLProperty) GetType() object.PropertyType {
 }
 
 // EmailProperty object represents Notion emailProperty Property.
-//go:generate gomodifytags -file $GOFILE -struct EmailProperty -clear-tags -w
 //go:generate gomodifytags --file $GOFILE --struct EmailProperty -add-tags json,mapstructure -w -transform snakecase
 type EmailProperty struct {
-	Type  object.PropertyType `json:"type" mapstructure:"type"`
-	ID    string              `json:"id" mapstructure:"id"`
-	Email interface{}         `json:"email" mapstructure:"email"`
+	Type  object.PropertyType `json:"type,omitempty" mapstructure:"type" `
+	ID    string              `json:"id,omitempty" mapstructure:"id" `
+	Email interface{}         `json:"email,omitempty" mapstructure:"email" `
 }
 
 // GetType returns the type of the property.
@@ -199,12 +185,11 @@ func (p *EmailProperty) GetType() object.PropertyType {
 }
 
 // PhoneNumberProperty object represents Notion phone number Property.
-//go:generate gomodifytags -file $GOFILE -struct PhoneNumberProperty -clear-tags -w
 //go:generate gomodifytags --file $GOFILE --struct PhoneNumberProperty -add-tags json,mapstructure -w -transform snakecase
 type PhoneNumberProperty struct {
-	Type        object.PropertyType `json:"type" mapstructure:"type"`
-	ID          string              `json:"id" mapstructure:"id"`
-	PhoneNumber interface{}         `json:"phone_number" mapstructure:"phone_number"`
+	Type        object.PropertyType `json:"type,omitempty" mapstructure:"type" `
+	ID          string              `json:"id,omitempty" mapstructure:"id" `
+	PhoneNumber interface{}         `json:"phone_number,omitempty" mapstructure:"phone_number" `
 }
 
 // GetType returns the type of the property.
@@ -213,12 +198,11 @@ func (p *PhoneNumberProperty) GetType() object.PropertyType {
 }
 
 // FormulaProperty object represents Notion formula Property.
-//go:generate gomodifytags -file $GOFILE -struct FormulaProperty -clear-tags -w
 //go:generate gomodifytags --file $GOFILE --struct FormulaProperty -add-tags json,mapstructure -w -transform snakecase
 type FormulaProperty struct {
-	Type       object.PropertyType `json:"type" mapstructure:"type"`
-	ID         string              `json:"id" mapstructure:"id"`
-	Expression string              `json:"expression" mapstructure:"expression"`
+	Type       object.PropertyType `json:"type,omitempty" mapstructure:"type" `
+	ID         string              `json:"id,omitempty" mapstructure:"id" `
+	Expression string              `json:"expression,omitempty" mapstructure:"expression" `
 }
 
 // GetType returns the type of the property.
@@ -227,21 +211,19 @@ func (p *FormulaProperty) GetType() object.PropertyType {
 }
 
 // RelationProperty object represents Notion relation Property.
-//go:generate gomodifytags -file $GOFILE -struct RelationProperty -clear-tags -w
 //go:generate gomodifytags --file $GOFILE --struct RelationProperty -add-tags json,mapstructure -w -transform snakecase
 type RelationProperty struct {
-	Type     object.PropertyType `json:"type" mapstructure:"type"`
-	ID       string              `json:"id" mapstructure:"id"`
-	Relation []Relation          `json:"relation" mapstructure:"relation"`
+	Type     object.PropertyType `json:"type,omitempty" mapstructure:"type" `
+	ID       string              `json:"id,omitempty" mapstructure:"id" `
+	Relation []Relation          `json:"relation,omitempty" mapstructure:"relation" `
 }
 
 // Relation object represents Notion relation.
-//go:generate gomodifytags -file $GOFILE -struct Relation -clear-tags -w
 //go:generate gomodifytags --file $GOFILE --struct Relation -add-tags json,mapstructure -w -transform snakecase
 type Relation struct {
-	DatabaseID         string `json:"database_id" mapstructure:"database_id"`
-	SyncedPropertyName string `json:"synced_property_name" mapstructure:"synced_property_name"`
-	SyncedPropertyID   string `json:"synced_property_id" mapstructure:"synced_property_id"`
+	DatabaseID         string `json:"database_id,omitempty" mapstructure:"database_id" `
+	SyncedPropertyName string `json:"synced_property_name,omitempty" mapstructure:"synced_property_name" `
+	SyncedPropertyID   string `json:"synced_property_id,omitempty" mapstructure:"synced_property_id" `
 }
 
 // GetType returns the type of the property.
@@ -250,12 +232,11 @@ func (p *RelationProperty) GetType() object.PropertyType {
 }
 
 // RollupProperty object represents Notion rollup Property.
-//go:generate gomodifytags -file $GOFILE -struct RollupProperty -clear-tags -w
 //go:generate gomodifytags --file $GOFILE --struct RollupProperty -add-tags json,mapstructure -w -transform snakecase
 type RollupProperty struct {
-	Type   object.PropertyType `json:"type" mapstructure:"type"`
-	ID     string              `json:"id" mapstructure:"id"`
-	Rollup *Rollup             `json:"rollup" mapstructure:"rollup"`
+	Type   object.PropertyType `json:"type,omitempty" mapstructure:"type" `
+	ID     string              `json:"id,omitempty" mapstructure:"id" `
+	Rollup *Rollup             `json:"rollup,omitempty" mapstructure:"rollup" `
 }
 
 // GetType returns the type of the property.
@@ -264,23 +245,21 @@ func (p *RollupProperty) GetType() object.PropertyType {
 }
 
 // Rollup object represents Notion rollup.
-//go:generate gomodifytags -file $GOFILE -struct Rollup -clear-tags -w
 //go:generate gomodifytags --file $GOFILE --struct Rollup -add-tags json,mapstructure -w -transform snakecase
 type Rollup struct {
-	RelationPropertyName string `json:"relation_property_name" mapstructure:"relation_property_name"`
-	RelationPropertyID   string `json:"relation_property_id" mapstructure:"relation_property_id"`
-	RollupPropertyName   string `json:"rollup_property_name" mapstructure:"rollup_property_name"`
-	RollupPropertyID     string `json:"rollup_property_id" mapstructure:"rollup_property_id"`
-	Function             string `json:"function" mapstructure:"function"`
+	RelationPropertyName string `json:"relation_property_name,omitempty" mapstructure:"relation_property_name" `
+	RelationPropertyID   string `json:"relation_property_id,omitempty" mapstructure:"relation_property_id" `
+	RollupPropertyName   string `json:"rollup_property_name,omitempty" mapstructure:"rollup_property_name" `
+	RollupPropertyID     string `json:"rollup_property_id,omitempty" mapstructure:"rollup_property_id" `
+	Function             string `json:"function,omitempty" mapstructure:"function" `
 }
 
 // CreatedTimeProperty object represents Notion created time Property.
-//go:generate gomodifytags -file $GOFILE -struct CreatedTimeProperty -clear-tags -w
 //go:generate gomodifytags --file $GOFILE --struct CreatedTimeProperty -add-tags json,mapstructure -w -transform snakecase
 type CreatedTimeProperty struct {
-	Type        object.PropertyType `json:"type" mapstructure:"type"`
-	ID          string              `json:"id" mapstructure:"id"`
-	CreatedTime interface{}         `json:"created_time" mapstructure:"created_time"`
+	Type        object.PropertyType `json:"type,omitempty" mapstructure:"type" `
+	ID          string              `json:"id,omitempty" mapstructure:"id" `
+	CreatedTime interface{}         `json:"created_time,omitempty" mapstructure:"created_time" `
 }
 
 // GetType returns the type of the property.
@@ -289,12 +268,11 @@ func (p *CreatedTimeProperty) GetType() object.PropertyType {
 }
 
 // CreatedByProperty object represents Notion created by Property.
-//go:generate gomodifytags -file $GOFILE -struct CreatedByProperty -clear-tags -w
 //go:generate gomodifytags --file $GOFILE --struct CreatedByProperty -add-tags json,mapstructure -w -transform snakecase
 type CreatedByProperty struct {
-	Type      object.PropertyType `json:"type" mapstructure:"type"`
-	ID        string              `json:"id" mapstructure:"id"`
-	CreatedBy interface{}         `json:"created_by" mapstructure:"created_by"`
+	Type      object.PropertyType `json:"type,omitempty" mapstructure:"type" `
+	ID        string              `json:"id,omitempty" mapstructure:"id" `
+	CreatedBy interface{}         `json:"created_by,omitempty" mapstructure:"created_by" `
 }
 
 // GetType returns the type of the property.
@@ -303,12 +281,11 @@ func (p *CreatedByProperty) GetType() object.PropertyType {
 }
 
 // LastEditedTimeProperty object represents Notion last edited time Property.
-//go:generate gomodifytags -file $GOFILE -struct LastEditedTimeProperty -clear-tags -w
 //go:generate gomodifytags --file $GOFILE --struct LastEditedTimeProperty -add-tags json,mapstructure -w -transform snakecase
 type LastEditedTimeProperty struct {
-	Type           object.PropertyType `json:"type" mapstructure:"type"`
-	ID             string              `json:"id" mapstructure:"id"`
-	LastEditedTime interface{}         `json:"last_edited_time" mapstructure:"last_edited_time"`
+	Type           object.PropertyType `json:"type,omitempty" mapstructure:"type" `
+	ID             string              `json:"id,omitempty" mapstructure:"id" `
+	LastEditedTime interface{}         `json:"last_edited_time,omitempty" mapstructure:"last_edited_time" `
 }
 
 // GetType returns the type of the property.
@@ -317,12 +294,11 @@ func (p *LastEditedTimeProperty) GetType() object.PropertyType {
 }
 
 // LastEditedByProperty object represents Notion last edited by Property.
-//go:generate gomodifytags -file $GOFILE -struct LastEditedByProperty -clear-tags -w
 //go:generate gomodifytags --file $GOFILE --struct LastEditedByProperty -add-tags json,mapstructure -w -transform snakecase
 type LastEditedByProperty struct {
-	Type         object.PropertyType `json:"type" mapstructure:"type"`
-	ID           string              `json:"id" mapstructure:"id"`
-	LastEditedBy interface{}         `json:"last_edited_by" mapstructure:"last_edited_by"`
+	Type         object.PropertyType `json:"type,omitempty" mapstructure:"type" `
+	ID           string              `json:"id,omitempty" mapstructure:"id" `
+	LastEditedBy interface{}         `json:"last_edited_by,omitempty" mapstructure:"last_edited_by" `
 }
 
 // GetType returns the type of the property.
