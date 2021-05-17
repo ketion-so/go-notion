@@ -214,12 +214,10 @@ func TestPagesService_Create(t *testing.T) {
 	defer teardown()
 
 	tcs := map[string]struct {
-		id    string
 		input *CreatePageRequest
 		want  *Page
 	}{
 		"ok": {
-			"d40e767c-d7af-4b18-a86d-55c61f1e39a4",
 			&CreatePageRequest{},
 			&Page{
 				Object:         "page",
@@ -236,7 +234,7 @@ func TestPagesService_Create(t *testing.T) {
 
 	for n, tc := range tcs {
 		t.Run(n, func(t *testing.T) {
-			mux.HandleFunc(fmt.Sprintf("/%s/%s", pagesPath, tc.id), func(w http.ResponseWriter, r *http.Request) {
+			mux.HandleFunc(fmt.Sprintf("/%s", pagesPath), func(w http.ResponseWriter, r *http.Request) {
 				if r.Header.Get(notionVersionHeader) == "" {
 					t.Fatalf("no notion version header to request")
 				}
@@ -244,7 +242,7 @@ func TestPagesService_Create(t *testing.T) {
 				fmt.Fprint(w, createPageJSON())
 			})
 
-			got, err := client.Pages.Create(context.Background(), tc.id, tc.input)
+			got, err := client.Pages.Create(context.Background(), tc.input)
 			if err != nil {
 				t.Fatalf("Failed: %v", err)
 			}
