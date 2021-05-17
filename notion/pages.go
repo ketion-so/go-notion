@@ -111,16 +111,16 @@ func (s *PagesService) Get(ctx context.Context, pageID string) (*Page, error) {
 //go:generate gomodifytags -file $GOFILE -struct CreatePageRequest -clear-tags -w
 //go:generate gomodifytags --file $GOFILE --struct CreatePageRequest -add-tags json,mapstructure -w -transform snakecase
 type CreatePageRequest struct {
-	Parent     *Parent     `json:"parent" mapstructure:"parent"`
-	Properties interface{} `json:"properties" mapstructure:"properties"`
-	Children   []Block     `json:"children" mapstructure:"children"`
+	Parent     *Parent             `json:"parent" mapstructure:"parent"`
+	Properties map[string]Property `json:"properties" mapstructure:"properties"`
+	Children   []Block             `json:"children" mapstructure:"children"`
 }
 
 // Create page.
 //
 // API doc: https://developers.notion.com/reference/post-page
-func (s *PagesService) Create(ctx context.Context, pageID string, preq *CreatePageRequest) (*Page, error) {
-	resp, err := s.client.post(ctx, fmt.Sprintf("%s/%s", pagesPath, pageID), preq)
+func (s *PagesService) Create(ctx context.Context, preq *CreatePageRequest) (*Page, error) {
+	resp, err := s.client.post(ctx, pagesPath, preq)
 	if err != nil {
 		return nil, err
 	}
