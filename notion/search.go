@@ -124,9 +124,6 @@ func (s *SearchService) Search(ctx context.Context, sreq *SearchRequest) (*Searc
 				return nil, err
 			}
 			objects = append(objects, page)
-		default:
-			fmt.Println(objectType)
-		}
 	}
 
 	return &SearchResults{
