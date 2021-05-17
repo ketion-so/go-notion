@@ -205,7 +205,7 @@ func TestClient_Do_Error(t *testing.T) {
 				}
 
 				w.WriteHeader(tc.want.Status)
-				json.NewEncoder(w).Encode(tc.want)
+				_ = json.NewEncoder(w).Encode(tc.want)
 			})
 
 			_, err := client.Users.List(context.Background())
