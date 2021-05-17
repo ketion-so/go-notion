@@ -161,7 +161,8 @@ func TestDatabasesService_Get(t *testing.T) {
 					{
 						PlainText:   "Grocery List",
 						Annotations: &Annotations{Color: DefaultColor},
-						Type:        Text,
+						Type:        TextRichTextType,
+						Text:        &Text{Content: "Grocery List"},
 					},
 				},
 			},

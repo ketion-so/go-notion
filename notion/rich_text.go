@@ -4,9 +4,9 @@ package notion
 type RichTextType string
 
 const (
-	Text     RichTextType = "text"
-	Mention  RichTextType = "mention"
-	Equation RichTextType = "equation"
+	TextRichTextType    RichTextType = "text"
+	MentionRichTextType RichTextType = "mention"
+	EquationRichTextTye RichTextType = "equation"
 )
 
 // RicchText is descibed in API doc: https://developers.notion.com/reference/rich-text
@@ -59,8 +59,13 @@ type TextObject struct {
 	Href        string       `json:"href" mapstructure:"href"`
 	Annotations *Annotations `json:"annotations" mapstructure:"annotations"`
 	Type        RichTextType `json:"type" mapstructure:"type"`
-	Content     string       `json:"content" mapstructure:"content"`
+	Text        *Text        `json:"text" mapstructure:"text"`
 	Link        *LinkObject  `json:"link" mapstructure:"link"`
+}
+
+type Text struct {
+	Type    RichTextType
+	Content string
 }
 
 // GetType returns the object type

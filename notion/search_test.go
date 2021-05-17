@@ -136,6 +136,7 @@ func TestSearchService_Search(t *testing.T) {
 								PlainText:   "Tasks",
 								Annotations: &Annotations{Color: "default"},
 								Type:        "text",
+								Text:        &Text{Content: "Tasks"},
 							},
 						},
 
@@ -176,6 +177,7 @@ func TestSearchService_Search(t *testing.T) {
 										PlainText:   "Task 1",
 										Annotations: &Annotations{Color: "default"},
 										Type:        "text",
+										Text:        &Text{Content: "Task1 1"},
 									},
 								},
 								Type: "title",
