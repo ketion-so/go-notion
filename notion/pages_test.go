@@ -60,8 +60,7 @@ func getPageJSON() string {
 				"id": "YnD",
 				"type": "date",
 				"date": {
-				  "start": "2021-05-12",
-				  "end": null
+				  "start": "2021-05-12"
 				}
 			  },
 			  "Name": {

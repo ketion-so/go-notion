@@ -57,6 +57,7 @@ type NumberProperty struct {
 	Type   object.PropertyType `json:"type,omitempty" mapstructure:"type" `
 	ID     string              `json:"id,omitempty" mapstructure:"id" `
 	Format string              `json:"format,omitempty" mapstructure:"format" `
+	Number float64             `json:"number" mapstructure:"format" `
 }
 
 // GetType returns the type of the property.
@@ -69,13 +70,13 @@ func (p *NumberProperty) GetType() object.PropertyType {
 type SelectProperty struct {
 	Type    object.PropertyType `json:"type,omitempty" mapstructure:"type" `
 	ID      string              `json:"id,omitempty" mapstructure:"id" `
-	Options []SelectOption      `json:"options,omitempty" mapstructure:"options" `
+	Options []SelectOption      `json:"options" mapstructure:"options" `
 }
 
 // SelectOption object represents Notion select Property.
 //go:generate gomodifytags --file $GOFILE --struct SelectOption -add-tags json,mapstructure -w -transform snakecase
 type SelectOption struct {
-	Name  string `json:"name,omitempty" mapstructure:"name" `
+	Name  string `json:"name" mapstructure:"name" `
 	ID    string `json:"id,omitempty" mapstructure:"id" `
 	Color Color  `json:"color,omitempty" mapstructure:"color" `
 }
@@ -96,7 +97,7 @@ type MultiSelectProperty struct {
 // MultiSelectOption object represents Notion select Property.
 //go:generate gomodifytags --file $GOFILE --struct MultiSelectOption -add-tags json,mapstructure -w -transform snakecase
 type MultiSelectOption struct {
-	Name  string `json:"name,omitempty" mapstructure:"name" `
+	Name  string `json:"name" mapstructure:"name" `
 	ID    string `json:"id,omitempty" mapstructure:"id" `
 	Color Color  `json:"color,omitempty" mapstructure:"color" `
 }
@@ -111,7 +112,13 @@ func (p *MultiSelectProperty) GetType() object.PropertyType {
 type DateProperty struct {
 	Type object.PropertyType `json:"type,omitempty" mapstructure:"type" `
 	ID   string              `json:"id,omitempty" mapstructure:"id" `
-	Date interface{}         `json:"date,omitempty" mapstructure:"date" `
+	Date *Date               `json:"date" mapstructure:"date"`
+}
+
+// Date represents data object's date
+type Date struct {
+	Start string `json:"start" mapstructure:"start"`
+	End   string `json:"end,omitempty" mapstructure:"end"`
 }
 
 // GetType returns the type of the property.
