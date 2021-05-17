@@ -8,6 +8,7 @@ import (
 
 	"github.com/google/go-cmp/cmp"
 	"github.com/google/go-cmp/cmp/cmpopts"
+	"github.com/ketion-so/go-notion/notion/object"
 )
 
 func getDatabaseSON() string {
@@ -185,6 +186,106 @@ func TestDatabasesService_Get(t *testing.T) {
 			}
 
 			if diff := cmp.Diff(got, tc.want, cmpopts.IgnoreFields(*got, "Properties")); diff != "" {
+				t.Fatalf("Diff: %s(-got +want)", diff)
+			}
+		})
+	}
+}
+
+func queryDatabaseJSON() string {
+	return `{
+		"object": "list",
+		"results": [
+		  {
+			"object": "page",
+			"id": "2e01e904-febd-43a0-ad02-8eedb903a82c",
+			"created_time": "2020-03-17T19:10:04.968Z",
+			"last_edited_time": "2020-03-17T21:49:37.913Z",
+			"parent": {
+			  "type": "database_id",
+			  "database_id": "897e5a76-ae52-4b48-9fdf-e71f5945d1af"
+			},
+			"archived": false,
+			"properties": {
+			  "Recipes": {
+				"id": "AiL",
+				"type": "relation",
+				"relation": [
+				  {
+					"id": "796659b4-a5d9-4c64-a539-06ac5292779e"
+				  },
+				  {
+					"id": "79e63318-f85a-4909-aceb-96a724d1021c"
+				  }
+				]
+			  },
+			  "Cost of next trip": {
+				"id": "R}wl",
+				"type": "formula",
+				"formula": {
+				  "type": "number",
+				  "number": 2
+				}
+			  },
+			  "Last ordered": {
+				"id": "UsKi",
+				"type": "date",
+				"date": {
+				  "start": "2020-10-07",
+				  "end": null
+				}
+			  },
+			  "In stock": {
+				"id": "{>U;",
+				"type": "checkbox",
+				"checkbox": false
+			  }
+			}
+		  }
+		],
+		"has_more": false,
+		"next_cursor": null
+	  }
+`
+}
+
+func TestDatabasesService_Query(t *testing.T) {
+	client, mux, _, teardown := setup()
+	defer teardown()
+
+	tcs := map[string]struct {
+		id    string
+		query *DatabaseQuery
+		want  *QueryDatabaseResults
+	}{
+		"ok": {
+			"668d797c-76fa-4934-9b05-ad288df2d136",
+			&DatabaseQuery{},
+			&QueryDatabaseResults{
+				HasMore:    false,
+				NextCursor: "",
+				Object:     object.List,
+				Results:    []object.Object{},
+			},
+		},
+	}
+
+	for n, tc := range tcs {
+		t.Run(n, func(t *testing.T) {
+			mux.HandleFunc(fmt.Sprintf("/%s/%s/query", databasesPath, tc.id), func(w http.ResponseWriter, r *http.Request) {
+				if r.Header.Get(notionVersionHeader) == "" {
+					t.Fatalf("no notion version header to request")
+				}
+
+				fmt.Fprint(w, queryDatabaseJSON())
+			})
+
+			got, err := client.Databases.Query(context.Background(), tc.id, tc.query)
+			if err != nil {
+				t.Fatalf("Failed: %v", err)
+			}
+
+			if diff := cmp.Diff(got, tc.want, cmpopts.IgnoreFields(*got, "Results")); diff != "" {
 				t.Fatalf("Diff: %s(-got +want)", diff)
 			}
 		})
