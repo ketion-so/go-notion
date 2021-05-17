@@ -3,7 +3,6 @@ package notion
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 
 	"github.com/ketion-so/go-notion/notion/object"
 	"github.com/mitchellh/mapstructure"
@@ -124,6 +123,7 @@ func (s *SearchService) Search(ctx context.Context, sreq *SearchRequest) (*Searc
 				return nil, err
 			}
 			objects = append(objects, page)
+		}
 	}
 
 	return &SearchResults{

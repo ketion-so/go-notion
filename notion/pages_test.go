@@ -325,6 +325,7 @@ func TestPagesService_UpdateProperties(t *testing.T) {
 					Type:       object.DatabaseParentType,
 					DatabaseID: "48f8fee9-cd79-4180-bc2f-ec0398253067",
 				},
+				Properties: nil,
 			},
 		},
 	}
@@ -344,7 +345,7 @@ func TestPagesService_UpdateProperties(t *testing.T) {
 				t.Fatalf("Failed: %v", err)
 			}
 
-			if diff := cmp.Diff(got, tc.want, cmpopts.IgnoreFields(*got, "Properties")); diff != "" {
+			if diff := cmp.Diff(got, tc.want); diff != "" {
 				t.Fatalf("Diff: %s(-got +want)", diff)
 			}
 		})
