@@ -7,7 +7,7 @@ import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
-	"github.com/google/go-cmp/cmp/cmpopts"
+	"github.com/ketion-so/go-notion/notion/object"
 )
 
 func getSearchJSON() string {
@@ -116,6 +116,54 @@ func TestSearchService_Search(t *testing.T) {
 				HasMore:    false,
 				NextCursor: "",
 				Object:     "list",
+				Results: []object.Object{
+					&Database{
+						Object:         object.Database,
+						ID:             "e6c6f8ff-c70e-4970-91ba-98f03e0d7fc6",
+						CreatedTime:    "2021-04-22T22:23:26.080Z",
+						LastEditedTime: "2021-04-23T04:21:00.000Z",
+						Title: []RichText{
+							{
+								PlainText:   "Tasks",
+								Annotations: &Annotations{Color: "default"},
+								Type:        "text",
+							},
+						},
+
+						Properties: map[string]Property{
+							"Name":      &TitleProperty{Type: "title", ID: "title", Title: map[string]interface{}{}},
+							"Task Type": &MultiSelectProperty{Type: "multi_select", ID: "vd@l"},
+						},
+					},
+					&Page{
+						Object: object.Page,
+						ID:     "4f555b50-3a9b-49cb-924c-3746f4ca5522",
+						Parent: &DatabaseParent{
+							Type:       object.DatabaseParentType,
+							DatabaseID: "e6c6f8ff-c70e-4970-91ba-98f03e0d7fc6",
+						},
+						Properties: map[string]interface{}{
+							"Name": map[string]interface{}{
+								"id": string("title"),
+								"title": []interface{}{map[string]interface{}{
+									"annotations": map[string]interface{}{
+										"bold":          bool(false),
+										"code":          bool(false),
+										"color":         string("default"),
+										"italic":        bool(false),
+										"strikethrough": bool(false),
+										"underline":     bool(false),
+									},
+									"href":       nil,
+									"plain_text": string("Task 1"),
+									"text":       map[string]interface{}{"content": string("Task1 1"), "link": nil},
+									"type":       string("text"),
+								}},
+								"type": string("title"),
+							},
+						},
+					},
+				},
 			},
 		},
 	}
@@ -135,7 +183,7 @@ func TestSearchService_Search(t *testing.T) {
 				t.Fatalf("Failed: %v", err)
 			}
 
-			if diff := cmp.Diff(got, tc.want, cmpopts.IgnoreFields(*got, "Results")); diff != "" {
+			if diff := cmp.Diff(got, tc.want); diff != "" {
 				t.Fatalf("Diff: %s(-got +want)", diff)
 			}
 		})

@@ -32,6 +32,10 @@ type Database struct {
 	Properties     map[string]Property `json:"properties" mapstructure:"properties"`
 }
 
+func (db *Database) GetObject() object.Type {
+	return db.Object
+}
+
 //go:generate gomodifytags -file $GOFILE -struct database -clear-tags -w
 //go:generate gomodifytags --file $GOFILE --struct database -add-tags json,mapstructure -w -transform snakecase
 type database struct {

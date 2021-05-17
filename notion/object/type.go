@@ -26,3 +26,7 @@ const (
 	ChildPageBlockType        BlockType = "child_page"
 	UnsupportedBlockType      BlockType = "unsupported"
 )
+
+type Object interface {
+	GetObject() Type
+}

@@ -32,6 +32,10 @@ type Page struct {
 	Properties     interface{} `json:"properties" mapstructure:"properties"`
 }
 
+func (p *Page) GetObject() object.Type {
+	return p.Object
+}
+
 type page struct {
 	Object         object.Type            `json:"object"`
 	ID             string                 `json:"id"`
