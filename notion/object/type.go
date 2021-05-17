@@ -6,6 +6,7 @@ type Type string
 const (
 	Bot      Type = "bot"
 	Database Type = "database"
+	Error    Type = "error"
 	Page     Type = "page"
 	Person   Type = "person"
 	User     Type = "user"

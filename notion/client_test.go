@@ -2,6 +2,7 @@ package notion
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"net/http/httptest"
@@ -10,6 +11,7 @@ import (
 	"time"
 
 	"github.com/google/go-cmp/cmp"
+	"github.com/ketion-so/go-notion/notion/object"
 )
 
 const (
@@ -171,6 +173,44 @@ func TestClient_Do(t *testing.T) {
 
 			if client.RateLimit.Reset.Unix() != int64(tc.rateLimitReset) {
 				t.Fatalf("rate reset timestamp has not been configured got:%d, want:%d", client.RateLimit.Reset.Unix(), tc.rateLimitReset)
+			}
+		})
+	}
+}
+
+func TestClient_Do_Error(t *testing.T) {
+	client, mux, _, teardown := setup()
+	defer teardown()
+
+	type testCase struct {
+		want *Error
+	}
+
+	tcs := map[string]testCase{
+		"ok": {
+			&Error{
+				object.Error,
+				http.StatusInternalServerError,
+				object.ErrInternalServer,
+				"internal server error",
+			},
+		},
+	}
+
+	for n, tc := range tcs {
+		t.Run(n, func(t *testing.T) {
+			mux.HandleFunc(fmt.Sprintf("/%s", usersPath), func(w http.ResponseWriter, r *http.Request) {
+				if r.Header.Get(notionVersionHeader) == "" {
+					t.Fatalf("no notion version header to request")
+				}
+
+				w.WriteHeader(tc.want.Status)
+				_ = json.NewEncoder(w).Encode(tc.want)
+			})
+
+			_, err := client.Users.List(context.Background())
+			if diff := cmp.Diff(err.(*Error), tc.want); diff != "" {
+				t.Fatalf("Diff: %s(-got +want)", diff)
 			}
 		})
 	}

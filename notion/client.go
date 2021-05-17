@@ -208,7 +208,7 @@ func (c *Client) do(ctx context.Context, req *http.Request) (*http.Response, err
 //go:generate gomodifytags -file $GOFILE -struct Error -clear-tags -w
 //go:generate gomodifytags --file $GOFILE --struct Error -add-tags json,mapstructure -w -transform snakecase
 type Error struct {
-	Object  string           `json:"object" mapstructure:"object"`
+	Object  object.Type      `json:"object" mapstructure:"object"`
 	Status  int              `json:"status" mapstructure:"status"`
 	Code    object.ErrorCode `json:"code" mapstructure:"code"`
 	Message string           `json:"message" mapstructure:"message"`
