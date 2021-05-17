@@ -137,7 +137,7 @@ func (s *PagesService) Create(ctx context.Context, preq *CreatePageRequest) (*Pa
 // UpdateProperties page properties.
 //
 // API doc: https://developers.notion.com/reference/patch-page
-func (s *PagesService) UpdateProperties(ctx context.Context, pageID string, properties interface{}) (*Page, error) {
+func (s *PagesService) UpdateProperties(ctx context.Context, pageID string, properties map[string]Property) (*Page, error) {
 	resp, err := s.client.patch(ctx, fmt.Sprintf("%s/%s", pagesPath, pageID), properties)
 	if err != nil {
 		return nil, err
