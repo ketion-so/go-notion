@@ -27,7 +27,7 @@ type Database struct {
 	ID             string              `json:"id" mapstructure:"id"`
 	CreatedTime    string              `json:"created_time" mapstructure:"created_time"`
 	LastEditedTime string              `json:"last_edited_time" mapstructure:"last_edited_time"`
-	Title          []RichText          `json:"title" mapstructure:"title"`
+	Title          []TextObject        `json:"title" mapstructure:"title"`
 	Properties     map[string]Property `json:"properties" mapstructure:"properties"`
 }
 
@@ -42,7 +42,7 @@ type database struct {
 	ID             string                 `json:"id" mapstructure:"id"`
 	CreatedTime    string                 `json:"created_time" mapstructure:"created_time"`
 	LastEditedTime string                 `json:"last_edited_time" mapstructure:"last_edited_time"`
-	Title          []RichText             `json:"title" mapstructure:"title"`
+	Title          []TextObject           `json:"title" mapstructure:"title"`
 	Properties     map[string]interface{} `json:"properties" mapstructure:"properties"`
 }
 

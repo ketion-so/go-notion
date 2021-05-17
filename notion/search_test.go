@@ -131,7 +131,7 @@ func TestSearchService_Search(t *testing.T) {
 						ID:             "e6c6f8ff-c70e-4970-91ba-98f03e0d7fc6",
 						CreatedTime:    "2021-04-22T22:23:26.080Z",
 						LastEditedTime: "2021-04-23T04:21:00.000Z",
-						Title: []RichText{
+						Title: []TextObject{
 							{
 								PlainText:   "Tasks",
 								Annotations: &Annotations{Color: "default"},
@@ -140,7 +140,7 @@ func TestSearchService_Search(t *testing.T) {
 						},
 
 						Properties: map[string]Property{
-							"Name":      &DatabaseTitleProperty{Type: "title", ID: "title", Title: &RichText{}},
+							"Name":      &DatabaseTitleProperty{Type: "title", ID: "title", Title: &TextObject{}},
 							"Task Type": &MultiSelectProperty{Type: "multi_select", ID: "vd@l"},
 						},
 					},
@@ -171,7 +171,7 @@ func TestSearchService_Search(t *testing.T) {
 						Properties: map[string]Property{
 							"Name": &PageTitleProperty{
 								ID: "title",
-								Title: []RichText{
+								Title: []TextObject{
 									{
 										PlainText:   "Task 1",
 										Annotations: &Annotations{Color: "default"},

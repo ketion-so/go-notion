@@ -157,8 +157,8 @@ func TestDatabasesService_Get(t *testing.T) {
 				Object:         "database",
 				CreatedTime:    "2020-03-17T19:10:04.968Z",
 				LastEditedTime: "2020-03-17T21:49:37.913Z",
-				Title: []RichText{
-					{
+				Title: []TextObject{
+					TextObject{
 						PlainText:   "Grocery List",
 						Annotations: &Annotations{Color: DefaultColor},
 						Type:        Text,
