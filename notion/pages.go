@@ -24,12 +24,12 @@ type PagesService service
 // API doc: https://developers.notion.com/reference/get-page
 //go:generate gomodifytags --file $GOFILE --struct Page -add-tags json,mapstructure -w -transform snakecase
 type Page struct {
-	Object         object.Type `json:"object" mapstructure:"object"`
-	ID             string      `json:"id" mapstructure:"id"`
-	CreatedTime    string      `json:"created_time" mapstructure:"created_time"`
-	LastEditedTime string      `json:"last_edited_time" mapstructure:"last_edited_time"`
-	Parent         Parent      `json:"parent" mapstructure:"parent"`
-	Properties     interface{} `json:"properties" mapstructure:"properties"`
+	Object         object.Type         `json:"object" mapstructure:"object"`
+	ID             string              `json:"id" mapstructure:"id"`
+	CreatedTime    string              `json:"created_time" mapstructure:"created_time"`
+	LastEditedTime string              `json:"last_edited_time" mapstructure:"last_edited_time"`
+	Parent         Parent              `json:"parent" mapstructure:"parent"`
+	Properties     map[string]Property `json:"properties" mapstructure:"properties"`
 }
 
 func (p *Page) GetObject() object.Type {
@@ -42,7 +42,7 @@ type page struct {
 	CreatedTime    string                 `json:"created_time"`
 	LastEditedTime string                 `json:"last_edited_time"`
 	Parent         map[string]interface{} `json:"parent"`
-	Properties     interface{}            `json:"properties"`
+	Properties     map[string]interface{} `json:"properties"`
 }
 
 // Parent represens the interface for all parents of the page.
@@ -169,12 +169,17 @@ func convPage(data *page) (*Page, error) {
 		return nil, err
 	}
 
+	properties, err := convProperties(data.Properties)
+	if err != nil {
+		return nil, err
+	}
+
 	page := &Page{
 		Object:         data.Object,
 		ID:             data.ID,
 		CreatedTime:    data.CreatedTime,
 		LastEditedTime: data.LastEditedTime,
-		Properties:     data.Properties,
+		Properties:     properties,
 		Parent:         p,
 	}
 

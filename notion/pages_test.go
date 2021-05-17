@@ -22,71 +22,72 @@ func getPageJSON() string {
 			"workspace": true
 		},
 		"properties": {
-		  "Name": [
-			{
-			  "id": "some-property-id",
-			  "text": "Avocado", 
-			  "annotations": {
-				"formatting": [],
-				"color": "default",
-				"link": null
-			  }, 
-			  "inline_object": null
-			}
-		  ],
-		  "Description": [
-			{
-			  "text": "Persea americana", 
-			  "annotations": {
-				"formatting": [],
-				"color": "default",
-				"link": null
-			  }, 
-			  "inline_object": null
-			}
-		  ],
-		  "In stock": false,
-		  "Food group": {
-			"name": "🍎Fruit",
-			"color": "red"
-		  },
-		  "Price": 2,
-		  "Cost of next trip": 2,
-		  "Last ordered": "2020-03-10",
-		  "Meals": [
-			"a91e35b0-5c4e-4018-83e8-584988caee1c",
-			"f5051efa-a7d9-4075-97f3-8ce9af14b1a7"
-		  ],
-		  "Number of meals": 2,
-		  "Store availability": [
-			{
-			  "name": "Rainbow Grocery",
-			  "color": "purple"
-			},
-			{
-			  "name": "Gus's Community Market",
-			  "color": "green"
-			}
-		  ],
-		  "+1": [
-			{
-			  "object": "user",
-			  "id": "01da9b00-e400-4959-91ce-af55307647e5",
-			  "type": "person",
-			  "name": "Avocado Lovelace",
-			  "person": {
-				"email": "avo@example.org"
+			"Tags": {
+				"id": "G~UH",
+				"type": "multi_select",
+				"multi_select": [
+				  {
+					"id": "4b9d25a5-a0ee-49ff-a7f1-9485f4773abf",
+					"name": "tags2",
+					"color": "green"
+				  }
+				]
 			  },
-			  "avatar_url": "https://secure.notion-static.com/e6a352a8-8381-44d0-a1dc-9ed80e62b53d.jpg"
-			}
-		  ],
-		  "Photos": [
-			{
-			  "url": "https://s3.us-west-2.amazonaws.com/secure.notion-static.com/e6a352a8-8381-44d0-a1dc-9ed80e62b53d/avocado.jpg",
-			  "name": "avocado",
-			  "mime_type": "image/jpg"
-			}
-		  ]
+			  "Text": {
+				"id": "Me;J",
+				"type": "text",
+				"text": [
+				  {
+					"type": "text",
+					"text": {
+					  "content": "uuu",
+					  "link": null
+					},
+					"annotations": {
+					  "bold": false,
+					  "italic": false,
+					  "strikethrough": false,
+					  "underline": false,
+					  "code": false,
+					  "color": "default"
+					},
+					"plain_text": "uuu",
+					"href": null
+				  }
+				]
+			  },
+			  "Date": {
+				"id": "YnD",
+				"type": "date",
+				"date": {
+				  "start": "2021-05-12",
+				  "end": null
+				}
+			  },
+			  "Name": {
+				"id": "title",
+				"type": "title",
+				"title": [
+				  {
+					"type": "text",
+					"text": {
+					  "content": "Hoho",
+					  "link": null
+					},
+					"annotations": {
+					  "bold": false,
+					  "italic": false,
+					  "strikethrough": false,
+					  "underline": false,
+					  "code": false,
+					  "color": "default"
+					},
+					"plain_text": "Hoho",
+					"href": null
+				  }
+				]
+			  }
+			  
 		}
 	  }`
 }
@@ -173,13 +174,8 @@ func createPageJSON() string {
     },
     "+1": {
       "id": "k?CE",
-      "type": "person",
+      "type": "people",
       "person": []
-    },
-    "Description": {
-      "id": "rT{n",
-      "type": "rich_text",
-      "rich_text": []
     },
     "In stock": {
       "id": "{>U;",
@@ -325,6 +321,16 @@ func TestPagesService_UpdateProperties(t *testing.T) {
 					Type:       object.DatabaseParentType,
 					DatabaseID: "48f8fee9-cd79-4180-bc2f-ec0398253067",
 				},
+				Properties: map[string]Property{
+					"In stock": &CheckboxProperty{Type: "checkbox", ID: "{>U;", Checkbox: true},
+					"Name": &PageTitleProperty{Type: "title", ID: "title", Title: []RichText{
+						{
+							PlainText:   "Avocado",
+							Annotations: &Annotations{Color: "default"},
+							Type:        "text",
+						},
+					}},
+				},
 			},
 		},
 	}
@@ -344,7 +350,7 @@ func TestPagesService_UpdateProperties(t *testing.T) {
 				t.Fatalf("Failed: %v", err)
 			}
 
-			if diff := cmp.Diff(got, tc.want, cmpopts.IgnoreFields(*got, "Properties")); diff != "" {
+			if diff := cmp.Diff(got, tc.want); diff != "" {
 				t.Fatalf("Diff: %s(-got +want)", diff)
 			}
 		})

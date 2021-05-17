@@ -10,7 +10,7 @@ import (
 	"github.com/ketion-so/go-notion/notion/object"
 )
 
-func getSearchJSON() string {
+func getSearchDatabaseJSON() string {
 	return `{
 		"has_more": false,
 		"next_cursor": null,
@@ -54,7 +54,18 @@ func getSearchJSON() string {
 						"type": "text"
 					}
 				]
-			},
+			}
+		]
+	}
+}`
+}
+
+func getSearchPageJSON() string {
+	return `{
+		"has_more": false,
+		"next_cursor": null,
+		"object": "list",
+		"results": [
 			{
 				"archived": false,
 				"created_time": "2021-04-23T04:21:00.000Z",
@@ -97,14 +108,12 @@ func getSearchJSON() string {
 }
 
 func TestSearchService_Search(t *testing.T) {
-	client, mux, _, teardown := setup()
-	defer teardown()
-
 	tcs := map[string]struct {
 		input *SearchRequest
 		want  *SearchResults
+		json  func() string
 	}{
-		"ok": {
+		"database": {
 			&SearchRequest{
 				Query: "External tasks",
 				Sort: &Sort{
@@ -131,10 +140,27 @@ func TestSearchService_Search(t *testing.T) {
 						},
 
 						Properties: map[string]Property{
-							"Name":      &TitleProperty{Type: "title", ID: "title", Title: map[string]interface{}{}},
+							"Name":      &DatabaseTitleProperty{Type: "title", ID: "title", Title: &RichText{}},
 							"Task Type": &MultiSelectProperty{Type: "multi_select", ID: "vd@l"},
 						},
 					},
+				},
+			},
+			getSearchDatabaseJSON,
+		},
+		"page": {
+			&SearchRequest{
+				Query: "External tasks",
+				Sort: &Sort{
+					Direction: Ascending,
+					Timestamp: "last_edited_time",
+				},
+			},
+			&SearchResults{
+				HasMore:    false,
+				NextCursor: "",
+				Object:     "list",
+				Results: []object.Object{
 					&Page{
 						Object: object.Page,
 						ID:     "4f555b50-3a9b-49cb-924c-3746f4ca5522",
@@ -142,40 +168,36 @@ func TestSearchService_Search(t *testing.T) {
 							Type:       object.DatabaseParentType,
 							DatabaseID: "e6c6f8ff-c70e-4970-91ba-98f03e0d7fc6",
 						},
-						Properties: map[string]interface{}{
-							"Name": map[string]interface{}{
-								"id": "title",
-								"title": []interface{}{map[string]interface{}{
-									"annotations": map[string]interface{}{
-										"bold":          false,
-										"code":          false,
-										"color":         "default",
-										"italic":        false,
-										"strikethrough": false,
-										"underline":     false,
+						Properties: map[string]Property{
+							"Name": &PageTitleProperty{
+								ID: "title",
+								Title: []RichText{
+									{
+										PlainText:   "Task 1",
+										Annotations: &Annotations{Color: "default"},
+										Type:        "text",
 									},
-									"href":       nil,
-									"plain_text": "Task 1",
-									"text":       map[string]interface{}{"content": "Task1 1", "link": nil},
-									"type":       "text",
-								}},
-								"type": "title",
+								},
+								Type: "title",
 							},
 						},
 					},
 				},
 			},
+			getSearchPageJSON,
 		},
 	}
 
 	for n, tc := range tcs {
 		t.Run(n, func(t *testing.T) {
+			client, mux, _, teardown := setup()
+			defer teardown()
 			mux.HandleFunc(fmt.Sprintf("/%s", searchPath), func(w http.ResponseWriter, r *http.Request) {
 				if r.Header.Get(notionVersionHeader) == "" {
 					t.Fatalf("no notion version header to request")
 				}
 
-				fmt.Fprint(w, getSearchJSON())
+				fmt.Fprint(w, tc.json())
 			})
 
 			got, err := client.Search.Search(context.Background(), tc.input)
