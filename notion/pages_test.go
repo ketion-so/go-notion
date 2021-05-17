@@ -87,7 +87,6 @@ func getPageJSON() string {
 				  }
 				]
 			  }
-			  
 		}
 	  }`
 }
@@ -323,7 +322,7 @@ func TestPagesService_UpdateProperties(t *testing.T) {
 				},
 				Properties: map[string]Property{
 					"In stock": &CheckboxProperty{Type: "checkbox", ID: "{>U;", Checkbox: true},
-					"Name": &PageTitleProperty{Type: "title", ID: "title", Title: []RichText{
+					"Name": &PageTitleProperty{Type: "title", ID: "title", Title: []TextObject{
 						{
 							PlainText:   "Avocado",
 							Annotations: &Annotations{Color: "default"},

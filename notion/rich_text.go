@@ -9,16 +9,9 @@ const (
 	Equation RichTextType = "equation"
 )
 
-// RichText object represents Notion rich text object
-//
-// API doc: https://developers.notion.com/reference/rich-text
-//go:generate gomodifytags -file $GOFILE -struct RichText -clear-tags -w
-//go:generate gomodifytags --file $GOFILE --struct RichText -add-tags json,mapstructure -w -transform snakecase
-type RichText struct {
-	PlainText   string       `json:"plain_text" mapstructure:"plain_text"`
-	Href        string       `json:"href" mapstructure:"href"`
-	Annotations *Annotations `json:"annotations" mapstructure:"annotations"`
-	Type        RichTextType `json:"type" mapstructure:"type"`
+// RicchText is descibed in API doc: https://developers.notion.com/reference/rich-text
+type RichText interface {
+	GetType() RichTextType
 }
 
 // Annotations object represents Notion rich text annotation
@@ -62,16 +55,33 @@ const (
 //go:generate gomodifytags -file $GOFILE -struct TextObject -clear-tags -w
 //go:generate gomodifytags --file $GOFILE --struct TextObject -add-tags json,mapstructure -w -transform snakecase
 type TextObject struct {
-	Content string      `json:"content" mapstructure:"content"`
-	Link    *LinkObject `json:"link" mapstructure:"link"`
+	PlainText   string       `json:"plain_text" mapstructure:"plain_text"`
+	Href        string       `json:"href" mapstructure:"href"`
+	Annotations *Annotations `json:"annotations" mapstructure:"annotations"`
+	Type        RichTextType `json:"type" mapstructure:"type"`
+	Content     string       `json:"content" mapstructure:"content"`
+	Link        *LinkObject  `json:"link" mapstructure:"link"`
+}
+
+// GetType returns the object type
+func (obj *TextObject) GetType() RichTextType {
+	return obj.Type
 }
 
 // LinkObject object represents Notion rich text object
 //go:generate gomodifytags -file $GOFILE -struct LinkObject -clear-tags -w
 //go:generate gomodifytags --file $GOFILE --struct LinkObject -add-tags json,mapstructure -w -transform snakecase
 type LinkObject struct {
-	Type string `json:"type" mapstructure:"type"`
-	URL  string `json:"url" mapstructure:"url"`
+	PlainText   string       `json:"plain_text" mapstructure:"plain_text"`
+	Href        string       `json:"href" mapstructure:"href"`
+	Annotations *Annotations `json:"annotations" mapstructure:"annotations"`
+	Type        RichTextType `json:"type" mapstructure:"type"`
+	URL         string       `json:"url" mapstructure:"url"`
+}
+
+// GetType returns the object type
+func (obj *LinkObject) GetType() RichTextType {
+	return obj.Type
 }
 
 // MentionObjectType is for types of mentions.
@@ -84,18 +94,35 @@ const (
 	DateionObject         MentionObjectType = "date"
 )
 
-// TextObject object represents Notion rich text object
-//go:generate gomodifytags -file $GOFILE -struct TextObject -clear-tags -w
-//go:generate gomodifytags --file $GOFILE --struct TextObject -add-tags json,mapstructure -w -transform snakecase
+// MentionObject object represents Notion rich text object
+//go:generate gomodifytags -file $GOFILE -struct MentionObject -clear-tags -w
+//go:generate gomodifytags --file $GOFILE --struct MentionObject -add-tags json,mapstructure -w -transform snakecase
 type MentionObject struct {
-	Type     MentionObjectType
-	Database *Database
-	User     *User
+	PlainText   string       `json:"plain_text" mapstructure:"plain_text"`
+	Href        string       `json:"href" mapstructure:"href"`
+	Annotations *Annotations `json:"annotations" mapstructure:"annotations"`
+	Type        RichTextType `json:"type" mapstructure:"type"`
+	Database    *Database    `json:"database" mapstructure:"database"`
+	User        *User        `json:"user" mapstructure:"user"`
+}
+
+// GetType returns the object type
+func (obj *MentionObject) GetType() RichTextType {
+	return obj.Type
 }
 
 // EquationObject object represents Notion rich text object
 //go:generate gomodifytags -file $GOFILE -struct EquationObject -clear-tags -w
 //go:generate gomodifytags --file $GOFILE --struct EquationObject -add-tags json,mapstructure -w -transform snakecase
 type EquationObject struct {
-	Expression string `json:"expression" mapstructure:"expression"`
+	PlainText   string       `json:"plain_text" mapstructure:"plain_text"`
+	Href        string       `json:"href" mapstructure:"href"`
+	Annotations *Annotations `json:"annotations" mapstructure:"annotations"`
+	Type        RichTextType `json:"type" mapstructure:"type"`
+	Expression  string       `json:"expression" mapstructure:"expression"`
+}
+
+// GetType returns the object type
+func (obj *EquationObject) GetType() RichTextType {
+	return obj.Type
 }

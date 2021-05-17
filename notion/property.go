@@ -13,12 +13,12 @@ type Property interface {
 }
 
 // PageTitleProperty object represents Notion title Property.
-//go:generate gomodifytags -file $GOFILE -struct TitleProperty -clear-tags -w
-//go:generate gomodifytags --file $GOFILE --struct TitleProperty -add-tags json,mapstructure -w -transform snakecase
+//go:generate gomodifytags -file $GOFILE -struct PageTitleProperty -clear-tags -w
+//go:generate gomodifytags --file $GOFILE --struct PageTitleProperty -add-tags json,mapstructure -w -transform snakecase
 type PageTitleProperty struct {
 	Type  object.PropertyType `json:"type" mapstructure:"type"`
 	ID    string              `json:"id" mapstructure:"id"`
-	Title []RichText          `json:"title" mapstructure:"title"`
+	Title []TextObject        `json:"title" mapstructure:"title"`
 }
 
 // GetType returns the type of the property.
@@ -32,7 +32,7 @@ func (p *PageTitleProperty) GetType() object.PropertyType {
 type DatabaseTitleProperty struct {
 	Type  object.PropertyType `json:"type" mapstructure:"type"`
 	ID    string              `json:"id" mapstructure:"id"`
-	Title *RichText           `json:"title" mapstructure:"title"`
+	Title *TextObject         `json:"title" mapstructure:"title"`
 }
 
 // GetType returns the type of the property.
@@ -46,7 +46,7 @@ func (p *DatabaseTitleProperty) GetType() object.PropertyType {
 type TextProperty struct {
 	Type object.PropertyType `json:"type" mapstructure:"type"`
 	ID   string              `json:"id" mapstructure:"id"`
-	Text []RichText          `json:"text" mapstructure:"text"`
+	Text interface{}         `json:"text" mapstructure:"text"`
 }
 
 // GetType returns the type of the property.
