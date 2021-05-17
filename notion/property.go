@@ -112,7 +112,7 @@ func (p *MultiSelectProperty) GetType() object.PropertyType {
 type DateProperty struct {
 	Type object.PropertyType `json:"type,omitempty" mapstructure:"type" `
 	ID   string              `json:"id,omitempty" mapstructure:"id" `
-	Date *Date               `json:"date,omitempty" mapstructure:"date" `
+	Date *Date               `json:"date" mapstructure:"date" `
 }
 
 // Date represents data object's date
