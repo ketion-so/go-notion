@@ -23,9 +23,9 @@ type UsersService service
 //go:generate gomodifytags --file $GOFILE --struct User -add-tags json,mapstructure -w -transform snakecase
 type User struct {
 	ID        string      `json:"id" mapstructure:"id"`
-	Type      object.Type `json:"type" mapstructure:"type"`
-	Name      string      `json:"name" mapstructure:"name"`
-	AvatarURL string      `json:"avatar_url" mapstructure:"avatar_url"`
+	Type      object.Type `json:"type,omitempty" mapstructure:"type"`
+	Name      string      `json:"name,omitempty" mapstructure:"name"`
+	AvatarURL string      `json:"avatar_url,omitempty" mapstructure:"avatar_url"`
 	Person    *People     `json:"person,omitempty" mapstructure:"person"`
 	Bot       *Bot        `json:"bot,omitempty" mapstructure:"bot"`
 }

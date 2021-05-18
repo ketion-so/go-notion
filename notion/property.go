@@ -126,16 +126,16 @@ func (p *DateProperty) GetType() object.PropertyType {
 	return object.PropertyType(p.Type)
 }
 
-// PeopleProperty object represents Notion people Property.
-//go:generate gomodifytags --file $GOFILE --struct PeopleProperty -add-tags json,mapstructure -w -transform snakecase
-type PeopleProperty struct {
+// PersonProperty object represents Notion people Property.
+//go:generate gomodifytags --file $GOFILE --struct PersonProperty -add-tags json,mapstructure -w -transform snakecase
+type PersonProperty struct {
 	Type   object.PropertyType `json:"type,omitempty" mapstructure:"type" `
 	ID     string              `json:"id,omitempty" mapstructure:"id" `
-	People interface{}         `json:"people,omitempty" mapstructure:"people" `
+	People *User               `json:"people,omitempty" mapstructure:"people" `
 }
 
 // GetType returns the type of the property.
-func (p *PeopleProperty) GetType() object.PropertyType {
+func (p *PersonProperty) GetType() object.PropertyType {
 	return object.PropertyType(p.Type)
 }
 
@@ -157,7 +157,7 @@ func (p *FilesProperty) GetType() object.PropertyType {
 type CheckboxProperty struct {
 	Type     object.PropertyType `json:"type,omitempty" mapstructure:"type" `
 	ID       string              `json:"id,omitempty" mapstructure:"id" `
-	Checkbox interface{}         `json:"checkbox,omitempty" mapstructure:"checkbox" `
+	Checkbox bool                `json:"checkbox" mapstructure:"checkbox" `
 }
 
 // GetType returns the type of the property.
@@ -170,7 +170,7 @@ func (p *CheckboxProperty) GetType() object.PropertyType {
 type URLProperty struct {
 	Type object.PropertyType `json:"type,omitempty" mapstructure:"type" `
 	ID   string              `json:"id,omitempty" mapstructure:"id" `
-	URL  interface{}         `json:"url,omitempty" mapstructure:"url" `
+	URL  string              `json:"url,omitempty" mapstructure:"url" `
 }
 
 // GetType returns the type of the property.
@@ -183,7 +183,7 @@ func (p *URLProperty) GetType() object.PropertyType {
 type EmailProperty struct {
 	Type  object.PropertyType `json:"type,omitempty" mapstructure:"type" `
 	ID    string              `json:"id,omitempty" mapstructure:"id" `
-	Email interface{}         `json:"email,omitempty" mapstructure:"email" `
+	Email string              `json:"email" mapstructure:"email" `
 }
 
 // GetType returns the type of the property.
@@ -196,7 +196,7 @@ func (p *EmailProperty) GetType() object.PropertyType {
 type PhoneNumberProperty struct {
 	Type        object.PropertyType `json:"type,omitempty" mapstructure:"type" `
 	ID          string              `json:"id,omitempty" mapstructure:"id" `
-	PhoneNumber interface{}         `json:"phone_number,omitempty" mapstructure:"phone_number" `
+	PhoneNumber string              `json:"phone_number,omitempty" mapstructure:"phone_number" `
 }
 
 // GetType returns the type of the property.
@@ -339,7 +339,7 @@ func convProperties(input map[string]interface{}) (map[string]Property, error) {
 			case object.DatePropertyType:
 				p = &DateProperty{}
 			case object.PeoplePropertyType:
-				p = &PeopleProperty{}
+				p = &PersonProperty{}
 			case object.FilesPropertyType:
 				p = &FilesProperty{}
 			case object.CheckboxPropertyType:
