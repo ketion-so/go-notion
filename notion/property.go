@@ -131,7 +131,7 @@ func (p *DateProperty) GetType() object.PropertyType {
 type PersonProperty struct {
 	Type   object.PropertyType `json:"type,omitempty" mapstructure:"type" `
 	ID     string              `json:"id,omitempty" mapstructure:"id" `
-	People *User               `json:"people,omitempty" mapstructure:"people" `
+	People interface{}         `json:"people,omitempty" mapstructure:"people" `
 }
 
 // GetType returns the type of the property.
