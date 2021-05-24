@@ -53,7 +53,7 @@ type Parent interface {
 // DatabaseParent object represents the retrieve parent.
 //go:generate gomodifytags --file $GOFILE --struct DatabaseParent -add-tags json,mapstructure -w -transform snakecase
 type DatabaseParent struct {
-	Type       object.ParentType `json:"type" mapstructure:"type"`
+	Type       object.ParentType `json:"type,omitempty" mapstructure:"type"`
 	DatabaseID string            `json:"database_id" mapstructure:"database_id"`
 }
 
@@ -67,7 +67,7 @@ func (p *DatabaseParent) GetType() object.ParentType {
 //go:generate gomodifytags -file $GOFILE -struct PageParent -clear-tags -w
 //go:generate gomodifytags --file $GOFILE --struct PageParent -add-tags json,mapstructure -w -transform snakecase
 type PageParent struct {
-	Type   object.ParentType `json:"type" mapstructure:"type"`
+	Type   object.ParentType `json:"type,omitempty" mapstructure:"type"`
 	PageID string            `json:"page_id" mapstructure:"page_id"`
 }
 
@@ -80,7 +80,7 @@ func (p *PageParent) GetType() object.ParentType {
 //go:generate gomodifytags -file $GOFILE -struct WorkspaceParent -clear-tags -w
 //go:generate gomodifytags --file $GOFILE --struct WorkspaceParent -add-tags json,mapstructure -w -transform snakecase
 type WorkspaceParent struct {
-	Type      object.ParentType `json:"type" mapstructure:"type"`
+	Type      object.ParentType `json:"type,omitempty" mapstructure:"type"`
 	Workspace bool              `json:"workspace" mapstructure:"workspace"`
 }
 
