@@ -56,7 +56,7 @@ const (
 //go:generate gomodifytags -file $GOFILE -struct Sort -clear-tags -w
 //go:generate gomodifytags --file $GOFILE --struct Sort -add-tags json,mapstructure -w -transform snakecase
 type Sort struct {
-	Property  string    `json:"property" mapstructure:"property"`
+	Property  string    `json:"property,omitempty" mapstructure:"property"`
 	Direction Direction `json:"direction" mapstructure:"direction"`
 	Timestamp string    `json:"timestamp" mapstructure:"timestamp"`
 }
