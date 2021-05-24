@@ -68,7 +68,7 @@ func (s *DatabasesService) Get(ctx context.Context, databaseID string) (*Databas
 // DatabaseQuery is a query for database
 type DatabaseQuery struct {
 	Filter      map[CompoundFilterType]FilterObject `json:"filter,omitempty" mapstructure:"filter"`
-	Sorts       []Sort                              `json:"sort,omitempty" mapstructure:"sort"`
+	Sorts       []Sort                              `json:"sorts,omitempty" mapstructure:"sort"`
 	StartCursor string                              `json:"start_cursor,omitempty" mapstructure:"start_cursor"`
 	PageSize    int32                               `json:"page_size,omitempty" mapstructure:"page_size"`
 }
