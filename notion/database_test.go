@@ -298,7 +298,25 @@ func getListDatabaseJSON() string {
 		  {
 			"object": "database",
 			"id": "668d797c-76fa-4934-9b05-ad288df2d136",
-			"title": "Grocery list",
+			"title": [
+                {
+                    "type": "text",
+                    "text": {
+                        "content": "Grocery list",
+                        "link": null
+                    },
+                    "annotations": {
+                        "bold": false,
+                        "italic": false,
+                        "strikethrough": false,
+                        "underline": false,
+                        "code": false,
+                        "color": "default"
+                    },
+                    "plain_text": "test",
+                    "href": null
+                }
+            ],
 			"properties": {
 			  "Name": {
 				"type": "title",
@@ -309,7 +327,25 @@ func getListDatabaseJSON() string {
 		  {
 			"object": "database",
 			"id": "74ba0cb2-732c-4d2f-954a-fcaa0d93a898",
-			"title": "Pantry",
+			"title": [
+                {
+                    "type": "text",
+                    "text": {
+                        "content": "Pantry",
+                        "link": null
+                    },
+                    "annotations": {
+                        "bold": false,
+                        "italic": false,
+                        "strikethrough": false,
+                        "underline": false,
+                        "code": false,
+                        "color": "default"
+                    },
+                    "plain_text": "test",
+                    "href": null
+                }
+            ],
 			"properties": {
 			  "Name": {
 				"type": "title",
