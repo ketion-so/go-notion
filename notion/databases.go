@@ -265,7 +265,7 @@ type ListDatabase struct {
 	ID             string                 `json:"id" mapstructure:"id"`
 	CreatedTime    string                 `json:"created_time" mapstructure:"created_time"`
 	LastEditedTime string                 `json:"last_edited_time" mapstructure:"last_edited_time"`
-	Title          string                 `json:"title" mapstructure:"title"`
+	Title          []TextObject           `json:"title" mapstructure:"title"`
 	Properties     map[string]interface{} `json:"properties" mapstructure:"properties"`
 }
 
